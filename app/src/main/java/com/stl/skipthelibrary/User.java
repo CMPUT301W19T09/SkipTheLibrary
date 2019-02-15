@@ -7,52 +7,17 @@ public class User {
     private ViewableImage image;
     private ContactInfo contactInfo;
     private Credentials credentials;
-    private Rating ownerRating;
-    private Rating borrowerRating;
-    private ArrayList<Book> booksIOwn;
-    private ArrayList<Book> booksIAmInterestedIn;
+    private Identity owerIdentity;
+    private Identity borrowerIdentity;
 
-    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, Rating ownerRating, Rating borrowerRating, ArrayList<Book> booksIOwn, ArrayList<Book> booksIAmInterestedIn) {
+
+    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, Identity owerIdentity, Identity borrowerIdentity) {
         this.name = name;
         this.image = image;
         this.contactInfo = contactInfo;
         this.credentials = credentials;
-        this.ownerRating = ownerRating;
-        this.borrowerRating = borrowerRating;
-        this.booksIOwn = booksIOwn;
-        this.booksIAmInterestedIn = booksIAmInterestedIn;
-    }
-
-    public Rating getOwnerRating() {
-        return ownerRating;
-    }
-
-    public void setOwnerRating(Rating ownerRating) {
-        this.ownerRating = ownerRating;
-    }
-
-    public Rating getBorrowerRating() {
-        return borrowerRating;
-    }
-
-    public void setBorrowerRating(Rating borrowerRating) {
-        this.borrowerRating = borrowerRating;
-    }
-
-    public ArrayList<Book> getBooksIOwn() {
-        return booksIOwn;
-    }
-
-    public void setBooksIOwn(ArrayList<Book> booksIOwn) {
-        this.booksIOwn = booksIOwn;
-    }
-
-    public ArrayList<Book> getBooksIAmInterestedIn() {
-        return booksIAmInterestedIn;
-    }
-
-    public void setBooksIAmInterestedIn(ArrayList<Book> booksIAmInterestedIn) {
-        this.booksIAmInterestedIn = booksIAmInterestedIn;
+        this.owerIdentity = owerIdentity;
+        this.borrowerIdentity = borrowerIdentity;
     }
 
     public String getName() {
@@ -86,4 +51,22 @@ public class User {
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
+
+    public Identity getOwerIdentity() {
+        return owerIdentity;
+    }
+
+    public void setOwerIdentity(Identity owerIdentity) {
+        this.owerIdentity = owerIdentity;
+    }
+
+    public Identity getBorrowerIdentity() {
+        return borrowerIdentity;
+    }
+
+    public void setBorrowerIdentity(Identity borrowerIdentity) {
+        this.borrowerIdentity = borrowerIdentity;
+    }
+
+
 }
