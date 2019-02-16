@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class IdentityTest {
+public class UserIdentityTest {
 
     @Before
     public void setUp() throws Exception {

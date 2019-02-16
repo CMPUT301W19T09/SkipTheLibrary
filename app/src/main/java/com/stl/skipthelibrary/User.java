@@ -5,17 +5,17 @@ public class User {
     private ViewableImage image;
     private ContactInfo contactInfo;
     private Credentials credentials;
-    private Identity ownerIdentity;
-    private Identity borrowerIdentity;
+    private UserIdentity ownerUserIdentity;
+    private UserIdentity borrowerUserIdentity;
 
 
-    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, Identity ownerIdentity, Identity borrowerIdentity) {
+    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, UserIdentity ownerUserIdentity, UserIdentity borrowerUserIdentity) {
         this.name = name;
         this.image = image;
         this.contactInfo = contactInfo;
         this.credentials = credentials;
-        this.ownerIdentity = ownerIdentity;
-        this.borrowerIdentity = borrowerIdentity;
+        this.ownerUserIdentity = ownerUserIdentity;
+        this.borrowerUserIdentity = borrowerUserIdentity;
     }
 
     public String getName() {
@@ -50,20 +50,20 @@ public class User {
         this.credentials = credentials;
     }
 
-    public Identity getOwnerIdentity() {
-        return ownerIdentity;
+    public UserIdentity getOwnerUserIdentity() {
+        return ownerUserIdentity;
     }
 
-    public void setOwnerIdentity(Identity ownerIdentity) {
-        this.ownerIdentity = ownerIdentity;
+    public void setOwnerUserIdentity(UserIdentity ownerUserIdentity) {
+        this.ownerUserIdentity = ownerUserIdentity;
     }
 
-    public Identity getBorrowerIdentity() {
-        return borrowerIdentity;
+    public UserIdentity getBorrowerUserIdentity() {
+        return borrowerUserIdentity;
     }
 
-    public void setBorrowerIdentity(Identity borrowerIdentity) {
-        this.borrowerIdentity = borrowerIdentity;
+    public void setBorrowerUserIdentity(UserIdentity borrowerUserIdentity) {
+        this.borrowerUserIdentity = borrowerUserIdentity;
     }
 
 

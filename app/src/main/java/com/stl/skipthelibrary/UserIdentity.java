@@ -2,12 +2,12 @@ package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
 
-public class Identity {
+public class UserIdentity {
     private ArrayList<Book> booksList;
     private Rating rating;
 
 
-    public Identity(ArrayList<Book> booksList, Rating rating) {
+    public UserIdentity(ArrayList<Book> booksList, Rating rating) {
         this.booksList = booksList;
         this.rating = rating;
     }
