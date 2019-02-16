@@ -1,24 +1,30 @@
 package com.stl.skipthelibrary;
 
-public class Handoff {
-    private Book book;
+/**
+ * Created by Luke Slevinsky on 2019-02-15.
+ */
+public class State {
+    private BookStatus bookStatus;
     private Location location;
     private HandoffState handoffState;
 
-    public Handoff(Book book, Location location, HandoffState handoffState) {
-        this.book = book;
+    public State() {
+        this(BookStatus.AVAILABLE,null,null);
+    }
+
+    public State(BookStatus bookStatus, Location location, HandoffState handoffState) {
+        this.bookStatus = bookStatus;
         this.location = location;
         this.handoffState = handoffState;
     }
 
-    public Book getBook() {
-        return book;
+    public BookStatus getBookStatus() {
+        return bookStatus;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setBookStatus(BookStatus bookStatus) {
+        this.bookStatus = bookStatus;
     }
-
     public Location getLocation() {
         return location;
     }
