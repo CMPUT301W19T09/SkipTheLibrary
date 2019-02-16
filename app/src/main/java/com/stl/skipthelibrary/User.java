@@ -1,7 +1,5 @@
 package com.stl.skipthelibrary;
 
-import java.util.ArrayList;
-
 public class User {
     private String name;
     private ViewableImage image;
