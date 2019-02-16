@@ -40,4 +40,23 @@ public class State {
     public void setHandoffState(HandoffState handoffState) {
         this.handoffState = handoffState;
     }
+
+
+
+    public void lendBook(){
+
+    }
+
+    public void confirmBorrowed(){
+
+    }
+
+    public void returnBook(){
+
+    }
+
+    public void confirmReturned(){
+
+    }
+
 }
