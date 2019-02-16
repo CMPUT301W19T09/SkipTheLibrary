@@ -5,33 +5,25 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BookTest {
+public class ContactInfoTest {
 
     @Before
     public void setUp() throws Exception {
     }
 
     @Test
-    public void getImages() {
+    public void getEmail() {
     }
 
     @Test
-    public void setImages() {
+    public void setEmail() {
     }
 
     @Test
-    public void getDescription() {
+    public void getPhoneNumber() {
     }
 
     @Test
-    public void setDescription() {
-    }
-
-    @Test
-    public void getUserID() {
-    }
-
-    @Test
-    public void setUserID() {
+    public void setPhoneNumber() {
     }
 }

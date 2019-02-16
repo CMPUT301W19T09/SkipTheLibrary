@@ -5,33 +5,33 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BookTest {
+public class CredentialsTest {
 
     @Before
     public void setUp() throws Exception {
     }
 
     @Test
-    public void getImages() {
+    public void getUserName() {
     }
 
     @Test
-    public void setImages() {
+    public void setUserName() {
     }
 
     @Test
-    public void getDescription() {
+    public void getSecretID() {
     }
 
     @Test
-    public void setDescription() {
+    public void setSecretID() {
     }
 
     @Test
-    public void getUserID() {
+    public void getHashedPassword() {
     }
 
     @Test
-    public void setUserID() {
+    public void setHashedPassword() {
     }
 }
