@@ -5,16 +5,16 @@ public class User {
     private ViewableImage image;
     private ContactInfo contactInfo;
     private Credentials credentials;
-    private Identity owerIdentity;
+    private Identity ownerIdentity;
     private Identity borrowerIdentity;
 
 
-    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, Identity owerIdentity, Identity borrowerIdentity) {
+    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, Identity ownerIdentity, Identity borrowerIdentity) {
         this.name = name;
         this.image = image;
         this.contactInfo = contactInfo;
         this.credentials = credentials;
-        this.owerIdentity = owerIdentity;
+        this.ownerIdentity = ownerIdentity;
         this.borrowerIdentity = borrowerIdentity;
     }
 
@@ -50,12 +50,12 @@ public class User {
         this.credentials = credentials;
     }
 
-    public Identity getOwerIdentity() {
-        return owerIdentity;
+    public Identity getOwnerIdentity() {
+        return ownerIdentity;
     }
 
-    public void setOwerIdentity(Identity owerIdentity) {
-        this.owerIdentity = owerIdentity;
+    public void setOwnerIdentity(Identity ownerIdentity) {
+        this.ownerIdentity = ownerIdentity;
     }
 
     public Identity getBorrowerIdentity() {
