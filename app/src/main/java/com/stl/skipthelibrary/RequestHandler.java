@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class RequestHandler {
     private State state;
-    private ArrayList<String> pendingRequestors; // User IDs
-    private String acceptedRequestor; // User ID
+    private ArrayList<String> pendingRequestors; // User name
+    private String acceptedRequestor; // User name
 
     public RequestHandler(State state) {
         this(state,new ArrayList<String>(), null);

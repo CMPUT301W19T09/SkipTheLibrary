@@ -1,17 +1,16 @@
 package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Book {
     private BookDescription description;
-    private UUID userID;
+    private String ownerUserName;
     private RequestHandler requests;
     private ArrayList<ViewableImage> images;
 
-    public Book(BookDescription description, UUID userID, RequestHandler requests, ArrayList<ViewableImage> images) {
+    public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images) {
         this.description = description;
-        this.userID = userID;
+        this.ownerUserName = ownerUserName;
         this.requests = requests;
         this.images = images;
     }
@@ -33,11 +32,11 @@ public class Book {
     }
 
 
-    public UUID getUserID() {
-        return userID;
+    public String getOwnerUserName() {
+        return ownerUserName;
     }
 
-    public void setUserID(UUID userID) {
-        this.userID = userID;
+    public void setOwnerUserName(String ownerUserName) {
+        this.ownerUserName = ownerUserName;
     }
 }
