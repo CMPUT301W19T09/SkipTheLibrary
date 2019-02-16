@@ -7,7 +7,6 @@ public class Identity {
     private Rating rating;
 
 
-    
     public Identity(ArrayList<Book> booksList, Rating rating) {
         this.booksList = booksList;
         this.rating = rating;
