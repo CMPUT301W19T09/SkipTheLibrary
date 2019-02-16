@@ -7,18 +7,18 @@ import java.util.ArrayList;
  */
 public class RequestHandler {
     private State state;
-    private ArrayList<User> pendingRequestors;
-    private User acceptedRequestors;
+    private ArrayList<String> pendingRequestors; // User IDs
+    private String acceptedRequestor; // User ID
 
     public RequestHandler(State state) {
-        this(state,new ArrayList<User>(), null);
+        this(state,new ArrayList<String>(), null);
 
     }
 
-    public RequestHandler(State state, ArrayList<User> pendingRequestors, User acceptedRequestors) {
+    public RequestHandler(State state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
         this.state = state;
         this.pendingRequestors = pendingRequestors;
-        this.acceptedRequestors = acceptedRequestors;
+        this.acceptedRequestor = acceptedRequestor;
     }
 
     public State getState() {
@@ -29,19 +29,20 @@ public class RequestHandler {
         this.state = state;
     }
 
-    public ArrayList<User> getPendingRequestors() {
+    public ArrayList<String> getPendingRequestors() {
         return pendingRequestors;
     }
 
-    public void setPendingRequestors(ArrayList<User> pendingRequestors) {
+    public void setPendingRequestors(ArrayList<String> pendingRequestors) {
         this.pendingRequestors = pendingRequestors;
     }
 
-    public User getAcceptedRequestors() {
-        return acceptedRequestors;
+    public String getAcceptedRequestor() {
+        return acceptedRequestor;
     }
 
-    public void setAcceptedRequestors(User acceptedRequestors) {
-        this.acceptedRequestors = acceptedRequestors;
+    public void setAcceptedRequestor(String acceptedRequestor) {
+        this.acceptedRequestor = acceptedRequestor;
     }
+
 }
