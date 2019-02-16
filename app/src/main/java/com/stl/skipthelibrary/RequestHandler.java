@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class RequestHandler {
     private State state;
-    private ArrayList<String> pendingRequestors; // User name
+    private ArrayList<String> requestors; // User name
     private String acceptedRequestor; // User name
 
     public RequestHandler(State state) {
@@ -17,7 +17,7 @@ public class RequestHandler {
 
     public RequestHandler(State state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
         this.state = state;
-        this.pendingRequestors = pendingRequestors;
+        this.requestors = pendingRequestors;
         this.acceptedRequestor = acceptedRequestor;
     }
 
@@ -30,11 +30,11 @@ public class RequestHandler {
     }
 
     public ArrayList<String> getPendingRequestors() {
-        return pendingRequestors;
+        return requestors;
     }
 
     public void setPendingRequestors(ArrayList<String> pendingRequestors) {
-        this.pendingRequestors = pendingRequestors;
+        this.requestors = pendingRequestors;
     }
 
     public String getAcceptedRequestor() {
