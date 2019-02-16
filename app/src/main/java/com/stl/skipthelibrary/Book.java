@@ -7,12 +7,33 @@ public class Book {
     private String ownerUserName;
     private RequestHandler requests;
     private ArrayList<ViewableImage> images;
+    private Rating rating;
 
-    public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images) {
+
+    public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
         this.description = description;
         this.ownerUserName = ownerUserName;
         this.requests = requests;
         this.images = images;
+        this.rating = rating;
+        pullRating();
+    }
+
+
+    public RequestHandler getRequests() {
+        return requests;
+    }
+
+    public void setRequests(RequestHandler requests) {
+        this.requests = requests;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
     public ArrayList<ViewableImage> getImages() {
@@ -39,4 +60,19 @@ public class Book {
     public void setOwnerUserName(String ownerUserName) {
         this.ownerUserName = ownerUserName;
     }
+
+
+
+
+
+
+
+    private void pullRating(){
+
+    }
+
+    private User pullOwner(){
+        return null;
+    }
+
 }

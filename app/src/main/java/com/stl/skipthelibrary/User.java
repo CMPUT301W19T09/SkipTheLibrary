@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import java.util.ArrayList;
+
 public class User {
     private String name;
     private ViewableImage image;
@@ -7,15 +9,25 @@ public class User {
     private Credentials credentials;
     private UserIdentity ownerUserIdentity;
     private UserIdentity borrowerUserIdentity;
+    private ArrayList<Notification> notifications;
 
 
-    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, UserIdentity ownerUserIdentity, UserIdentity borrowerUserIdentity) {
+    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, UserIdentity ownerUserIdentity, UserIdentity borrowerUserIdentity, ArrayList<Notification> notifications) {
         this.name = name;
         this.image = image;
         this.contactInfo = contactInfo;
         this.credentials = credentials;
         this.ownerUserIdentity = ownerUserIdentity;
         this.borrowerUserIdentity = borrowerUserIdentity;
+        this.notifications = notifications;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     public String getName() {
