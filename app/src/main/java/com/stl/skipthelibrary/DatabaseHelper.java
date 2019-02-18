@@ -1,6 +1,5 @@
 package com.stl.skipthelibrary;
 
-import android.content.Context;
 import android.util.Log;
 
 /**
