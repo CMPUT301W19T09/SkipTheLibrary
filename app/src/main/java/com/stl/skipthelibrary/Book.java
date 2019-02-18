@@ -77,9 +77,4 @@ public class Book implements Scannable {
         Log.d(TAG, "scan: OPEN UP THE SCANNER");
         return false;
     }
-
-    private User pullOwner(){
-        return null;
-    }
-
 }
