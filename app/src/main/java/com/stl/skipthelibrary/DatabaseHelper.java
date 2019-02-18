@@ -8,24 +8,10 @@ import android.util.Log;
  */
 public class DatabaseHelper {
     public final String TAG = getClass().getSimpleName();
-//    private static final DatabaseHelper ourInstance = new DatabaseHelper();
-    private Context mContext;
-
-//    public static DatabaseHelper getInstance() {
-//        return ourInstance;
-//    }
-
-    private DatabaseHelper(Context context) {
-        try {
-//            mContext = context;
-//            Firebase.setAndroidContext(context);
-//            userRef = FirebaseDatabase.getInstance().getReference().child("Users");
-//            roomRef = FirebaseDatabase.getInstance().getReference().child("Rooms");
-            Log.d(TAG, "DatabaseHelper: Not much goin on yet it seems");
-        }
-        catch(Exception e){
-            Log.d(TAG,"ERROR: "+e.getMessage());
-        }
+//    public DatabaseReference myRef;
+    
+    private DatabaseHelper() {
+//        myRef = FirebaseDatabase.getInstance();
     }
 
 
