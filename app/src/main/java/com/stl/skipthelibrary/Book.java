@@ -1,8 +1,14 @@
 package com.stl.skipthelibrary;
 
-import java.util.ArrayList;
+import android.util.Log;
 
-public class Book {
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class Book implements Scannable {
+    public String TAG = getClass().getSimpleName();
+
+    private UUID uuid;
     private BookDescription description;
     private String ownerUserName;
     private RequestHandler requests;
@@ -11,15 +17,16 @@ public class Book {
 
 
     public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
+        this.uuid = UUID.randomUUID();
         this.description = description;
         this.ownerUserName = ownerUserName;
         this.requests = requests;
         this.images = images;
         this.rating = rating;
-        pullRating();
     }
 
 
+    // Getters and Setters
     public RequestHandler getRequests() {
         return requests;
     }
@@ -61,14 +68,14 @@ public class Book {
         this.ownerUserName = ownerUserName;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+    /**************************************************/
 
-
-
-
-
-
-    private void pullRating(){
-
+    public Boolean scan() {
+        Log.d(TAG, "scan: OPEN UP THE SCANNER");
+        return false;
     }
 
     private User pullOwner(){
