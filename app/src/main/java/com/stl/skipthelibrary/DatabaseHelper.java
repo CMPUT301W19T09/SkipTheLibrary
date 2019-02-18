@@ -9,9 +9,7 @@ import android.util.Log;
 public class DatabaseHelper {
     public final String TAG = getClass().getSimpleName();
 //    public DatabaseReference myRef;
-
-
-
+    
     private DatabaseHelper() {
 //        myRef = FirebaseDatabase.getInstance();
     }
