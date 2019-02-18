@@ -8,12 +8,12 @@ import android.util.Log;
  */
 public class DatabaseHelper {
     public final String TAG = getClass().getSimpleName();
-    private static final DatabaseHelper ourInstance = new DatabaseHelper();
+//    private static final DatabaseHelper ourInstance = new DatabaseHelper();
     private Context mContext;
 
-    public static DatabaseHelper getInstance() {
-        return ourInstance;
-    }
+//    public static DatabaseHelper getInstance() {
+//        return ourInstance;
+//    }
 
     private DatabaseHelper(Context context) {
         try {

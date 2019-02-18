@@ -3,28 +3,39 @@ package com.stl.skipthelibrary;
 import java.util.ArrayList;
 
 public class UserIdentity {
-    private ArrayList<Book> booksList;
+    private ArrayList<Book> bookList;
     private Rating rating;
+    private UserMode userMode;
 
-
-    public UserIdentity(ArrayList<Book> booksList, Rating rating) {
-        this.booksList = booksList;
-        this.rating = rating;
+    public UserIdentity(UserMode userMode) {
+        this.userMode = userMode;
+        rating = new Rating();
+        bookList = new ArrayList<Book>();
     }
 
-    public ArrayList<Book> getBooksList() {
-        return booksList;
+    public UserIdentity(ArrayList<Book> bookList, Rating rating, UserMode userMode) {
+        this.bookList = bookList;
+        this.rating = rating;
+        this.userMode = userMode;
+    }
+
+    public ArrayList<Book> getBookList() {
+        return bookList;
     }
 
     public Rating getRating() {
         return rating;
     }
 
-    public void setBooksList(ArrayList<Book> booksList) {
-        this.booksList = booksList;
+    public UserMode getUserMode() {
+        return userMode;
     }
 
-    public void setRating(Rating rating) {
-        this.rating = rating;
+    public void addBook(Book book){
+        bookList.add(book);
+    }
+
+    public boolean removeBook(Book book){
+        return bookList.remove(book);
     }
 }

@@ -21,18 +21,6 @@ public class Rating {
         return averageRating;
     }
 
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public void addRating(double rating) throws RatingOutOfBoundsException{
         if (rating < minRating || rating > maxRating){
             throw new RatingOutOfBoundsException();
@@ -46,15 +34,7 @@ public class Rating {
         return maxRating;
     }
 
-    public void setMaxRating(int maxRating) {
-        this.maxRating = maxRating;
-    }
-
     public int getMinRating() {
         return minRating;
-    }
-
-    public void setMinRating(int minRating) {
-        this.minRating = minRating;
     }
 }
