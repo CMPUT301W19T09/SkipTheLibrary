@@ -1,40 +1,23 @@
 package com.stl.skipthelibrary;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class BookDescriptionTest {
+    private BookDescription bookDescription;
 
-    @Test
-    public void getTitle() {
+    @Before
+    public void setup(){
+        bookDescription = new BookDescription("test title", "test synopsis", "test author", null);
     }
 
     @Test
-    public void setTitle() {
-    }
-
-    @Test
-    public void getSynopsis() {
-    }
-
-    @Test
-    public void setSynopsis() {
-    }
-
-    @Test
-    public void getAuthor() {
-    }
-
-    @Test
-    public void setAuthor() {
-    }
-
-    @Test
-    public void getRating() {
-    }
-
-    @Test
-    public void setRating() {
+    public void testConstructor() {
+        assertEquals("test title", bookDescription.getTitle());
+        assertEquals("test synopsis", bookDescription.getSynopsis());
+        assertEquals("test author", bookDescription.getAuthor());
+        assertEquals(null, bookDescription.getRating());
     }
 }
