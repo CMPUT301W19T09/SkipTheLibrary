@@ -9,7 +9,6 @@ public class UserIdentityTest {
     private UserIdentity ownerIdentity;
     private UserIdentity borrowerIdentity;
 
-
     @Before
     public void setUp() throws Exception {
         ownerIdentity = new UserIdentity(UserMode.OWNER);
