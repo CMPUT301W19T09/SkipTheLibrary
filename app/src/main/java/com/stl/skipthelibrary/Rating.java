@@ -1,28 +1,45 @@
 package com.stl.skipthelibrary;
 
 public class Rating {
-    private int rating;
+    private double averageRating;
+    private int count;
     private int maxRating;
     private int minRating;
 
-    public Rating(int rating) {
-        this.rating = rating;
-        this.minRating = 0;
-        this.maxRating = 5;
+    public Rating() {
+        this(0, 0, 5, 0);
     }
 
-    public Rating(int rating, int maxRating, int minRating) {
-        this.rating = rating;
+    public Rating(double averageRating, int count, int maxRating, int minRating) {
+        this.averageRating = averageRating;
+        this.count = count;
         this.maxRating = maxRating;
         this.minRating = minRating;
     }
 
-    public int getRating() {
-        return rating;
+    public double getAverageRating() {
+        return averageRating;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void addRating(double rating) throws RatingOutOfBoundsException{
+        if (rating < minRating || rating > maxRating){
+            throw new RatingOutOfBoundsException();
+        }
+        double totalRating = (averageRating * (double) count) + rating;
+        count++;
+        averageRating = totalRating / (double) count;
     }
 
     public int getMaxRating() {

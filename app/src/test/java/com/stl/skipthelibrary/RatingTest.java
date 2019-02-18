@@ -1,32 +1,37 @@
 package com.stl.skipthelibrary;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class RatingTest {
 
-    @Test
-    public void getRating() {
+    private Rating rating;
+
+    @Before
+    public void setup(){
+        rating = new Rating();
     }
 
     @Test
-    public void setRating() {
+    public void testAddRating(){
+        assertEquals(0, rating.getAverageRating(), 0);
+        rating.addRating(4.0);
+        assertEquals(4.0, rating.getAverageRating(), 0);
+        rating.addRating(2.0);
+        assertEquals(3.0, rating.getAverageRating(), 0);
+        rating.addRating(4.5);
+        assertEquals(3.5, rating.getAverageRating(), 0);
     }
 
-    @Test
-    public void getMaxRating() {
+    @Test(expected = RatingOutOfBoundsException.class)
+    public void testRatingLowerBoundException(){
+        rating.addRating(rating.getMinRating() - 1);
     }
 
-    @Test
-    public void setMaxRating() {
-    }
-
-    @Test
-    public void getMinRating() {
-    }
-
-    @Test
-    public void setMinRating() {
+    @Test(expected = RatingOutOfBoundsException.class)
+    public void testRatingHigherBoundException(){
+        rating.addRating(rating.getMaxRating() + 1);
     }
 }
