@@ -6,24 +6,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ContactInfoTest {
+    private ContactInfo contactInfo;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
+        contactInfo = new ContactInfo("test@test.com", "aaabbbcccc", null);
     }
 
     @Test
-    public void getEmail() {
-    }
-
-    @Test
-    public void setEmail() {
-    }
-
-    @Test
-    public void getPhoneNumber() {
-    }
-
-    @Test
-    public void setPhoneNumber() {
+    public void testConstructor() {
+        assertEquals("test@test.com", contactInfo.getEmail());
+        assertEquals("aaabbbcccc", contactInfo.getPhoneNumber());
     }
 }
