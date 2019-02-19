@@ -8,6 +8,7 @@ public class State {
     private Location location;
     private HandoffState handoffState;
 
+    // CONSTRUCTORS
     public State() {
         this(BookStatus.AVAILABLE,null,null);
     }
@@ -18,6 +19,7 @@ public class State {
         this.handoffState = handoffState;
     }
 
+    // GETTERS AND SETTERS
     public BookStatus getBookStatus() {
         return bookStatus;
     }
@@ -40,23 +42,6 @@ public class State {
     public void setHandoffState(HandoffState handoffState) {
         this.handoffState = handoffState;
     }
-
-
-
-    public void lendBook(){
-
-    }
-
-    public void confirmBorrowed(){
-
-    }
-
-    public void returnBook(){
-
-    }
-
-    public void confirmReturned(){
-
-    }
+    //////
 
 }
