@@ -7,6 +7,12 @@ public class UserIdentity {
     private Rating rating;
     private UserMode userMode;
 
+    public UserIdentity() {
+        this.userMode = null;
+        rating = new Rating();
+        bookList = new ArrayList<Book>();
+    }
+
     public UserIdentity(UserMode userMode) {
         this.userMode = userMode;
         rating = new Rating();
@@ -16,6 +22,18 @@ public class UserIdentity {
     public UserIdentity(ArrayList<Book> bookList, Rating rating, UserMode userMode) {
         this.bookList = bookList;
         this.rating = rating;
+        this.userMode = userMode;
+    }
+
+    public void setBookList(ArrayList<Book> bookList) {
+        this.bookList = bookList;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
+    }
+
+    public void setUserMode(UserMode userMode) {
         this.userMode = userMode;
     }
 
@@ -37,5 +55,10 @@ public class UserIdentity {
 
     public boolean removeBook(Book book){
         return bookList.remove(book);
+    }
+
+    @Override
+    public String toString() {
+        return "{UserMode= " + userMode.name() + " ,Rating = " + rating.toString() + "}";
     }
 }

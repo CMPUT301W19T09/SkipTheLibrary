@@ -10,7 +10,7 @@ public class UserTest {
 
     @Before
     public void setUp(){
-        user = new User("test name", null, null, null, null, null, null);
+        user = new User("test name", "test username", null, null, null, null, null, null);
     }
 
     @Test

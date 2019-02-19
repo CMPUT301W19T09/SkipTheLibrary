@@ -9,6 +9,14 @@ public class Notification {
         this.message = message;
     }
 
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public NotificationType getNotificationType() {
         return notificationType;
     }

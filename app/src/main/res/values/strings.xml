@@ -3,6 +3,11 @@
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="emailaddress">Email</string>
+    <string name="resister">Register</string>
+    <string name="phonenumber">Phone Number</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
     <string name="signin">Sign In</string>
     <string name="signup">Sign Up</string>
     <string name="ratingheader">Select a rating for . . .</string>

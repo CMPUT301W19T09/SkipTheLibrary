@@ -35,35 +35,34 @@
             style="@style/Widget.MaterialComponents.ChipGroup"
             android:layout_width="500dp"
             android:layout_height="match_parent"
+            android:scrollbars="none"
             android:singleLine="true"
             app:chipSpacing="10dp"
-            app:singleLine="true"
-            >
+            android:layout_marginBottom="10dp"
+            app:singleLine="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/AvailableChip"
-                style="@style/Base.Widget.MaterialComponents.Chip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
-                android:text="@string/available"
-                />
+                android:checked="true"
+                android:text="@string/available" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/RequestedChip"
-                style="@style/Base.Widget.MaterialComponents.Chip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
-                android:text="@string/requested"
-                />
+                android:checked="true"
+                android:text="@string/requested" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/AcceptedChip"
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
+                android:checked="true"
                 android:text="@string/accepted" />
 
             <com.google.android.material.chip.Chip
@@ -71,7 +70,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
+                android:checked="true"
                 android:text="@string/lent" />
         </com.google.android.material.chip.ChipGroup>
     </android.widget.HorizontalScrollView>

@@ -38,15 +38,16 @@
             android:layout_height="match_parent"
             android:singleLine="true"
             app:chipSpacing="10dp"
+            android:layout_marginBottom="10dp"
             app:singleLine="true"
             >
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/RequestedChip"
-                style="@style/Base.Widget.MaterialComponents.Chip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
+                android:checked="true"
                 android:text="@string/requested"
                 />
 
@@ -55,7 +56,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
+                android:checked="true"
                 android:text="@string/accepted" />
 
             <com.google.android.material.chip.Chip
@@ -63,7 +64,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Filter"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
+                android:checked="true"
                 android:text="@string/borrowed" />
         </com.google.android.material.chip.ChipGroup>
     </android.widget.HorizontalScrollView>
