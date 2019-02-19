@@ -20,6 +20,8 @@ public class State {
     }
 
     // GETTERS AND SETTERS
+
+
     public BookStatus getBookStatus() {
         return bookStatus;
     }

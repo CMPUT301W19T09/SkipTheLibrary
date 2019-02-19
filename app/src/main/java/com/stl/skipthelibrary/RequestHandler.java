@@ -15,6 +15,8 @@ public class RequestHandler {
 
     }
 
+
+
     public RequestHandler(State state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
         this.state = state;
         this.requestors = pendingRequestors;
@@ -22,6 +24,9 @@ public class RequestHandler {
     }
 
     // GETTERS AND SETTERS
+
+
+
     public State getState() {
         return state;
     }

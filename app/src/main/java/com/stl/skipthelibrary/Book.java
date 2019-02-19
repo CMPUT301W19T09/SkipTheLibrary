@@ -26,7 +26,14 @@ public class Book implements Scannable {
     }
 
 
+
     // Getters and Setters
+
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public RequestHandler getRequests() {
         return requests;
     }

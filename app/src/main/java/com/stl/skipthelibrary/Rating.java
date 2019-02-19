@@ -17,6 +17,26 @@ public class Rating {
         this.minRating = minRating;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setMaxRating(int maxRating) {
+        this.maxRating = maxRating;
+    }
+
+    public void setMinRating(int minRating) {
+        this.minRating = minRating;
+    }
+
     public double getAverageRating() {
         return averageRating;
     }

@@ -15,6 +15,14 @@ public class ContactInfo {
         this.context = context;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public String getEmail() {
         return email;
     }

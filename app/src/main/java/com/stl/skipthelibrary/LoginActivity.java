@@ -24,5 +24,14 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        MaterialButton signUp = findViewById(R.id.SignUpButton);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

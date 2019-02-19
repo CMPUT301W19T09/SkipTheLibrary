@@ -19,6 +19,18 @@ public class UserIdentity {
         this.userMode = userMode;
     }
 
+    public void setBookList(ArrayList<Book> bookList) {
+        this.bookList = bookList;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
+    }
+
+    public void setUserMode(UserMode userMode) {
+        this.userMode = userMode;
+    }
+
     public ArrayList<Book> getBookList() {
         return bookList;
     }
