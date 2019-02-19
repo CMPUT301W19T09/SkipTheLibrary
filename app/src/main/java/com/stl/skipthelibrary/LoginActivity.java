@@ -10,20 +10,20 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 private EditText passwordText;
-private EditText usernameText;
+private EditText emailText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        usernameText = findViewById(R.id.UsernameEditText);
+        emailText = findViewById(R.id.EmailEditText);
         passwordText = findViewById(R.id.PasswordEditText);
         
     }
 
 
     public void signInOnClick(View view) {
-        String email = usernameText.getText().toString();
+        String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
         SignInValidator signInValidator = new SignInValidator(email, password);
         if (signInValidator.isValid()){

@@ -21,7 +21,7 @@ public class SignUpValidator implements Validatable {
         this.errorMessage = "No errors detected";
     }
 
-    private boolean isUserNameValid(){
+    public boolean isUserNameValid(){
         Boolean valid = Pattern.compile("[0-9a-zA-Z_]+").matcher(username).matches();
 
         if (!valid){
@@ -30,7 +30,7 @@ public class SignUpValidator implements Validatable {
 
         return valid;
     }
-    private boolean isPasswordValid(){
+    public boolean isPasswordValid(){
         Boolean valid = Pattern.compile("[0-9a-zA-Z_]+").matcher(password).matches();
 
         if (!valid){
@@ -39,7 +39,7 @@ public class SignUpValidator implements Validatable {
 
         return valid;
     }
-    private boolean isFirstNameValid(){
+    public boolean isFirstNameValid(){
         Boolean valid = Pattern.compile("[a-zA-Z_]+").matcher(firstName).matches();
 
         if (!valid){
@@ -48,7 +48,7 @@ public class SignUpValidator implements Validatable {
 
         return valid;
     }
-    private boolean isLastNameValid(){
+    public boolean isLastNameValid(){
         Boolean valid = Pattern.compile("[a-zA-Z_]+").matcher(lastName).matches();
 
         if (!valid){
@@ -57,7 +57,7 @@ public class SignUpValidator implements Validatable {
 
         return valid;
     }
-    private boolean isEmailNameValid(){
+    public boolean isEmailNameValid(){
         Boolean valid = Pattern.compile("[a-zA-Z_0-9.]+@[a-zA-Z]+\\.[a-zA-Z]+").matcher(emailAddress).matches();
 
         if (!valid){
@@ -66,7 +66,7 @@ public class SignUpValidator implements Validatable {
 
         return valid;
     }
-    private boolean isPhoneNumberValid(){
+    public boolean isPhoneNumberValid(){
         Boolean valid = Pattern.compile("\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}").matcher(phoneNumber).matches();
 
         if (!valid){
