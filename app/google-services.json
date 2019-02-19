@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "498806897794-ksj9flld9bi57auclf9d050m272gerkj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stl.skipthelibrary",
+            "certificate_hash": "3fa2e256a2d320f831756f1f672b0ccf0e4d1bdb"
+          }
+        },
+        {
           "client_id": "498806897794-e00qtmirdg6u8r3hhe4jnqahrir4js28.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -50,30 +50,43 @@ public class RequestHandler {
 
 
     public void lendBook(){
-        throw new UnsupportedOperationException("Not implemented yet");
+        getState().setHandoffState(HandoffState.OWNER_LENT);
     }
 
     public void confirmBorrowed(){
-        throw new UnsupportedOperationException("Not implemented yet");
+        getState().setBookStatus(BookStatus.BORROWED);
+        getState().setHandoffState(HandoffState.BORROWER_RECEIVED);
     }
 
     public void returnBook(){
-        throw new UnsupportedOperationException("Not implemented yet");
+        getState().setBookStatus(BookStatus.BORROWED);
+        getState().setHandoffState(HandoffState.BORROWER_RETURNED);
     }
 
     public void confirmReturned(){
+       getState().setBookStatus(BookStatus.AVAILABLE);
+       getState().setHandoffState(HandoffState.OWNER_RECEIVED);
+    }
+
+    public void addRequestor(String user){
+        getRequestors().add(user);
+    }
+
+    public void acceptRequestor(String user){
+        if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
+        setAcceptedRequestor(user);
+//        for (String s: getRequestors()) {
+//            sendNotificaition()
+//        }
+        getRequestors().clear();
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public void addRequestor(User user){
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public void acceptRequestor(User user){
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public void denyRequestor(User user){
+    public void denyRequestor(String user){
+        if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
+        setAcceptedRequestor(user);
+//        sendNotificaition();
+        getRequestors().remove(user);
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 /**
@@ -65,7 +67,7 @@ public class RequestHandlerTest {
 
     @Test
     public void testAddRequestor(){
-        User requestor = new User();
+        String requestor = UUID.randomUUID().toString();
 
         requestHandler.addRequestor(requestor);
 
@@ -74,8 +76,8 @@ public class RequestHandlerTest {
 
     @Test(expected = RequestorsUnavailableException.class)
     public void testAcceptRequestor(){
-        User failedRequest = new User();
-        User succeedRequest = new User();
+        String failedRequest = UUID.randomUUID().toString();
+        String succeedRequest = UUID.randomUUID().toString();
 
         requestHandler.addRequestor(failedRequest);
         requestHandler.addRequestor(succeedRequest);
@@ -92,8 +94,8 @@ public class RequestHandlerTest {
 
     @Test
     public void testDenyRequestor(){
-        User deniedRequest = new User();
-        User succeedRequest = new User();
+        String deniedRequest = UUID.randomUUID().toString();
+        String succeedRequest = UUID.randomUUID().toString();
 
         requestHandler.addRequestor(deniedRequest);
         requestHandler.addRequestor(succeedRequest);
