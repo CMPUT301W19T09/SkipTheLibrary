@@ -21,6 +21,7 @@ public class RequestHandler {
         this.acceptedRequestor = acceptedRequestor;
     }
 
+    // GETTERS AND SETTERS
     public State getState() {
         return state;
     }
@@ -29,12 +30,12 @@ public class RequestHandler {
         this.state = state;
     }
 
-    public ArrayList<String> getPendingRequestors() {
+    public ArrayList<String> getRequestors() {
         return requestors;
     }
 
-    public void setPendingRequestors(ArrayList<String> pendingRequestors) {
-        this.requestors = pendingRequestors;
+    public void setRequestors(ArrayList<String> requestors) {
+        this.requestors = requestors;
     }
 
     public String getAcceptedRequestor() {
@@ -44,21 +45,36 @@ public class RequestHandler {
     public void setAcceptedRequestor(String acceptedRequestor) {
         this.acceptedRequestor = acceptedRequestor;
     }
+    ////////
 
 
 
-
-
-
-    public void addRequestor(){
-
+    public void lendBook(){
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public void acceptRequestor(){
-
+    public void confirmBorrowed(){
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public void denyRequestor(){
-
+    public void returnBook(){
+        throw new UnsupportedOperationException("Not implemented yet");
     }
+
+    public void confirmReturned(){
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public void addRequestor(User user){
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public void acceptRequestor(User user){
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public void denyRequestor(User user){
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
 }

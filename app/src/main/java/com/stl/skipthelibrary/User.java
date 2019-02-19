@@ -11,6 +11,15 @@ public class User {
     private UserIdentity borrowerUserIdentity;
     private ArrayList<Notification> notifications;
 
+    public User(){
+        this.name = "";
+        this.image = null;
+        this.contactInfo = null;
+        this.credentials = null;
+        this.ownerUserIdentity = null;
+        this.borrowerUserIdentity = null;
+        this.notifications = new ArrayList<Notification>();
+    }
 
     public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, UserIdentity ownerUserIdentity, UserIdentity borrowerUserIdentity, ArrayList<Notification> notifications) {
         this.name = name;
