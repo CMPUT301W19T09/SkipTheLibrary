@@ -18,7 +18,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void signInOnClick(View view) {
-        String email = ((EditText) findViewById(R.id.UsernameEditText)).getText().toString();
+        String email = usernameText.getText().toString();
         String password = ((EditText) findViewById(R.id.PasswordEditText)).getText().toString();
         SignInValidator signInValidator = new SignInValidator(email, password);
         if (signInValidator.isValid()){
