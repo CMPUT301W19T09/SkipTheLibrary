@@ -1,16 +1,33 @@
 package com.stl.skipthelibrary;
 
+import java.util.ArrayList;
+
 public class User {
     private String name;
     private ViewableImage image;
     private ContactInfo contactInfo;
     private Credentials credentials;
+    private UserIdentity ownerUserIdentity;
+    private UserIdentity borrowerUserIdentity;
+    private ArrayList<Notification> notifications;
 
-    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials) {
+
+    public User(String name, ViewableImage image, ContactInfo contactInfo, Credentials credentials, UserIdentity ownerUserIdentity, UserIdentity borrowerUserIdentity, ArrayList<Notification> notifications) {
         this.name = name;
         this.image = image;
         this.contactInfo = contactInfo;
         this.credentials = credentials;
+        this.ownerUserIdentity = ownerUserIdentity;
+        this.borrowerUserIdentity = borrowerUserIdentity;
+        this.notifications = notifications;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     public String getName() {
@@ -44,4 +61,22 @@ public class User {
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
+
+    public UserIdentity getOwnerUserIdentity() {
+        return ownerUserIdentity;
+    }
+
+    public void setOwnerUserIdentity(UserIdentity ownerUserIdentity) {
+        this.ownerUserIdentity = ownerUserIdentity;
+    }
+
+    public UserIdentity getBorrowerUserIdentity() {
+        return borrowerUserIdentity;
+    }
+
+    public void setBorrowerUserIdentity(UserIdentity borrowerUserIdentity) {
+        this.borrowerUserIdentity = borrowerUserIdentity;
+    }
+
+
 }

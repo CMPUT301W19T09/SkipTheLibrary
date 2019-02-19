@@ -1,22 +1,46 @@
 package com.stl.skipthelibrary;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class Book {
+public class Book implements Scannable {
+    public String TAG = getClass().getSimpleName();
+
+    private UUID uuid;
     private BookDescription description;
-    private BookStatus status;
-    private User owner;
-    private ArrayList<Request> pendingRequests;
-    private Request acceptedRequest;
+    private String ownerUserName;
+    private RequestHandler requests;
     private ArrayList<ViewableImage> images;
+    private Rating rating;
 
-    public Book(BookDescription description, BookStatus status, User owner, ArrayList<Request> pendingRequests, Request acceptedRequest, ArrayList<ViewableImage> images) {
+
+    public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
+        this.uuid = UUID.randomUUID();
         this.description = description;
-        this.status = status;
-        this.owner = owner;
-        this.pendingRequests = pendingRequests;
-        this.acceptedRequest = acceptedRequest;
+        this.ownerUserName = ownerUserName;
+        this.requests = requests;
         this.images = images;
+        this.rating = rating;
+    }
+
+
+    // Getters and Setters
+    public RequestHandler getRequests() {
+        return requests;
+    }
+
+    public void setRequests(RequestHandler requests) {
+        this.requests = requests;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
     public ArrayList<ViewableImage> getImages() {
@@ -35,35 +59,22 @@ public class Book {
         this.description = description;
     }
 
-    public BookStatus getStatus() {
-        return status;
+
+    public String getOwnerUserName() {
+        return ownerUserName;
     }
 
-    public void setStatus(BookStatus status) {
-        this.status = status;
+    public void setOwnerUserName(String ownerUserName) {
+        this.ownerUserName = ownerUserName;
     }
 
-    public User getOwner() {
-        return owner;
+    public UUID getUuid() {
+        return uuid;
     }
+    /**************************************************/
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public ArrayList<Request> getPendingRequests() {
-        return pendingRequests;
-    }
-
-    public void setPendingRequests(ArrayList<Request> pendingRequests) {
-        this.pendingRequests = pendingRequests;
-    }
-
-    public Request getAcceptedRequest() {
-        return acceptedRequest;
-    }
-
-    public void setAcceptedRequest(Request acceptedRequest) {
-        this.acceptedRequest = acceptedRequest;
+    public Boolean scan() {
+        Log.d(TAG, "scan: OPEN UP THE SCANNER");
+        return false;
     }
 }
