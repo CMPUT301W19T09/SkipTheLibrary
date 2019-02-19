@@ -36,4 +36,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 }
 
+// Test Logging
+tasks.withType(Test) {
+    testLogging {
+        events "standardOut", "passed", "skipped", "failed"
+    }
+}
+
 apply plugin: 'com.google.gms.google-services'

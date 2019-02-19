@@ -45,4 +45,4 @@ before_install:
 #  - yes | sdkmanager "platforms;android-28"
 
 script:
-  - "./gradlew clean build test -i -PdisablePreDex"
+  - "./gradlew clean build test -PdisablePreDex"
