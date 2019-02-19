@@ -91,7 +91,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider1"
-                app:layout_constrantBottom_toTopOf="@+id/BookRating"/>
+                app:layout_constraintBottom_toTopOf="@+id/BookRating"/>
 
             <RatingBar
                 android:id="@+id/BookRating"
