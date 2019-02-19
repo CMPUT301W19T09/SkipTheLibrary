@@ -38,40 +38,14 @@ public class SignUpActivity extends AppCompatActivity {
         String phoneNumber = ((EditText) findViewById(R.id.SignUpPhoneNumber)).getText().toString();
         SignUpValidator signUpValidator = new SignUpValidator(userName, password, firstName, lastName, emailAddress, phoneNumber);
         if (signUpValidator.isValid()){
-            createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber);
+            DatabaseHelper databaseHelper = new DatabaseHelper(this);
+            databaseHelper.createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber);
         }
         else{
             Toast.makeText(SignUpActivity.this, signUpValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();
             return;
         }
 
-    }
-
-    private void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber){
-        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignUpActivity.this, "Authentication Succeeded.", Toast.LENGTH_SHORT).show();
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            accountCreated(new User(firstName + " " + lastName, userName, firebaseUser.getUid()
-                                    , new ContactInfo(emailAddress, phoneNumber, null)));
-                        }
-                        else {
-                            Toast.makeText(SignUpActivity.this, "Registration failed.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    private void accountCreated(User user){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference();
-        databaseReference.child("Users").child(user.getUserID()).setValue(user);
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 
 }
