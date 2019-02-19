@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/grey_gradient"
+    app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/mybooks"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <android.widget.HorizontalScrollView
+        android:id="@+id/BorrowerFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.chip.ChipGroup
+            style="@style/Widget.MaterialComponents.ChipGroup"
+            android:layout_width="500dp"
+            android:layout_height="match_parent"
+            android:singleLine="true"
+            app:chipSpacing="10dp"
+            app:singleLine="true"
+            >
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/AvailableChip"
+                style="@style/Base.Widget.MaterialComponents.Chip"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_grey"
+                android:text="@string/available"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/RequestedChip"
+                style="@style/Base.Widget.MaterialComponents.Chip"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_grey"
+                android:text="@string/requested"
+                />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/AcceptedChip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_grey"
+                android:text="@string/accepted" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/LentChip"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/light_grey"
+                android:text="@string/lent" />
+        </com.google.android.material.chip.ChipGroup>
+    </android.widget.HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/book_list_item" />
+
+
+
+</LinearLayout>
+
+<com.google.android.material.bottomnavigation.BottomNavigationView
+android:id="@+id/bottom_navigation"
+style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:background="@color/black"
+app:itemIconTint="@drawable/bottom_nav_colors"
+app:itemTextColor="@drawable/bottom_nav_colors"
+app:menu="@menu/bottom_menu_basic"
+app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton3"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:backgroundTint="@color/magenta"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
+
+</android.support.constraint.ConstraintLayout>
