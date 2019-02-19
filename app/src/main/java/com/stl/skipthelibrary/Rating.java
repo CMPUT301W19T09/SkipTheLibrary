@@ -57,4 +57,9 @@ public class Rating {
     public int getMinRating() {
         return minRating;
     }
+
+    @Override
+    public String toString() {
+        return "{rating = " + averageRating + "}";
+    }
 }

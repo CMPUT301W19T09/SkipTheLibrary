@@ -9,6 +9,12 @@ public class ContactInfo {
     private String phoneNumber;
     private Context context;
 
+    public ContactInfo() {
+        this.email = "";
+        this.phoneNumber = "";
+        this.context = null;
+    }
+
     public ContactInfo(String email, String phoneNumber, Context context) {
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -18,6 +24,8 @@ public class ContactInfo {
     public Context getContext() {
         return context;
     }
+
+
 
     public void setContext(Context context) {
         this.context = context;
@@ -57,5 +65,10 @@ public class ContactInfo {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Info about your book");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Hello, I would like to know more about your book.\n\n");
         context.startActivity(emailIntent);
+    }
+
+    @Override
+    public String toString() {
+        return "{email= " + email + " ,phonenumber= " + phoneNumber + "}";
     }
 }

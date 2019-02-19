@@ -111,5 +111,11 @@ public class User {
         this.borrowerUserIdentity = borrowerUserIdentity;
     }
 
-
+    @Override
+    public String toString() {
+        return "{Name = " + name + " ,userName = " + userName + " ,userID = " + userID
+                + " ,contactInfo = " + contactInfo.toString() + " ,ownerUserIdentity = "
+                + ownerUserIdentity.toString() + " ,borrowerUserIdentity = "
+                + borrowerUserIdentity.toString() + "}";
+    }
 }

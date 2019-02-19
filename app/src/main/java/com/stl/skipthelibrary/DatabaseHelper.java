@@ -11,8 +11,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
 
@@ -66,11 +70,9 @@ public class DatabaseHelper {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             Toast.makeText(context, "Authentication successful.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(context, NotificationActivity.class);
-                            // TODO: Get the user from their userID and pass the user object to the intent, or write it somewhere as a global var
-                            context.startActivity(intent);
+                            pullUser(firebaseUser.getUid());
                         }
                         else {
                             // If sign in fails, display a message to the user.
@@ -80,8 +82,27 @@ public class DatabaseHelper {
                 });
     }
 
-    public User pullUser(String userName) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void pullUser(String userID) {
+        databaseReference.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                UserRetrieved(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void UserRetrieved(User user){
+        Log.d(TAG, "User Recieved: username = " + user.toString());
+        Gson gson = new Gson();
+        Intent intent = new Intent(context, NotificationActivity.class);
+        intent.putExtra("User", gson.toJson(user));
+        context.startActivity(intent);
     }
 
     public BookDescription pullBookDescription(String isbn) {

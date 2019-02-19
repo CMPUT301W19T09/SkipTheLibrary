@@ -7,6 +7,12 @@ public class UserIdentity {
     private Rating rating;
     private UserMode userMode;
 
+    public UserIdentity() {
+        this.userMode = null;
+        rating = new Rating();
+        bookList = new ArrayList<Book>();
+    }
+
     public UserIdentity(UserMode userMode) {
         this.userMode = userMode;
         rating = new Rating();
@@ -49,5 +55,10 @@ public class UserIdentity {
 
     public boolean removeBook(Book book){
         return bookList.remove(book);
+    }
+
+    @Override
+    public String toString() {
+        return "{UserMode= " + userMode.name() + " ,Rating = " + rating.toString() + "}";
     }
 }
