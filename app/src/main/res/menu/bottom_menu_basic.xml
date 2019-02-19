@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_white_24dp"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_person_white_24dp"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/my_books"
+        android:icon="@drawable/ic_collections_bookmark_white_24dp"
+        android:title="@string/mybooks" />
+    <item
+        android:id="@+id/borrow"
+        android:icon="@drawable/ic_local_library_white_24dp"
+        android:title="@string/borrow" />
+</menu>

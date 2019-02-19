@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">SkipTheLibrary</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">Sign Up</string>
+    <string name="ratingheader">Select a rating for . . .</string>
+    <string name="username_tag">\@username</string>
+    <string name="rate">rate</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="mybooks">My Books</string>
+    <string name="borrow">Borrow</string>
+    <string name="heading">Heading</string>
+    <string name="notifications">Notifications</string>
+    <string name="title">Title</string>
+    <string name="author">by Author</string>
+    <string name="rating">Rating</string>
+    <string name="details">Details</string>
+    <string name="requesters">Requesters</string>
+    <string name="accept">accept</string>
+    <string name="deny">deny</string>
+    <string name="borrowed">borrowed</string>
+    <string name="accepted">accepted</string>
+    <string name="requested">requested</string>
+    <string name="borrowing">Borrowing</string>
+    <string name="title">Title</string>
+    <string name="status">status</string>
+    <string name="available">available</string>
+    <string name="lent">lent</string>
 </resources>
