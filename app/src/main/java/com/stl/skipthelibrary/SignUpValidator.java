@@ -31,7 +31,7 @@ public class SignUpValidator implements Validatable {
         return valid;
     }
     public boolean isPasswordValid(){
-        Boolean valid = Pattern.compile("[0-9a-zA-Z_]+").matcher(password).matches();
+        Boolean valid = Pattern.compile("[0-9a-zA-Z_]{6,}").matcher(password).matches();
 
         if (!valid){
             errorMessage = "Invalid password format";
