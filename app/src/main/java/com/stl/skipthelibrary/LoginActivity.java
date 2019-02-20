@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordText.getText().toString();
         SignInValidator signInValidator = new SignInValidator(email, password);
         if (signInValidator.isValid()){
-            DatabaseHelper databaseHelper = new DatabaseHelper(this);
             databaseHelper.signIn(email, password);
         }
         else{
