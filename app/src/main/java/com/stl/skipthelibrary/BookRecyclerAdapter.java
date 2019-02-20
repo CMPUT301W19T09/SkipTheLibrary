@@ -37,7 +37,13 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
         holder.title.setText(title);
         holder.author.setText(author);
-        holder.status.setText(status);
+        if (context.getClass() == MyBooksActivity.class && status.equals(BookStatus.BORROWED.name())){
+            holder.status.setText(context.getString(R.string.lent).toUpperCase());
+        }
+        else{
+            holder.status.setText(status);
+        }
+
 
         if (status.equals(BookStatus.ACCEPTED.name())){
             holder.status.setBackgroundTintList(context.getColorStateList(R.color.ACCEPTED));
