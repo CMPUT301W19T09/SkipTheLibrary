@@ -33,4 +33,6 @@
     <string name="status">status</string>
     <string name="available">available</string>
     <string name="lent">lent</string>
+    <string name="logout">logout</string>
+    <string name="myprofile">My Profile</string>
 </resources>

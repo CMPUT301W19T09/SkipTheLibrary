@@ -28,12 +28,14 @@ public class DatabaseHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private FirebaseUser firebaseUser;
     private Context context;
 
     public DatabaseHelper(Context context) {
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
+        firebaseUser = firebaseAuth.getCurrentUser();
         this.context = context;
     }
 
@@ -72,7 +74,7 @@ public class DatabaseHelper {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             Toast.makeText(context, "Authentication successful.", Toast.LENGTH_SHORT).show();
-                            pullUser(firebaseUser.getUid());
+                            pullUserSignIn(firebaseUser.getUid());
                         }
                         else {
                             // If sign in fails, display a message to the user.
@@ -82,7 +84,7 @@ public class DatabaseHelper {
                 });
     }
 
-    public void pullUser(String userID) {
+    public void pullUserSignIn(String userID) {
         databaseReference.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -103,6 +105,14 @@ public class DatabaseHelper {
         Intent intent = new Intent(context, NotificationActivity.class);
         intent.putExtra("User", gson.toJson(user));
         context.startActivity(intent);
+    }
+
+    public boolean isUserLoggedIn(){
+        return firebaseUser != null;
+    }
+
+    public void signOut(){
+        firebaseAuth.signOut();
     }
 
     public BookDescription pullBookDescription(String isbn) {
@@ -158,5 +168,13 @@ public class DatabaseHelper {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public FirebaseUser getFirebaseUser() {
+        return firebaseUser;
+    }
+
+    public void setFirebaseUser(FirebaseUser firebaseUser) {
+        this.firebaseUser = firebaseUser;
     }
 }

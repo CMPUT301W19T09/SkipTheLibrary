@@ -10,8 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
-private EditText passwordText;
-private EditText emailText;
+
+    private EditText passwordText;
+    private EditText emailText;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,13 @@ private EditText emailText;
         setContentView(R.layout.activity_login);
         emailText = findViewById(R.id.EmailEditText);
         passwordText = findViewById(R.id.PasswordEditText);
+        databaseHelper = new DatabaseHelper(this);
+
+        // user is already logged in
+        if (databaseHelper.isUserLoggedIn()){
+            databaseHelper.pullUserSignIn(databaseHelper.getFirebaseUser().getUid());
+            Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
+        }
 
         emailText.addTextChangedListener(new TextValidator(emailText) {
             @Override
@@ -36,7 +45,7 @@ private EditText emailText;
                 }
             }
         });
-        
+
     }
 
 
@@ -45,7 +54,6 @@ private EditText emailText;
         String password = passwordText.getText().toString();
         SignInValidator signInValidator = new SignInValidator(email, password);
         if (signInValidator.isValid()){
-            DatabaseHelper databaseHelper = new DatabaseHelper(this);
             databaseHelper.signIn(email, password);
         }
         else{
