@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
@@ -18,6 +19,23 @@ private EditText emailText;
         setContentView(R.layout.activity_login);
         emailText = findViewById(R.id.EmailEditText);
         passwordText = findViewById(R.id.PasswordEditText);
+
+        emailText.addTextChangedListener(new TextValidator(emailText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignInValidator(text,null).isEmailNameValid())){
+                    emailText.setError("Please enter valid email");
+                }
+            }
+        });
+        passwordText.addTextChangedListener(new TextValidator(passwordText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignInValidator(null,text).isPasswordValid())){
+                    passwordText.setError("Please enter valid password");
+                }
+            }
+        });
         
     }
 

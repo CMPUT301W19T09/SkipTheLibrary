@@ -13,7 +13,7 @@ public class SignInValidator implements Validatable {
         this.errorMessage = "No errors detected";
     }
 
-    private boolean isEmailNameValid(){
+    public boolean isEmailNameValid(){
         Boolean valid = Pattern.compile("[a-zA-Z_0-9.]+@[a-zA-Z]+\\.[a-zA-Z]+").matcher(emailAddress).matches();
 
         if (!valid){
@@ -23,7 +23,7 @@ public class SignInValidator implements Validatable {
         return valid;
     }
 
-    private boolean isPasswordValid(){
+    public boolean isPasswordValid(){
         Boolean valid = Pattern.compile("[0-9a-zA-Z_]+").matcher(password).matches();
 
         if (!valid){
