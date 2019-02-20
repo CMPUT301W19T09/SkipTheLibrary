@@ -2,7 +2,9 @@ language: android
 jdk: oraclejdk8
 sudo: required
 
-
+notifications:
+  email: false
+ 
 before_cache:
   -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
   -rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -46,3 +48,12 @@ before_install:
 
 script:
   - "./gradlew clean build test -PdisablePreDex"
+  
+after_success:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
+after_failure:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL
