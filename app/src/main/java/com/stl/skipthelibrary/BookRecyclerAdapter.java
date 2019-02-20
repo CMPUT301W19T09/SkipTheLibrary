@@ -38,6 +38,19 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         holder.title.setText(title);
         holder.author.setText(author);
         holder.status.setText(status);
+
+        if (status.equals(BookStatus.ACCEPTED.name())){
+            holder.status.setBackgroundTintList(context.getColorStateList(R.color.ACCEPTED));
+        }
+        else if (status.equals(BookStatus.AVAILABLE.name())){
+            holder.status.setBackgroundTintList(context.getColorStateList(R.color.AVAILABLE));
+        }
+        else if (status.equals(BookStatus.REQUESTED.name())){
+            holder.status.setBackgroundTintList(context.getColorStateList(R.color.REQUESTED));
+        }
+        else if (status.equals(BookStatus.BORROWED.name())){
+            holder.status.setBackgroundTintList(context.getColorStateList(R.color.BORROWED));
+        }
     }
 
     @Override
