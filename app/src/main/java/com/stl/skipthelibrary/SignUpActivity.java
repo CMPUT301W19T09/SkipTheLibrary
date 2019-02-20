@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -27,6 +28,60 @@ public class SignUpActivity extends AppCompatActivity {
         lastNameText = findViewById(R.id.SignUpLastName);
         emailAddressText = findViewById(R.id.SignUpEmail);
         phoneNumberText = findViewById(R.id.SignUpPhoneNumber);
+
+        usernameText.addTextChangedListener(new TextValidator(usernameText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignUpValidator(text,null,null,null,null,null).isUserNameValid())){
+                    usernameText.setError("Please enter valid Username");
+                }
+            }
+        });
+
+        passwordText.addTextChangedListener(new TextValidator(passwordText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignUpValidator(null,text,null,null,null,null).isPasswordValid())){
+                    passwordText.setError("Please enter valid username");
+                }
+            }
+        });
+
+        firstNameText.addTextChangedListener(new TextValidator(firstNameText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignUpValidator(null,null,text,null,null,null).isFirstNameValid())){
+                    firstNameText.setError("Please enter valid first name");
+                }
+            }
+        });
+
+        lastNameText.addTextChangedListener(new TextValidator(lastNameText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignUpValidator(null,null,null,text,null,null).isLastNameValid())){
+                    lastNameText.setError("Please enter valid last name");
+                }
+            }
+        });
+
+        emailAddressText.addTextChangedListener(new TextValidator(emailAddressText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignUpValidator(null,null,null,null,text,null).isEmailNameValid())){
+                    emailAddressText.setError("Please enter valid email");
+                }
+            }
+        });
+
+        phoneNumberText.addTextChangedListener(new TextValidator(phoneNumberText) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new SignUpValidator(null,null,null,null,null,text).isPhoneNumberValid())){
+                    phoneNumberText.setError("Please enter valid phone number");
+                }
+            }
+        });
     }
 
     public void RegisterOnClick(View view) {

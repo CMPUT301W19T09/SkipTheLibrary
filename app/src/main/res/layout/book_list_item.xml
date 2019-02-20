@@ -56,9 +56,9 @@
 
     <ImageView
         android:id="@+id/BookListItemRightArrow"
-        android:layout_width="75dp"
+        android:layout_width="40dp"
         android:layout_height="75dp"
-        android:layout_gravity="end"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/right_arrow" />
 
 </LinearLayout>
