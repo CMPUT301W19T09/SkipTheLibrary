@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // user is already logged in
         if (databaseHelper.isUserLoggedIn()){
-            DatabaseHelper databaseHelper = new DatabaseHelper(this);
             databaseHelper.pullUserSignIn(databaseHelper.getFirebaseUser().getUid());
             Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
         }
