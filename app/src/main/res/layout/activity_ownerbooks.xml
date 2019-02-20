@@ -6,10 +6,12 @@
     android:layout_width="match_parent">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="0dp"
     android:orientation="vertical"
     android:background="@drawable/grey_gradient"
-    app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+    >
 
     <TextView
         android:id="@+id/textView"
@@ -29,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="0dp">
 
         <com.google.android.material.chip.ChipGroup
             style="@style/Widget.MaterialComponents.ChipGroup"
@@ -76,6 +78,7 @@
     </android.widget.HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ownerBooksRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/book_list_item" />
