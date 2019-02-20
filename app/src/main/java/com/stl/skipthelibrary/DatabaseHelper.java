@@ -28,12 +28,14 @@ public class DatabaseHelper {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private FirebaseUser firebaseUser;
     private Context context;
 
     public DatabaseHelper(Context context) {
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
+        firebaseUser = firebaseAuth.getCurrentUser();
         this.context = context;
     }
 
@@ -105,6 +107,14 @@ public class DatabaseHelper {
         context.startActivity(intent);
     }
 
+    public boolean isUserLoggedIn(){
+        return firebaseUser != null;
+    }
+
+    public void signOut(){
+        firebaseAuth.signOut();
+    }
+
     public BookDescription pullBookDescription(String isbn) {
         Log.d(TAG, "pullBookDescription: Here we should pull the book desciption");
         throw new UnsupportedOperationException("Not implemented yet");
@@ -158,5 +168,13 @@ public class DatabaseHelper {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public FirebaseUser getFirebaseUser() {
+        return firebaseUser;
+    }
+
+    public void setFirebaseUser(FirebaseUser firebaseUser) {
+        this.firebaseUser = firebaseUser;
     }
 }
