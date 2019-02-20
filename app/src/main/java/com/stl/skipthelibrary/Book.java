@@ -16,6 +16,11 @@ public class Book implements Scannable {
     private Rating rating;
 
 
+    public Book(BookDescription description, String ownerUserName) {
+        this(description,ownerUserName,new RequestHandler(), new ArrayList<ViewableImage>(), new Rating());
+    }
+
+
     public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
         this.uuid = UUID.randomUUID();
         this.description = description;

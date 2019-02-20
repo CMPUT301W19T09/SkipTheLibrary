@@ -1,8 +1,12 @@
 package com.stl.skipthelibrary;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -11,18 +15,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyBooksActivity extends AppCompatActivity {
+    private static final String TAG = MyBooksActivity.class.getSimpleName();
+    public static final int ADD = 1;
+
     ArrayList<Book> books = new ArrayList<Book>();
     RecyclerView recyclerView;
+    FloatingActionButton addBookButton;
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ownerbooks);
-        recyclerView = findViewById(R.id.ownerBooksRecyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.ownerBooksRecyclerView);
+        addBookButton = (FloatingActionButton) findViewById(R.id.addBookButton);
+        mContext = getApplicationContext();
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.my_books);
+
+        addBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, AddBooksActivity.class);
+                startActivityForResult(intent, ADD);
+            }
+        });
 
         getBooks();
         initRecyclerView();

@@ -35,4 +35,9 @@
     <string name="lent">lent</string>
     <string name="logout">logout</string>
     <string name="myprofile">My Profile</string>
+    <string name="scaninfo">scan info</string>
+    <string name="isbn">ISBN</string>
+    <string name="description">Description</string>
+    <string name="save_button">Save Button</string>
+    <string name="img_carousel">Image Carousel</string>
 </resources>

@@ -10,6 +10,10 @@ import java.io.ByteArrayOutputStream;
 public class ViewableImage {
     private String imageString;
 
+    public ViewableImage() {
+        setImageString("");
+    }
+
     public ViewableImage(Uri uri) {
         Bitmap bm = BitmapFactory.decodeFile(uri.toString());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
