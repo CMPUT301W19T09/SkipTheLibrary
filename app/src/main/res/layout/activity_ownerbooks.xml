@@ -73,7 +73,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/borrowed" />
+                android:text="@string/lent" />
         </com.google.android.material.chip.ChipGroup>
     </android.widget.HorizontalScrollView>
 

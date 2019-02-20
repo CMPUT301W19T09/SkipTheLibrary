@@ -12,11 +12,13 @@ import java.util.ArrayList;
 
 public class BorrowersBooksActivity extends AppCompatActivity {
     ArrayList<Book> books = new ArrayList<Book>();
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrowerbooks);
+        recyclerView = findViewById(R.id.borrowerBookRecyclerView);
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
@@ -46,7 +48,6 @@ public class BorrowersBooksActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-        RecyclerView recyclerView = findViewById(R.id.borrowerBookRecyclerView);
         BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

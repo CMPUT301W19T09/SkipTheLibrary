@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyBooksActivity extends AppCompatActivity {
     ArrayList<Book> books = new ArrayList<Book>();
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ownerbooks);
+        recyclerView = findViewById(R.id.ownerBooksRecyclerView);
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
@@ -46,7 +48,6 @@ public class MyBooksActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-        RecyclerView recyclerView = findViewById(R.id.ownerBooksRecyclerView);
         BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
