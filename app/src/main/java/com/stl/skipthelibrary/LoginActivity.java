@@ -8,9 +8,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class LoginActivity extends AppCompatActivity {
-private EditText passwordText;
-private EditText usernameText;
+    private EditText passwordText;
+    private EditText usernameText;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +23,16 @@ private EditText usernameText;
         setContentView(R.layout.activity_login);
         usernameText = findViewById(R.id.UsernameEditText);
         passwordText = findViewById(R.id.PasswordEditText);
-        
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        // user is already logged in
+        if (firebaseUser != null){
+            DatabaseHelper databaseHelper = new DatabaseHelper(this);
+            databaseHelper.pullUserSignIn(firebaseUser.getUid());
+            Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 

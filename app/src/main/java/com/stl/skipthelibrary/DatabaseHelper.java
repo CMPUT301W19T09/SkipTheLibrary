@@ -72,7 +72,7 @@ public class DatabaseHelper {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             Toast.makeText(context, "Authentication successful.", Toast.LENGTH_SHORT).show();
-                            pullUser(firebaseUser.getUid());
+                            pullUserSignIn(firebaseUser.getUid());
                         }
                         else {
                             // If sign in fails, display a message to the user.
@@ -82,7 +82,7 @@ public class DatabaseHelper {
                 });
     }
 
-    public void pullUser(String userID) {
+    public void pullUserSignIn(String userID) {
         databaseReference.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
