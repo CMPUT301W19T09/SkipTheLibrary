@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -29,6 +30,7 @@ public class User {
         this.userName = userName;
         this.userID = userID;
         this.contactInfo = contactInfo;
+        this.image = null;
         this.ownerUserIdentity = new UserIdentity(UserMode.OWNER);
         this.borrowerUserIdentity = new UserIdentity(UserMode.BORROWER);
         this.notifications = new ArrayList<Notification>();
