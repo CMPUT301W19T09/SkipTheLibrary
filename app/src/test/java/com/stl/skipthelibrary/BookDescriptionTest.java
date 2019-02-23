@@ -19,6 +19,10 @@ public class BookDescriptionTest {
         assertEquals("test synopsis", bookDescription.getSynopsis());
         assertEquals("test author", bookDescription.getAuthor());
         assertEquals(null, bookDescription.getRating());
+    }
+
+    @Test
+    public void testSetters() {
         bookDescription.setTitle("test set title");
         assertEquals("test set title", bookDescription.getTitle());
         bookDescription.setAuthor("test set author");

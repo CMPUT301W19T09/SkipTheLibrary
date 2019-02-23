@@ -11,12 +11,17 @@ import java.util.Objects;
 public class ViewableImage {
     private String imageString;
 
+    public ViewableImage(){
+        this.imageString = "default string";
+    }
+
     public ViewableImage(Uri uri) {
         Bitmap bm = BitmapFactory.decodeFile(uri.toString());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();
     }
+
 
     public String getImageString() {
         return imageString;
