@@ -18,8 +18,17 @@ public class LocationTest {
     }
 
     @Test
-    public void setLongitude() {
+    public void testConstructor() {
         assertEquals(testLat, location.getLatitude(), 0);
         assertEquals(testLon, location.getLongitude(), 0);
+    }
+
+    @Test
+    public void testSetters() {
+
+        location.setLatitude(69.420);
+        assertEquals(69.420, location.getLatitude(), 0);
+        location.setLongitude(-69.420);
+        assertEquals(-69.420, location.getLongitude(),0);
     }
 }

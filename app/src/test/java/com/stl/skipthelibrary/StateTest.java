@@ -1,6 +1,5 @@
 package com.stl.skipthelibrary;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,18 +10,29 @@ import static org.junit.Assert.*;
  */
 public class StateTest {
     private State state;
-    private Location location;
 
     @Before
-    public void setUp() throws Exception {
-        location= new Location(53.631611,	-113.323975);
-        state = new State(BookStatus.ACCEPTED,location,HandoffState.READY_FOR_PICKUP);
+    public void setUp() {
+        state = new State();
     }
 
     @Test
-    public void testConstructor() {
-        assertEquals(BookStatus.ACCEPTED, state.getBookStatus());
-        assertEquals(location,state.getLocation());
-        assertEquals(HandoffState.READY_FOR_PICKUP, state.getHandoffState());
+    public void testSetBookStatus() {
+        state.setBookStatus(BookStatus.BORROWED);
+        assertEquals(BookStatus.BORROWED, state.getBookStatus());
     }
+
+    @Test
+    public void testSetLocation() {
+        Location location = new Location(53.525151, -113.527350);
+        state.setLocation(location);
+        assertEquals(location, state.getLocation());
+    }
+
+    @Test
+    public void testSetHandOffState() {
+        state.setHandoffState(HandoffState.OWNER_LENT);
+        assertEquals(HandoffState.OWNER_LENT, state.getHandoffState());
+    }
+
 }

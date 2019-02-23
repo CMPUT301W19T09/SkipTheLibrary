@@ -7,6 +7,9 @@ public class SignInValidator implements Validatable {
     private String password;
     private String errorMessage;
 
+    public SignInValidator() {
+    }
+
     public SignInValidator(String emailAddress, String password) {
         this.emailAddress = emailAddress;
         this.password = password;
@@ -30,6 +33,26 @@ public class SignInValidator implements Validatable {
             errorMessage = "Invalid password format";
         }
         return valid;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     @Override

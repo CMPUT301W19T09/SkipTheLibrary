@@ -34,4 +34,39 @@ public class RatingTest {
     public void testRatingHigherBoundException(){
         rating.addRating(rating.getMaxRating() + 1);
     }
+
+    @Test
+    public void testSetAverageRating() {
+        double num = 2.5;
+        rating.setAverageRating(num);
+        assertEquals(num, rating.getAverageRating(), 0);
+    }
+
+    @Test
+    public void testSetCount() {
+        int count = 6;
+        rating.setCount(count);
+        assertEquals(count, rating.getCount());
+    }
+
+    @Test
+    public void testSetMaxRating() {
+        int maxRate = 25;
+        rating.setMaxRating(maxRate);
+        assertEquals(maxRate, rating.getMaxRating());
+    }
+
+    @Test
+    public void testSetMinRating() {
+        int minRate = -5;
+        rating.setMinRating(minRate);
+        assertEquals(minRate, rating.getMinRating());
+    }
+
+    @Test
+    public void testToString() {
+        double averageRating = 2.3;
+        rating.setAverageRating(averageRating);
+        assertEquals("{rating = " + averageRating + "}", rating.toString());
+    }
 }
