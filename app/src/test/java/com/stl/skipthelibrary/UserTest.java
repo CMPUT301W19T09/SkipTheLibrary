@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import android.net.Uri;
+
 import org.junit.Before;
 import org.junit.Test;
 
