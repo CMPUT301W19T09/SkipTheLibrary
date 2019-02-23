@@ -88,40 +88,40 @@ public class RequestHandlerTest {
         assertTrue(requestHandler.getRequestors().contains(requestor));
     }
 
-//    @Test
-//    public void testAcceptRequestor(){
-//        String failedRequest = UUID.randomUUID().toString();
-//        String succeedRequest = UUID.randomUUID().toString();
-//
-//        requestHandler.addRequestor(failedRequest);
-//        requestHandler.addRequestor(succeedRequest);
-//
-//        assertEquals(requestHandler.getRequestors().size(),2);
-//
-//        requestHandler.acceptRequestor(succeedRequest);
-//
-//        assertEquals(requestHandler.getRequestors().size(),0);
-//        assertEquals(requestHandler.getAcceptedRequestor(),succeedRequest);
-//        assertEquals(requestHandler.getState().getBookStatus(),BookStatus.ACCEPTED);
-//        assertEquals(requestHandler.getState().getHandoffState(),HandoffState.READY_FOR_PICKUP);
-//    }
-//
-//    @Test
-//    public void testDenyRequestor(){
-//        String deniedRequest = UUID.randomUUID().toString();
-//        String succeedRequest = UUID.randomUUID().toString();
-//
-//        requestHandler.addRequestor(deniedRequest);
-//        requestHandler.addRequestor(succeedRequest);
-//
-//        assertEquals(requestHandler.getRequestors().size(),2);
-//
-//        requestHandler.denyRequestor(deniedRequest);
-//
-//        assertEquals(requestHandler.getRequestors().size(),1);
-//        assertEquals(requestHandler.getRequestors().get(0),succeedRequest);
-//        assertEquals(requestHandler.getState().getBookStatus(),BookStatus.REQUESTED);
-//        assertEquals(requestHandler.getState().getHandoffState(),null);
-//    }
+    @Test
+    public void testAcceptRequestor(){
+        String failedRequest = UUID.randomUUID().toString();
+        String succeedRequest = UUID.randomUUID().toString();
+
+        requestHandler.addRequestor(failedRequest);
+        requestHandler.addRequestor(succeedRequest);
+
+        assertEquals(requestHandler.getRequestors().size(),2);
+
+        requestHandler.acceptRequestor(succeedRequest);
+
+        assertEquals(requestHandler.getRequestors().size(),0);
+        assertEquals(requestHandler.getAcceptedRequestor(),succeedRequest);
+        assertEquals(requestHandler.getState().getBookStatus(),BookStatus.ACCEPTED);
+        assertEquals(requestHandler.getState().getHandoffState(),HandoffState.READY_FOR_PICKUP);
+    }
+
+    @Test
+    public void testDenyRequestor(){
+        String deniedRequest = UUID.randomUUID().toString();
+        String succeedRequest = UUID.randomUUID().toString();
+
+        requestHandler.addRequestor(deniedRequest);
+        requestHandler.addRequestor(succeedRequest);
+
+        assertEquals(requestHandler.getRequestors().size(),2);
+
+        requestHandler.denyRequestor(deniedRequest);
+
+        assertEquals(requestHandler.getRequestors().size(),1);
+        assertEquals(requestHandler.getRequestors().get(0),succeedRequest);
+        assertEquals(requestHandler.getState().getBookStatus(),BookStatus.REQUESTED);
+        assertEquals(requestHandler.getState().getHandoffState(),null);
+    }
 
 }
