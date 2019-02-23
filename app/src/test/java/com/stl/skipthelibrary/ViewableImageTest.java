@@ -20,7 +20,7 @@ public class ViewableImageTest {
     }
 
     @Test
-    public void testSetters(){
+    public void testSetImageString(){
         viewableImage.setImageString("test image string");
         assertEquals("test image string", viewableImage.getImageString());
     }
