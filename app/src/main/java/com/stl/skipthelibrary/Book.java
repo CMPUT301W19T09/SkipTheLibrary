@@ -27,7 +27,6 @@ public class Book implements Scannable {
     }
 
 
-
     // Getters and Setters
 
 
@@ -79,6 +78,7 @@ public class Book implements Scannable {
     public UUID getUuid() {
         return uuid;
     }
+
     /**************************************************/
 
     public Boolean scan() {
