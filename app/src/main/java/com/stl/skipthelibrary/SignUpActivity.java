@@ -32,8 +32,10 @@ public class SignUpActivity extends AppCompatActivity {
         usernameText.addTextChangedListener(new TextValidator(usernameText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (!(new SignUpValidator(text,null,null,null,null,null).isUserNameValid())){
-                    usernameText.setError("Please enter valid Username");
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setUsername(text);
+                if (!(signInValidator.isUserNameValid())){
+                    usernameText.setError(signInValidator.getErrorMessage());
                 }
             }
         });
@@ -41,8 +43,10 @@ public class SignUpActivity extends AppCompatActivity {
         passwordText.addTextChangedListener(new TextValidator(passwordText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (!(new SignUpValidator(null,text,null,null,null,null).isPasswordValid())){
-                    passwordText.setError("Please enter valid username");
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setPassword(text);
+                if (!(signInValidator.isPasswordValid())){
+                    passwordText.setError(signInValidator.getErrorMessage());
                 }
             }
         });
@@ -50,8 +54,10 @@ public class SignUpActivity extends AppCompatActivity {
         firstNameText.addTextChangedListener(new TextValidator(firstNameText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (!(new SignUpValidator(null,null,text,null,null,null).isFirstNameValid())){
-                    firstNameText.setError("Please enter valid first name");
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setFirstName(text);
+                if (!(signInValidator.isFirstNameValid())){
+                    firstNameText.setError(signInValidator.getErrorMessage());
                 }
             }
         });
@@ -59,8 +65,10 @@ public class SignUpActivity extends AppCompatActivity {
         lastNameText.addTextChangedListener(new TextValidator(lastNameText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (!(new SignUpValidator(null,null,null,text,null,null).isLastNameValid())){
-                    lastNameText.setError("Please enter valid last name");
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setLastName(text);
+                if (!(signInValidator.isLastNameValid())){
+                    lastNameText.setError(signInValidator.getErrorMessage());
                 }
             }
         });
@@ -68,8 +76,10 @@ public class SignUpActivity extends AppCompatActivity {
         emailAddressText.addTextChangedListener(new TextValidator(emailAddressText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (!(new SignUpValidator(null,null,null,null,text,null).isEmailNameValid())){
-                    emailAddressText.setError("Please enter valid email");
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setEmailAddress(text);
+                if (!(signInValidator.isEmailNameValid())){
+                    emailAddressText.setError(signInValidator.getErrorMessage());
                 }
             }
         });
@@ -77,8 +87,10 @@ public class SignUpActivity extends AppCompatActivity {
         phoneNumberText.addTextChangedListener(new TextValidator(phoneNumberText) {
             @Override
             public void validate(TextView textView, String text) {
-                if (!(new SignUpValidator(null,null,null,null,null,text).isPhoneNumberValid())){
-                    phoneNumberText.setError("Please enter valid phone number");
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setPhoneNumber(text);
+                if (!(signInValidator.isPhoneNumberValid())){
+                    phoneNumberText.setError(signInValidator.getErrorMessage());
                 }
             }
         });
