@@ -97,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
             databaseHelper.createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber);
         }
         else{
-            Toast.makeText(SignUpActivity.this, signUpValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpActivity.this, "Please fix the above errors", Toast.LENGTH_SHORT).show();
             return;
         }
 
