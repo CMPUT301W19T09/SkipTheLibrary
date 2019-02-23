@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UserIdentity {
     private ArrayList<Book> bookList;
@@ -60,5 +61,20 @@ public class UserIdentity {
     @Override
     public String toString() {
         return "{UserMode= " + userMode.name() + " ,Rating = " + rating.toString() + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserIdentity)) return false;
+        UserIdentity that = (UserIdentity) o;
+        return Objects.equals(getBookList(), that.getBookList()) &&
+                Objects.equals(getRating(), that.getRating()) &&
+                getUserMode() == that.getUserMode();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBookList(), getRating(), getUserMode());
     }
 }

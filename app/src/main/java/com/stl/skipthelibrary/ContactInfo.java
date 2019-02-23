@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import java.util.Objects;
+
 public class ContactInfo {
     private String email;
     private String phoneNumber;
@@ -70,5 +72,20 @@ public class ContactInfo {
     @Override
     public String toString() {
         return "{email= " + email + " ,phonenumber= " + phoneNumber + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ContactInfo)) return false;
+        ContactInfo that = (ContactInfo) o;
+        return Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getPhoneNumber(), that.getPhoneNumber()) &&
+                Objects.equals(getContext(), that.getContext());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEmail(), getPhoneNumber(), getContext());
     }
 }

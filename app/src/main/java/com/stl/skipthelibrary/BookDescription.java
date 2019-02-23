@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import java.util.Objects;
+
 public class BookDescription {
     private String title;
     private String synopsis;
@@ -45,5 +47,21 @@ public class BookDescription {
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BookDescription)) return false;
+        BookDescription that = (BookDescription) o;
+        return Objects.equals(getTitle(), that.getTitle()) &&
+                Objects.equals(getSynopsis(), that.getSynopsis()) &&
+                Objects.equals(getAuthor(), that.getAuthor()) &&
+                Objects.equals(getRating(), that.getRating());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle(), getSynopsis(), getAuthor(), getRating());
     }
 }

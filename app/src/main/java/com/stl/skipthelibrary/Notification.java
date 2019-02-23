@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import java.util.Objects;
+
 public class Notification {
     private NotificationType notificationType;
     private String message;
@@ -23,5 +25,19 @@ public class Notification {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Notification)) return false;
+        Notification that = (Notification) o;
+        return getNotificationType() == that.getNotificationType() &&
+                Objects.equals(getMessage(), that.getMessage());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNotificationType(), getMessage());
     }
 }
