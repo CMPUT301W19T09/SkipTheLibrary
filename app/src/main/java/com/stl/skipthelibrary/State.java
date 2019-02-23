@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import java.util.Objects;
+
 /**
  * Created by Luke Slevinsky on 2019-02-15.
  */
@@ -43,6 +45,21 @@ public class State {
 
     public void setHandoffState(HandoffState handoffState) {
         this.handoffState = handoffState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof State)) return false;
+        State state = (State) o;
+        return getBookStatus() == state.getBookStatus() &&
+                Objects.equals(getLocation(), state.getLocation()) &&
+                getHandoffState() == state.getHandoffState();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBookStatus(), getLocation(), getHandoffState());
     }
     //////
 
