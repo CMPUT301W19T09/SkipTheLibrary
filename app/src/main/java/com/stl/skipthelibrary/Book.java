@@ -3,6 +3,7 @@ package com.stl.skipthelibrary;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Book implements Scannable {
@@ -24,7 +25,6 @@ public class Book implements Scannable {
         this.images = images;
         this.rating = rating;
     }
-
 
 
     // Getters and Setters
@@ -78,6 +78,7 @@ public class Book implements Scannable {
     public UUID getUuid() {
         return uuid;
     }
+
     /**************************************************/
 
     public Boolean scan() {
