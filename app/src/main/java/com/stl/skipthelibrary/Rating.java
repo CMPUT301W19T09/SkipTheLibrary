@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import java.util.Objects;
+
 public class Rating {
     private double averageRating;
     private int count;
@@ -61,5 +63,38 @@ public class Rating {
     @Override
     public String toString() {
         return "{rating = " + averageRating + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!Rating.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+
+        final Rating other = (Rating) obj;
+        if (getAverageRating() != other.getAverageRating()) {
+            return false;
+        }
+        if (getCount() != other.getCount()) {
+            return false;
+        }
+        if (getMaxRating() != other.getMaxRating()) {
+            return false;
+        }
+        if (getMinRating() != other.getMinRating()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(averageRating, count, maxRating, minRating);
     }
 }
