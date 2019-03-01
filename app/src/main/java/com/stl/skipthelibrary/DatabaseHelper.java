@@ -101,6 +101,9 @@ public class DatabaseHelper {
 
     private void UserRetrieved(User user){
         Log.d(TAG, "User Recieved: username = " + user.toString());
+
+        CurrentUser.setUser(user);
+
         Gson gson = new Gson();
         Intent intent = new Intent(context, NotificationActivity.class);
         intent.putExtra("User", gson.toJson(user));
@@ -114,11 +117,18 @@ public class DatabaseHelper {
     public void signOut(){
         firebaseAuth.signOut();
     }
+
     /////////
     // Book Functions
     //TODO:Make this work
     public void addBook(Book book){
-//        getDatabaseReference().child("Users").child(getFirebaseUser().getUid()).setValue(this);
+        CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
+
+        getDatabaseReference().child("Users").child(CurrentUser.getInstance().getUserName())
+                .setValue(CurrentUser.getInstance());
+
+        getDatabaseReference().child("Books").child(book.getUuid().toString())
+                .setValue(book);
     }
 
 

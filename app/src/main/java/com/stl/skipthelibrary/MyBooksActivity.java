@@ -3,10 +3,16 @@ package com.stl.skipthelibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -67,9 +73,39 @@ public class MyBooksActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-        BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books);
+
+        Query songQuery = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Books");
+
+        FirebaseRecyclerOptions<Book> options =
+                new FirebaseRecyclerOptions.Builder<Book>()
+                        .setQuery(songQuery, Book.class)
+                        .build();
+
+        FirebaseRecyclerAdapter adapter = new BookRecyclerAdapter(this, books, options);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    /**
+     * onActivitResult method to get the result from startActivityFromResult
+     *
+     * @param requestCode The request code that was sent with the activity
+     * @param resultCode The status code for the result
+     * @param resultIntent The returning intent from the activity
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        Book book;
+        // Check which request it is that we're responding to
+        if (requestCode == ADD) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(mContext, "BOOK ADDED 🤪", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(mContext, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -2,12 +2,16 @@ package com.stl.skipthelibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 public class AddBooksActivity extends AppCompatActivity {
     private Context mContext;
@@ -74,9 +78,16 @@ public class AddBooksActivity extends AppCompatActivity {
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
-            Book newBook = new Book(bookDescription,databaseHelper.getFirebaseUser().getDisplayName());
-//            databaseHelper.addBook(newBook);
-            Toast.makeText(mContext, "We should add a book here", Toast.LENGTH_SHORT).show();
+            Book newBook = new Book(bookDescription,CurrentUser.getInstance().getUserName());
+            databaseHelper.addBook(newBook);
+            Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
+
+            Gson gson = new Gson();
+            Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
+
+            intent.putExtra("Book", gson.toJson(newBook));
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         }
         else{
             Toast.makeText(mContext, bookValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();

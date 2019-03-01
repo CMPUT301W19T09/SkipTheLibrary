@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -48,7 +51,17 @@ public class BorrowersBooksActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
-        BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books);
+
+        Query songQuery = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Books");
+
+        FirebaseRecyclerOptions<Book> options =
+                new FirebaseRecyclerOptions.Builder<Book>()
+                        .setQuery(songQuery, Book.class)
+                        .build();
+
+        BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books, options);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

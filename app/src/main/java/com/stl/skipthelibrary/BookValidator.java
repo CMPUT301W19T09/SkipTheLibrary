@@ -40,7 +40,7 @@ public class BookValidator implements Validatable{
         return valid;
     }
     public boolean isISBNValid(){
-        Boolean valid = Pattern.compile("[x0-9\\- ]{13}").matcher(isbn).matches();
+        Boolean valid = Pattern.compile("(?:[x0-9]\\-?){13}").matcher(isbn).matches();
 
         if (!valid){
             errorMessage = "Invalid ISBN format";
@@ -49,7 +49,7 @@ public class BookValidator implements Validatable{
         return valid;
     }
     public boolean isDescriptionValid(){
-        Boolean valid = Pattern.compile("[0-9a-zA-Z_]+").matcher(desc).matches();
+        Boolean valid = Pattern.compile("[0-9a-zA-Z_ ]+").matcher(desc).matches();
 
         if (!valid){
             errorMessage = "Invalid description format";

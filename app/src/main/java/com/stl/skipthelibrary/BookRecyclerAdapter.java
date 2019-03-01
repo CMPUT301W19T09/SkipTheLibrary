@@ -8,16 +8,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
+public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyclerAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Book> books;
 
-    public BookRecyclerAdapter(Context context, ArrayList<Book> books) {
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public BookRecyclerAdapter(Context context, ArrayList<Book> books, @NonNull FirebaseRecyclerOptions<Book> options) {
+        super(options);
         this.context = context;
         this.books = books;
     }
@@ -31,9 +41,14 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        String title = books.get(position).getDescription().getTitle();
-        String author = books.get(position).getDescription().getAuthor();
-        String status = books.get(position).getRequests().getState().getBookStatus().name();
+
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Book book) {
+        String title = book.getDescription().getTitle();
+        String author = book.getDescription().getAuthor();
+        String status = book.getRequests().getState().getBookStatus().name();
 
         holder.title.setText(title);
         holder.author.setText(author);

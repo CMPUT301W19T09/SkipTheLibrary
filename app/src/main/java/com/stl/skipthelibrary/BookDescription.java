@@ -6,6 +6,8 @@ public class BookDescription {
     private String author;
     private Rating rating;
 
+    public BookDescription(){}
+
     public BookDescription(String title, String synopsis, String author, Rating rating) {
         this.title = title;
         this.synopsis = synopsis;
