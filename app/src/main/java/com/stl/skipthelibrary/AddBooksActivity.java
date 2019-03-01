@@ -64,7 +64,7 @@ public class AddBooksActivity extends AppCompatActivity {
         });
     }
 
-    public void RegisterOnClick(View view) {
+    public void saveBookOnClick(View view) {
         String title = bookTitle.getText().toString();
         String author = bookAuthor.getText().toString();
         String isbn = bookISBN.getText().toString();
