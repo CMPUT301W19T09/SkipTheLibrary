@@ -10,11 +10,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddBooksActivity extends AppCompatActivity {
-    Context mContext;
-    EditText bookTitle;
-    EditText bookAuthor;
-    EditText bookISBN;
-    EditText bookDesc;
+    private Context mContext;
+    private EditText bookTitle;
+    private EditText bookAuthor;
+    private EditText bookISBN;
+    private EditText bookDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +73,8 @@ public class AddBooksActivity extends AppCompatActivity {
         BookValidator bookValidator = new BookValidator(title,author,isbn,description);
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
-            BookDescription bd = new BookDescription(title,description,author,new Rating());
-            Book newBook = new Book(bd,databaseHelper.getFirebaseUser().getDisplayName());
+            BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
+            Book newBook = new Book(bookDescription,databaseHelper.getFirebaseUser().getDisplayName());
 //            databaseHelper.addBook(newBook);
             Toast.makeText(mContext, "We should add a book here", Toast.LENGTH_SHORT).show();
         }

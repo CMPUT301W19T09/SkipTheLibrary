@@ -18,10 +18,10 @@ public class MyBooksActivity extends AppCompatActivity {
     private static final String TAG = MyBooksActivity.class.getSimpleName();
     public static final int ADD = 1;
 
-    ArrayList<Book> books = new ArrayList<Book>();
-    RecyclerView recyclerView;
-    FloatingActionButton addBookButton;
-    Context mContext;
+    private ArrayList<Book> books = new ArrayList<Book>();
+    private RecyclerView recyclerView;
+    private FloatingActionButton addBookButton;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
