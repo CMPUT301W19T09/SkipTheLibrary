@@ -6,12 +6,13 @@ import android.net.Uri;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class ViewableImage {
     private String imageString;
 
-    public ViewableImage() {
-        setImageString("");
+    public ViewableImage(){
+        this.imageString = "default string";
     }
 
     public ViewableImage(Uri uri) {
@@ -20,6 +21,7 @@ public class ViewableImage {
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();
     }
+
 
     public String getImageString() {
         return imageString;
@@ -37,5 +39,18 @@ public class ViewableImage {
     public void decode(){
 //        Base64.encode(getImageString(),Base64.DEFAULT);
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ViewableImage)) return false;
+        ViewableImage that = (ViewableImage) o;
+        return Objects.equals(getImageString(), that.getImageString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getImageString());
     }
 }

@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -21,6 +22,19 @@ public class RequestHandlerTest {
         requestHandler = new RequestHandler(state);
     }
 
+    @Test
+    public void testSetState(){
+        State newState = new State();
+        requestHandler.setState(newState);
+        assertEquals(newState, requestHandler.getState());
+    }
+
+    @Test
+    public void testSetRequestors(){
+        ArrayList<String> newRequestors = new ArrayList<>();
+        requestHandler.setRequestors(newRequestors);
+        assertEquals(newRequestors, requestHandler.getRequestors());
+    }
     @Test
     public void testLendBook(){
         requestHandler.getState().setBookStatus(BookStatus.ACCEPTED);
@@ -74,7 +88,7 @@ public class RequestHandlerTest {
         assertTrue(requestHandler.getRequestors().contains(requestor));
     }
 
-    @Test(expected = RequestorsUnavailableException.class)
+    @Test
     public void testAcceptRequestor(){
         String failedRequest = UUID.randomUUID().toString();
         String succeedRequest = UUID.randomUUID().toString();

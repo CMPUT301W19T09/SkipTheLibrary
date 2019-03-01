@@ -3,6 +3,7 @@ package com.stl.skipthelibrary;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Book implements Scannable {
@@ -29,7 +30,6 @@ public class Book implements Scannable {
         this.images = images;
         this.rating = rating;
     }
-
 
 
     // Getters and Setters
@@ -83,10 +83,30 @@ public class Book implements Scannable {
     public UUID getUuid() {
         return uuid;
     }
+
     /**************************************************/
 
     public Boolean scan() {
         Log.d(TAG, "scan: OPEN UP THE SCANNER");
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
+        Book book = (Book) o;
+        return Objects.equals(TAG, book.TAG) &&
+                Objects.equals(getUuid(), book.getUuid()) &&
+                Objects.equals(getDescription(), book.getDescription()) &&
+                Objects.equals(getOwnerUserName(), book.getOwnerUserName()) &&
+                Objects.equals(getRequests(), book.getRequests()) &&
+                Objects.equals(getImages(), book.getImages()) &&
+                Objects.equals(getRating(), book.getRating());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(TAG, getUuid(), getDescription(), getOwnerUserName(), getRequests(), getImages(), getRating());
     }
 }
