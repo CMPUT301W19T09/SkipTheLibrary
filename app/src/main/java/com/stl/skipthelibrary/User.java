@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -29,6 +30,7 @@ public class User {
         this.userName = userName;
         this.userID = userID;
         this.contactInfo = contactInfo;
+        this.image = null;
         this.ownerUserIdentity = new UserIdentity(UserMode.OWNER);
         this.borrowerUserIdentity = new UserIdentity(UserMode.BORROWER);
         this.notifications = new ArrayList<Notification>();
@@ -117,5 +119,25 @@ public class User {
                 + " ,contactInfo = " + contactInfo.toString() + " ,ownerUserIdentity = "
                 + ownerUserIdentity.toString() + " ,borrowerUserIdentity = "
                 + borrowerUserIdentity.toString() + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getName(), user.getName()) &&
+                Objects.equals(getUserName(), user.getUserName()) &&
+                Objects.equals(getUserID(), user.getUserID()) &&
+                Objects.equals(getImage(), user.getImage()) &&
+                Objects.equals(getContactInfo(), user.getContactInfo()) &&
+                Objects.equals(getOwnerUserIdentity(), user.getOwnerUserIdentity()) &&
+                Objects.equals(getBorrowerUserIdentity(), user.getBorrowerUserIdentity()) &&
+                Objects.equals(getNotifications(), user.getNotifications());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getUserName(), getUserID(), getImage(), getContactInfo(), getOwnerUserIdentity(), getBorrowerUserIdentity(), getNotifications());
     }
 }

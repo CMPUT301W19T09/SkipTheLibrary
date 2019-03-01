@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             databaseHelper.signIn(email, password);
         }
         else{
-            Toast.makeText(LoginActivity.this, signInValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Please fix the above errors", Toast.LENGTH_SHORT).show();
             return;
         }
     }

@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Luke Slevinsky on 2019-02-15.
@@ -98,4 +99,18 @@ public class RequestHandler {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RequestHandler)) return false;
+        RequestHandler that = (RequestHandler) o;
+        return Objects.equals(getState(), that.getState()) &&
+                Objects.equals(getRequestors(), that.getRequestors()) &&
+                Objects.equals(getAcceptedRequestor(), that.getAcceptedRequestor());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getState(), getRequestors(), getAcceptedRequestor());
+    }
 }
