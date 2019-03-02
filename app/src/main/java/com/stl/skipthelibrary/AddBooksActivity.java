@@ -77,7 +77,7 @@ public class AddBooksActivity extends AppCompatActivity {
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
-            Book newBook = new Book(bookDescription,CurrentUser.getInstance().getUserName());
+            Book newBook = new Book(bookDescription, isbn,CurrentUser.getInstance().getUserName());
             databaseHelper.addBook(newBook);
             Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
 
@@ -106,6 +106,7 @@ public class AddBooksActivity extends AppCompatActivity {
         if(requestCode == ScannerActivity.SCAN_BOOK) {
             String ISBN = data.getStringExtra("ISBN");
             bookISBN.setText(ISBN);
+            new BookDescriptionReceiver(ISBN, bookTitle, bookAuthor, bookDesc).execute(ISBN);
         }
     }
 }

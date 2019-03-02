@@ -33,19 +33,19 @@ public class BorrowersBooksActivity extends AppCompatActivity {
 
     private void getBooks() {
         //Currently just test data as firebase is empty
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
+        books.add(new Book("test ISBN" ,new BookDescription("test Title", "test Sysnopsis",
                 "test author", new Rating()),"testUsername",
                 new RequestHandler(new State(BookStatus.ACCEPTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
+        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
                 "test author", new Rating()),"testUsername",
                 new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
+        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
                 "test author", new Rating()),"testUsername",
                 new RequestHandler(new State(BookStatus.AVAILABLE,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
+        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
                 "test author", new Rating()),"testUsername",
                 new RequestHandler(new State(BookStatus.BORROWED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
+        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
                 "test author", new Rating()),"testUsername",
                 new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
     }

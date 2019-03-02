@@ -49,7 +49,7 @@ public class BookValidator implements Validatable{
         return valid;
     }
     public boolean isDescriptionValid(){
-        Boolean valid = Pattern.compile("[0-9a-zA-Z_ ]+").matcher(desc).matches();
+        Boolean valid = desc.length() > 0;
 
         if (!valid){
             errorMessage = "Invalid description format";
