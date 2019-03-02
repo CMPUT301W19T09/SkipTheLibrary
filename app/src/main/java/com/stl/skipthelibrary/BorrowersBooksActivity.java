@@ -4,65 +4,67 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
 public class BorrowersBooksActivity extends AppCompatActivity {
-    ArrayList<Book> books = new ArrayList<Book>();
-    RecyclerView recyclerView;
+    public static final String TAG = BorrowersBooksActivity.class.getSimpleName();
+
+    private RecyclerView recyclerView;
+    private FloatingActionButton searchBookButton;
+    private Context mContext;
+    private FirebaseRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrowerbooks);
-        recyclerView = findViewById(R.id.borrowerBookRecyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.borrowerBookRecyclerView);
+        searchBookButton = (FloatingActionButton) findViewById(R.id.searchBookButton);
+        mContext = getApplicationContext();
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.borrow);
 
-        getBooks();
         initRecyclerView();
     }
 
-    private void getBooks() {
-        //Currently just test data as firebase is empty
-        books.add(new Book("test ISBN" ,new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.ACCEPTED,null, null)), null, new Rating()));
-        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.AVAILABLE,null, null)), null, new Rating()));
-        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.BORROWED,null, null)), null, new Rating()));
-        books.add(new Book("test ISBN", new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
     }
 
     private void initRecyclerView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
-        Query songQuery = FirebaseDatabase.getInstance()
+        Query bookQuery = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Books");
 
+
         FirebaseRecyclerOptions<Book> options =
                 new FirebaseRecyclerOptions.Builder<Book>()
-                        .setQuery(songQuery, Book.class)
+                        .setQuery(bookQuery, Book.class)
                         .build();
 
-        BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books, options);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new BookRecyclerAdapter(this, options);
+        recyclerView.setAdapter(mAdapter);
     }
 }
