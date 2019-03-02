@@ -54,9 +54,7 @@ public class ScannerActivity extends AppCompatActivity {
             public void onImage(CameraKitImage cameraKitImage) {
                 Bitmap bitmap = Bitmap.createScaledBitmap(cameraKitImage.getBitmap(), cameraView.getWidth(),
                         cameraView.getHeight(), false);
-//                cameraView.stop();
                 processBitMap(bitmap);
-
             }
 
             @Override
@@ -97,11 +95,11 @@ public class ScannerActivity extends AppCompatActivity {
 
         for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes){
             if (barcode.getValueType() == FirebaseVisionBarcode.TYPE_ISBN){
-                Toast.makeText(this, barcode.getDisplayValue(), Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent();
                 intent.putExtra("ISBN", barcode.getDisplayValue());
                 setResult(SCAN_BOOK, intent);
                 finish();
+                return;
             }
         }
         Toast.makeText(this, "Found improper barcode. Please try again", Toast.LENGTH_SHORT).show();

@@ -105,7 +105,7 @@ public class AddBooksActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ScannerActivity.SCAN_BOOK) {
             String ISBN = data.getStringExtra("ISBN");
-            Toast.makeText(this, ISBN, Toast.LENGTH_SHORT).show();
+            bookISBN.setText(ISBN);
         }
     }
 }
