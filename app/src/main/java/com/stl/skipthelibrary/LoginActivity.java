@@ -28,8 +28,13 @@ public class LoginActivity extends AppCompatActivity {
         // user is already logged in
         Log.d(TAG, "onCreate: "+databaseHelper.isUserLoggedIn());
         if (databaseHelper.isUserLoggedIn()){
-            databaseHelper.pullUserSignIn(databaseHelper.getFirebaseUser().getUid());
-            Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
+            try{
+                databaseHelper.pullUserSignIn(databaseHelper.getFirebaseUser().getUid());
+                Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e){
+                Toast.makeText(this, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         emailText.addTextChangedListener(new TextValidator(emailText) {
