@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -22,25 +25,31 @@ import com.mapbox.mapboxsdk.maps.Style;
 public class MapBoxActivity extends AppCompatActivity {
     public static final int SET_LOCATION = 1;
     private MapView mapView;
+    private Location location;
+    private ImageView dropPinView;
+    private MapboxMap mapboxMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_map_box);
+
+        location = Location.getCurrentLocation(this);
+
         mapView = findViewById(R.id.select_location_map_view);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
-
+                MapBoxActivity.this.mapboxMap = mapboxMap;
                 mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
 
                         // Map is set up and the style has loaded. Now you can add data or make other map adjustments
                         // Create drop pin using custom image
-                        ImageView dropPinView = new ImageView(MapBoxActivity.this);
+                        dropPinView = new ImageView(MapBoxActivity.this);
                         dropPinView.setImageResource(R.drawable.red_pin);
 
                         // Statically Set drop pin in center of screen
@@ -54,13 +63,22 @@ public class MapBoxActivity extends AppCompatActivity {
 
                     }
                 });
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .zoom(15)
+                        .tilt(20)
+                        .build();
+                mapboxMap.setCameraPosition(cameraPosition);
             }
         });
 
         findViewById(R.id.select_location_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Location location = new Location(5.6, 4.2);
+                mapView.onDestroy();
+                location.setLatitude(mapboxMap.getCameraPosition().target.getLatitude());
+                location.setLongitude(mapboxMap.getCameraPosition().target.getLongitude());
                 Gson gson = new Gson();
                 Intent intent=new Intent();
                 intent.putExtra("Location", gson.toJson(location));

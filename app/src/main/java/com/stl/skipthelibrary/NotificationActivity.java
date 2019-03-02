@@ -39,7 +39,7 @@ public class NotificationActivity extends AppCompatActivity {
             String locationString = data.getStringExtra("Location");
             Gson gson = new Gson();
             Location location = gson.fromJson(locationString, Location.class);
-            Toast.makeText(this, "Here " + location.getLatitude(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, location.getLatitude() + " \n " + location.getLongitude(), Toast.LENGTH_SHORT).show();
         }
     }
 }
