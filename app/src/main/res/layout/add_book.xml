@@ -93,7 +93,7 @@
         android:paddingRight="25dp"
         android:text="@string/scaninfo"
         android:textSize="14sp"
-       
+        android:onClick="scanBookOnClick"
         app:backgroundTint="@color/black"
         app:cornerRadius="40dp"
         app:layout_constraintBottom_toBottomOf="parent"

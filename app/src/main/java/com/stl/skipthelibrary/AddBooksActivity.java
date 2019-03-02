@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 
 public class AddBooksActivity extends AppCompatActivity {
@@ -78,7 +77,7 @@ public class AddBooksActivity extends AppCompatActivity {
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
-            Book newBook = new Book(bookDescription,CurrentUser.getInstance().getUserName());
+            Book newBook = new Book(bookDescription, isbn,CurrentUser.getInstance().getUserName());
             databaseHelper.addBook(newBook);
             Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
 
@@ -94,5 +93,20 @@ public class AddBooksActivity extends AppCompatActivity {
             return;
         }
 
+    }
+
+    public void scanBookOnClick(View view) {
+        Intent intent = new Intent(this, ScannerActivity.class);
+        startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ScannerActivity.SCAN_BOOK) {
+            String ISBN = data.getStringExtra("ISBN");
+            bookISBN.setText(ISBN);
+            new BookDescriptionReceiver(ISBN, bookTitle, bookAuthor, bookDesc).execute(ISBN);
+        }
     }
 }
