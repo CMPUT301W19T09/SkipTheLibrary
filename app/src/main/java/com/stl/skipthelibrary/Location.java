@@ -14,6 +14,12 @@ public class Location {
         this.longitude = longitude;
     }
 
+
+    static Location getCurrentLocation(){
+
+        return null;
+    }
+
     public double getLatitude() {
         return latitude;
     }
@@ -43,4 +49,5 @@ public class Location {
     public int hashCode() {
         return Objects.hash(getLatitude(), getLongitude());
     }
+
 }
