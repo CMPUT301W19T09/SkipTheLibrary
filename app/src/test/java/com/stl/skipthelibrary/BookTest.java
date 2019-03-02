@@ -16,7 +16,7 @@ public class BookTest {
 
     @Before
     public void setUp(){
-        book = new Book(new BookDescription("test title", "test synopsis", "test author", null),
+        book = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author", null),
                 "testUserName", new RequestHandler(new State()), null, null);
     }
 

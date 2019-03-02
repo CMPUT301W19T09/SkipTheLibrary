@@ -53,6 +53,7 @@ public class MyBooksActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAdapter.startListening();
+
     }
 
     @Override
@@ -60,6 +61,7 @@ public class MyBooksActivity extends AppCompatActivity {
         super.onStop();
         mAdapter.stopListening();
     }
+
     private void initRecyclerView(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
 

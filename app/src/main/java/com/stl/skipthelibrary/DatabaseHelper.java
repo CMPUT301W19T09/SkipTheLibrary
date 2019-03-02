@@ -100,6 +100,11 @@ public class DatabaseHelper {
     }
 
     private void UserRetrieved(User user){
+        if (user == null){
+            Toast.makeText(context, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Log.d(TAG, "User Recieved: username = " + user.toString());
 
         CurrentUser.setUser(user);
@@ -124,7 +129,8 @@ public class DatabaseHelper {
     public void addBook(Book book){
         CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
 
-        getDatabaseReference().child("Users").child(getFirebaseUser().getUid())
+        getDatabaseReference().child("Users").child(firebaseUser.getUid())
+
                 .setValue(CurrentUser.getInstance());
 
         getDatabaseReference().child("Books").child(book.getUuid())

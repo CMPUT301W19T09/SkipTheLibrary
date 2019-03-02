@@ -6,14 +6,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 
 public class AddBooksActivity extends AppCompatActivity {
+    final public static String TAG = AddBooksActivity.class.getSimpleName();
+
     private Context mContext;
     private EditText bookTitle;
     private EditText bookAuthor;
@@ -78,7 +80,7 @@ public class AddBooksActivity extends AppCompatActivity {
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
-            Book newBook = new Book(bookDescription,CurrentUser.getInstance().getUserName());
+            Book newBook = new Book(bookDescription, isbn,CurrentUser.getInstance().getUserName());
             databaseHelper.addBook(newBook);
             Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
 
@@ -94,5 +96,24 @@ public class AddBooksActivity extends AppCompatActivity {
             return;
         }
 
+    }
+
+    public void scanBookOnClick(View view) {
+        Intent intent = new Intent(this, ScannerActivity.class);
+        startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ScannerActivity.SCAN_BOOK) {
+            if (resultCode == RESULT_OK) {
+                String ISBN = data.getStringExtra("ISBN");
+                bookISBN.setText(ISBN);
+                new BookDescriptionReceiver(ISBN, bookTitle, bookAuthor, bookDesc).execute(ISBN);
+            } else {
+                Log.d(TAG, "onActivityResult: Something went wrong in scan");
+            }
+        }
     }
 }
