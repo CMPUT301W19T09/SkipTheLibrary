@@ -39,7 +39,7 @@ public class DatabaseHelper {
         this.context = context;
     }
 
-
+    // AUTH Methods
     public void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber){
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
@@ -101,6 +101,9 @@ public class DatabaseHelper {
 
     private void UserRetrieved(User user){
         Log.d(TAG, "User Recieved: username = " + user.toString());
+
+        CurrentUser.setUser(user);
+
         Gson gson = new Gson();
         Intent intent = new Intent(context, NotificationActivity.class);
         intent.putExtra("User", gson.toJson(user));
@@ -114,6 +117,20 @@ public class DatabaseHelper {
     public void signOut(){
         firebaseAuth.signOut();
     }
+
+    /////////
+    // Book Functions
+    //TODO:Make this work
+    public void addBook(Book book){
+        CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
+
+        getDatabaseReference().child("Users").child(getFirebaseUser().getUid())
+                .setValue(CurrentUser.getInstance());
+
+        getDatabaseReference().child("Books").child(book.getUuid())
+                .setValue(book);
+    }
+
 
     public BookDescription pullBookDescription(String isbn) {
         Log.d(TAG, "pullBookDescription: Here we should pull the book desciption");

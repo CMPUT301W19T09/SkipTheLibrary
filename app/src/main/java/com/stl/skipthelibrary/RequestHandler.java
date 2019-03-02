@@ -11,12 +11,15 @@ public class RequestHandler {
     private ArrayList<String> requestors; // User name
     private String acceptedRequestor; // User name
 
+    public RequestHandler() {
+        this(new State(),new ArrayList<String>(), null);
+
+    }
+
     public RequestHandler(State state) {
         this(state,new ArrayList<String>(), null);
 
     }
-
-
 
     public RequestHandler(State state, ArrayList<String> pendingRequestors, String acceptedRequestor) {
         this.state = state;

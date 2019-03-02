@@ -7,18 +7,26 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Book implements Scannable {
-    public String TAG = getClass().getSimpleName();
+    final public static String TAG = "Book";
 
-    private UUID uuid;
+    private String uuid;
     private BookDescription description;
     private String ownerUserName;
     private RequestHandler requests;
     private ArrayList<ViewableImage> images;
     private Rating rating;
 
+    public Book() {
+        this.uuid = UUID.randomUUID().toString();
+    }
+
+    public Book(BookDescription description, String ownerUserName) {
+        this(description,ownerUserName,new RequestHandler(), new ArrayList<ViewableImage>(), new Rating());
+    }
+
 
     public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.randomUUID().toString();
         this.description = description;
         this.ownerUserName = ownerUserName;
         this.requests = requests;
@@ -30,7 +38,7 @@ public class Book implements Scannable {
     // Getters and Setters
 
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
@@ -75,7 +83,7 @@ public class Book implements Scannable {
         this.ownerUserName = ownerUserName;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 

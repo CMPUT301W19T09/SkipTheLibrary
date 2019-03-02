@@ -10,9 +10,9 @@ import java.util.Objects;
 
 public class ViewableImage {
     private String imageString;
-
-    public ViewableImage(){
-        this.imageString = "default string";
+    
+    public ViewableImage() {
+        setImageString("default string");
     }
 
     public ViewableImage(Uri uri) {

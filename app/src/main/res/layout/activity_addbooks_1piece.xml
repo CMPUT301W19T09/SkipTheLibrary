@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/add_books"
+    android:background="@drawable/grey_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/AddBookCarouselLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
+
+        <ImageButton
+            android:id="@+id/SaveBookButton"
+            style="@android:style/Widget.Material.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@android:color/transparent"
+            android:elevation="5dp"
+            android:contentDescription="@string/save_button"
+            app:srcCompat="@android:drawable/ic_menu_save" />
+
+
+        <ImageView
+            android:id="@+id/AddBookImageCarousel"
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="center"
+            android:contentDescription="@string/img_carousel"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/EditBookLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_top_corners_rectangle"
+        android:backgroundTint="@color/magenta"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/AddBookTitle"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:autofillHints="true"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/title"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/AddBookAuthor"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autofillHints="true"
+            android:ems="10"
+            android:hint="@string/author"
+            android:inputType="textPersonName"/>
+
+        <EditText
+            android:id="@+id/AddBookISBN"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autofillHints="true"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/isbn"
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/AddBookDesc"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autofillHints="true"
+            android:ems="10"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/description"
+            android:inputType="textMultiLine"/>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/AddBookScanInfo"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@color/black"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:text="@string/scaninfo"
+            android:textSize="14sp"
+            app:backgroundTint="@color/black"
+            app:cornerRadius="40dp"/>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -10,12 +10,12 @@ import android.widget.Toast;
 
 
 public class SignUpActivity extends AppCompatActivity {
-    EditText usernameText;
-    EditText passwordText;
-    EditText firstNameText;
-    EditText lastNameText;
-    EditText emailAddressText;
-    EditText phoneNumberText;
+    private EditText usernameText;
+    private EditText passwordText;
+    private EditText firstNameText;
+    private EditText lastNameText;
+    private EditText emailAddressText;
+    private EditText phoneNumberText;
 
 
     @Override
