@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 
 public class AddBooksActivity extends AppCompatActivity {
@@ -94,5 +93,19 @@ public class AddBooksActivity extends AppCompatActivity {
             return;
         }
 
+    }
+
+    public void scanBookOnClick(View view) {
+        Intent intent = new Intent(this, ScannerActivity.class);
+        startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ScannerActivity.SCAN_BOOK) {
+            String ISBN = data.getStringExtra("ISBN");
+            Toast.makeText(this, ISBN, Toast.LENGTH_SHORT).show();
+        }
     }
 }
