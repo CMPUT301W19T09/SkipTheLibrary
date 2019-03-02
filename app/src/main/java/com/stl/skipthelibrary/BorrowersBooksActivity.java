@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class BorrowersBooksActivity extends AppCompatActivity {
     public static final String TAG = BorrowersBooksActivity.class.getSimpleName();
 
-    private ArrayList<Book> books = new ArrayList<Book>();
     private RecyclerView recyclerView;
     private FloatingActionButton searchBookButton;
     private Context mContext;
@@ -37,7 +36,6 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.borrow);
 
-//        getBooks();
         initRecyclerView();
     }
 
@@ -53,25 +51,6 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         mAdapter.stopListening();
     }
 
-    private void getBooks() {
-        //Currently just test data as firebase is empty
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.ACCEPTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.AVAILABLE,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.BORROWED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-    }
-
     private void initRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
@@ -85,7 +64,7 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                         .setQuery(bookQuery, Book.class)
                         .build();
 
-        mAdapter = new BookRecyclerAdapter(this, books, options);
+        mAdapter = new BookRecyclerAdapter(this, options);
         recyclerView.setAdapter(mAdapter);
     }
 }

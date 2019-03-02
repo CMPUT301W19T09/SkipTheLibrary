@@ -13,7 +13,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseError;
 
-import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyclerAdapter.ViewHolder> {
     final static public String TAG = "BookRecyclerAdapter";
     private Context context;
-    private ArrayList<Book> books;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -29,10 +27,9 @@ public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyc
      *
      * @param options
      */
-    public BookRecyclerAdapter(Context context, ArrayList<Book> books, @NonNull FirebaseRecyclerOptions<Book> options) {
+    public BookRecyclerAdapter(Context context, @NonNull FirebaseRecyclerOptions<Book> options) {
         super(options);
         this.context = context;
-        this.books = books;
     }
 
     @NonNull
@@ -89,12 +86,6 @@ public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyc
         Log.d(TAG, "onError: DATABASE ERROR");
     }
 
-//    @Override
-//    public int getItemCount() {
-//        return books.size();
-//    }
-
-
     // Inner Class ViewHolder defines all of the elements in the corresponding xml file.
     // it allows us to set their properties during onBind.
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -122,13 +113,5 @@ public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyc
 
     public void setContext(Context context) {
         this.context = context;
-    }
-
-    public ArrayList<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(ArrayList<Book> books) {
-        this.books = books;
     }
 }

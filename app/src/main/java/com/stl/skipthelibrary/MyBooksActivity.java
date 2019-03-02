@@ -3,7 +3,6 @@ package com.stl.skipthelibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,14 +10,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,7 +21,6 @@ public class MyBooksActivity extends AppCompatActivity {
     private static final String TAG = MyBooksActivity.class.getSimpleName();
     public static final int ADD = 1;
 
-    private ArrayList<Book> books = new ArrayList<Book>();
     private RecyclerView recyclerView;
     private FloatingActionButton addBookButton;
     private Context mContext;
@@ -54,7 +46,6 @@ public class MyBooksActivity extends AppCompatActivity {
             }
         });
 
-//        getBooks();
         initRecyclerView();
     }
 
@@ -69,26 +60,6 @@ public class MyBooksActivity extends AppCompatActivity {
         super.onStop();
         mAdapter.stopListening();
     }
-
-    private void getBooks() {
-        //Currently just test data as firebase is empty
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.ACCEPTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.AVAILABLE,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.BORROWED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-    }
-
     private void initRecyclerView(){
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
@@ -100,13 +71,12 @@ public class MyBooksActivity extends AppCompatActivity {
                 .orderByChild("ownerUserName")
                 .equalTo(CurrentUser.getInstance().getUserName());
 
-
         FirebaseRecyclerOptions<Book> options =
                 new FirebaseRecyclerOptions.Builder<Book>()
                         .setQuery(bookQuery, Book.class)
                         .build();
 
-        mAdapter = new BookRecyclerAdapter(this, books, options);
+        mAdapter = new BookRecyclerAdapter(this, options);
         recyclerView.setAdapter(mAdapter);
     }
 
