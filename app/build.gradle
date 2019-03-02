@@ -38,6 +38,10 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'com.gtomato.android.library:carouselview:2.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    //map
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0'
 }
 
 // Test Logging

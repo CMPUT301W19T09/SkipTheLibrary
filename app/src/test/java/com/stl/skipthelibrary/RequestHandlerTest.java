@@ -88,7 +88,7 @@ public class RequestHandlerTest {
         assertTrue(requestHandler.getRequestors().contains(requestor));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testAcceptRequestor(){
         String failedRequest = UUID.randomUUID().toString();
         String succeedRequest = UUID.randomUUID().toString();
@@ -106,7 +106,7 @@ public class RequestHandlerTest {
         assertEquals(requestHandler.getState().getHandoffState(),HandoffState.READY_FOR_PICKUP);
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test
     public void testDenyRequestor(){
         String deniedRequest = UUID.randomUUID().toString();
         String succeedRequest = UUID.randomUUID().toString();

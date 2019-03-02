@@ -40,4 +40,10 @@
     <string name="description">Description</string>
     <string name="save_button">Save Button</string>
     <string name="img_carousel">Image Carousel</string>
+    <string name="name">User\'s Name</string>
+    <string name="ownerRating">Owner Rating</string>
+    <string name="borrowerRating">Borrower Rating</string>
+    <string name="contactInfo">Contact Information</string>
+
+    <string name="mapbox_access_token">pk.eyJ1IjoidHltb29yZSIsImEiOiJjanNxbDVsNGIxOTk3NGFwOXpkY3gwczFqIn0.V5q6lH_Wy9kmkepqc17m_A</string>
 </resources>
