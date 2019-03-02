@@ -90,11 +90,15 @@ public class MyBooksActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView(){
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
         Query bookQuery = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Books");
+                .child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(CurrentUser.getInstance().getUserName());
 
 
         FirebaseRecyclerOptions<Book> options =
