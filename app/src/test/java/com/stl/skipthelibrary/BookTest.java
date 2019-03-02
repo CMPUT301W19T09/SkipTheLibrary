@@ -29,7 +29,7 @@ public class BookTest {
 
     @Test
     public void testSetUUID() {
-        UUID uuid = UUID.randomUUID();
+        String uuid = UUID.randomUUID().toString();
         book.setUuid(uuid);
         assertEquals(uuid, book.getUuid());
     }
