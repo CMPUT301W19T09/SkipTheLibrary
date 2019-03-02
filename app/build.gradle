@@ -44,6 +44,7 @@ dependencies {
 
     // camera for scanning
     implementation 'com.wonderkiln:camerakit:0.13.1'
+
 }
 
 // Test Logging

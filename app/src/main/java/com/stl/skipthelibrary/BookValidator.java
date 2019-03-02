@@ -22,7 +22,7 @@ public class BookValidator implements Validatable{
     }
 
     public boolean isTitleValid(){
-        Boolean valid = Pattern.compile("[0-9a-zA-Z_ .!?]+").matcher(title).matches();
+        Boolean valid = Pattern.compile("[0-9a-zA-Z'_ .!?]+").matcher(title).matches();
 
         if (!valid){
             errorMessage = "Invalid title format";
@@ -31,7 +31,7 @@ public class BookValidator implements Validatable{
         return valid;
     }
     public boolean isAuthorValid(){
-        Boolean valid = Pattern.compile("[a-zA-Z_ \\-.]+").matcher(author).matches();
+        Boolean valid = Pattern.compile("[a-zA-Z_' \\-.]+").matcher(author).matches();
 
         if (!valid){
             errorMessage = "Invalid author format";
