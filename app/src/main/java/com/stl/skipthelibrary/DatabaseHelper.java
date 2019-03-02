@@ -124,10 +124,10 @@ public class DatabaseHelper {
     public void addBook(Book book){
         CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
 
-        getDatabaseReference().child("Users").child(CurrentUser.getInstance().getUserName())
+        getDatabaseReference().child("Users").child(getFirebaseUser().getUid())
                 .setValue(CurrentUser.getInstance());
 
-        getDatabaseReference().child("Books").child(book.getUuid().toString())
+        getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
     }
 

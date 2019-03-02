@@ -43,4 +43,5 @@
     <string name="name">User\'s Name</string>
     <string name="ownerRating">Owner Rating</string>
     <string name="borrowerRating">Borrower Rating</string>
+    <string name="contactInfo">Contact Information</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyclerAdapter.ViewHolder> {
+    final static public String TAG = "BookRecyclerAdapter";
     private Context context;
     private ArrayList<Book> books;
 
@@ -39,10 +42,6 @@ public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyc
         return new BookRecyclerAdapter.ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-
-    }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Book book) {
@@ -75,9 +74,25 @@ public class BookRecyclerAdapter extends FirebaseRecyclerAdapter<Book, BookRecyc
     }
 
     @Override
-    public int getItemCount() {
-        return books.size();
+    public void onDataChanged() {
+        // Called each time there is a new data snapshot. You may want to use this method
+        // to hide a loading spinner or check for the "no documents" state and update your UI.
+        // ...
+        //TODO:Add loading spinner here
     }
+
+    @Override
+    public void onError(DatabaseError e) {
+        // Called when there is an error getting data. You may want to update
+        // your UI to display an error message to the user.
+        // ...
+        Log.d(TAG, "onError: DATABASE ERROR");
+    }
+
+//    @Override
+//    public int getItemCount() {
+//        return books.size();
+//    }
 
 
     // Inner Class ViewHolder defines all of the elements in the corresponding xml file.
