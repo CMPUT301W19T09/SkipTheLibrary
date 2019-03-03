@@ -116,8 +116,8 @@ public class User {
     @Override
     public String toString() {
         return "{Name = " + name + " ,userName = " + userName + " ,userID = " + userID
-                + " ,contactInfo = " + contactInfo.toString() + " ,ownerUserIdentity = "
-                + ownerRating.toString() + " ,borrowerUserIdentity = "
+                + " ,contactInfo = " + contactInfo.toString() + " ,ownerRating = "
+                + ownerRating.toString() + " ,borrowerRating = "
                 + borrowerRating.toString() + "}";
     }
 
