@@ -25,12 +25,12 @@ public class User {
         this.notifications = new ArrayList<Notification>();
     }
 
-    public User(String name, String userName, String userID, ContactInfo contactInfo) {
+    public User(String name, String userName, String userID, ContactInfo contactInfo, ViewableImage image) {
         this.name = name;
         this.userName = userName;
         this.userID = userID;
         this.contactInfo = contactInfo;
-        this.image = null;
+        this.image = image;
         this.ownerUserIdentity = new UserIdentity(UserMode.OWNER);
         this.borrowerUserIdentity = new UserIdentity(UserMode.BORROWER);
         this.notifications = new ArrayList<Notification>();

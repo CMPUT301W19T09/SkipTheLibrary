@@ -3,6 +3,7 @@ package com.stl.skipthelibrary;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,7 +41,7 @@ public class DatabaseHelper {
     }
 
     // AUTH Methods
-    public void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber){
+    public void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -50,7 +51,7 @@ public class DatabaseHelper {
                             Toast.makeText(context, "Authentication Succeeded.", Toast.LENGTH_SHORT).show();
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             accountCreated(new User(firstName + " " + lastName, userName, firebaseUser.getUid()
-                                    , new ContactInfo(emailAddress, phoneNumber, null)));
+                                    , new ContactInfo(emailAddress, phoneNumber, null), image));
                         }
                         else {
                             Toast.makeText(context, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
