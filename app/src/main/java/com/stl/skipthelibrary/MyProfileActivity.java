@@ -38,6 +38,7 @@ public class MyProfileActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.profile);
 
         currentUser = CurrentUser.getInstance();
+        currentUser.getContactInfo().setContext(this);
 
         if (currentUser.getImage() != null) {
             myProfileImage.setImageBitmap(currentUser.getImage().decode());
@@ -55,5 +56,13 @@ public class MyProfileActivity extends AppCompatActivity {
         Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    public void sendEmailOnClick(View view) {
+        currentUser.getContactInfo().startEmail();
+    }
+
+    public void sendPhoneCallOnClick(View view) {
+        currentUser.getContactInfo().startCall();
     }
 }

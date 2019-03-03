@@ -175,7 +175,8 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="16dp"
+            android:onClick="sendEmailOnClick"/>
 
         <TextView
             android:id="@+id/phoneNumber"
@@ -186,7 +187,8 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="16dp"
+            android:onClick="sendPhoneCallOnClick"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/logoutButton"
