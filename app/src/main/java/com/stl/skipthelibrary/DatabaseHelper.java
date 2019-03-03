@@ -111,7 +111,6 @@ public class DatabaseHelper {
 
         Gson gson = new Gson();
         Intent intent = new Intent(context, NotificationActivity.class);
-        intent.putExtra("User", gson.toJson(user));
         context.startActivity(intent);
     }
 
