@@ -19,6 +19,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView myProfileEmail;
     private TextView myProfilePhoneNumber;
     private BottomNavigationView navigation;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,14 @@ public class MyProfileActivity extends AppCompatActivity {
 
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.profile);
+
+        currentUser = CurrentUser.getInstance();
+
+        myProfileImage.setImageBitmap(currentUser.getImage().decode());
+        myProfileName.setText(currentUser.getName());
+        myProfileUsername.setText("@"+currentUser.getUserName());
+        myProfileEmail.setText("Email: "+currentUser.getContactInfo().getEmail());
+        myProfilePhoneNumber.setText("Phone Number: "+currentUser.getContactInfo().getPhoneNumber().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
 
     }
 
