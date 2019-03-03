@@ -11,9 +11,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,8 +30,14 @@ public class BorrowersBooksActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton searchBookButton;
     private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Book> filteredBooks = new ArrayList<>();
+    private ArrayList<BookStatus> filters = new ArrayList<>();
     private BookRecyclerAdapter adapter;
     private Context mContext;
+
+    private Chip requestedChip;
+    private Chip acceptedChip;
+    private Chip borrowedChip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +48,31 @@ public class BorrowersBooksActivity extends AppCompatActivity {
 
         mContext = getApplicationContext();
 
-        adapter = new BookRecyclerAdapter(this, books);
+        adapter = new BookRecyclerAdapter(this, filteredBooks);
 
+        requestedChip = findViewById(R.id.RequestedChip);
+        acceptedChip = findViewById(R.id.AcceptedChip);
+        borrowedChip = findViewById(R.id.BorrowedChip);
+        updateFilter();
+
+        requestedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        acceptedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        borrowedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
@@ -59,6 +90,21 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
+    private void updateFilter() {
+        ArrayList<BookStatus> newFilters = new ArrayList<>();
+        if (requestedChip.isChecked()){
+            newFilters.add(BookStatus.REQUESTED);
+        }
+        if (acceptedChip.isChecked()){
+            newFilters.add(BookStatus.ACCEPTED);
+        }
+        if (borrowedChip.isChecked()){
+            newFilters.add(BookStatus.BORROWED);
+        }
+        filters = newFilters;
+        updateFilteredBooks();
+    }
+
     private void getBooks() {
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
         databaseHelper.getDatabaseReference().child("Books").addChildEventListener(new ChildEventListener() {
@@ -67,7 +113,7 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                 Book book = dataSnapshot.getValue(Book.class);
                 if (book.userIsInterested(CurrentUser.getInstance().getUserName())){
                     books.add(book);
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -92,13 +138,13 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                     else{
                         books.remove(books.get(idToReplace));
                     }
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
                 // if the book was not in our record but the user is now interested in it
                 // we add the book to their collection.
                 else if(book.userIsInterested(CurrentUser.getInstance().getUserName())){
                     books.add(book);
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -115,7 +161,7 @@ public class BorrowersBooksActivity extends AppCompatActivity {
 
                 if (idToRemove != null){
                     books.remove(books.get(idToRemove));
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -128,6 +174,19 @@ public class BorrowersBooksActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    private void updateFilteredBooks(){
+        ArrayList<Book> newFilteredBooks = new ArrayList<>();
+        for (Book book: books){
+            if (filters.contains(book.getRequests().getState().getBookStatus())){
+                newFilteredBooks.add(book);
+            }
+        }
+        filteredBooks.clear();
+        filteredBooks.addAll(newFilteredBooks);
+
+        adapter.notifyDataSetChanged();
     }
 
 
