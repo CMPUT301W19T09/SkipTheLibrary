@@ -130,6 +130,7 @@ public class DatabaseHelper {
         CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
 
         getDatabaseReference().child("Users").child(firebaseUser.getUid())
+
                 .setValue(CurrentUser.getInstance());
 
         getDatabaseReference().child("Books").child(book.getUuid())

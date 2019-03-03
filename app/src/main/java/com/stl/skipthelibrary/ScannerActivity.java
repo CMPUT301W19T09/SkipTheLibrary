@@ -3,6 +3,7 @@ package com.stl.skipthelibrary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -97,7 +98,7 @@ public class ScannerActivity extends AppCompatActivity {
             if (barcode.getValueType() == FirebaseVisionBarcode.TYPE_ISBN){
                 Intent intent=new Intent();
                 intent.putExtra("ISBN", barcode.getDisplayValue());
-                setResult(SCAN_BOOK, intent);
+                setResult(Activity.RESULT_OK, intent);
                 finish();
                 return;
             }

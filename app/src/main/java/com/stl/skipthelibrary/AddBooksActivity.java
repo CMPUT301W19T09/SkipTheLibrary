@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 public class AddBooksActivity extends AppCompatActivity {
+    final public static String TAG = AddBooksActivity.class.getSimpleName();
+
     private Context mContext;
     private EditText bookTitle;
     private EditText bookAuthor;
@@ -104,9 +107,13 @@ public class AddBooksActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ScannerActivity.SCAN_BOOK) {
-            String ISBN = data.getStringExtra("ISBN");
-            bookISBN.setText(ISBN);
-            new BookDescriptionReceiver(ISBN, bookTitle, bookAuthor, bookDesc).execute(ISBN);
+            if (resultCode == RESULT_OK) {
+                String ISBN = data.getStringExtra("ISBN");
+                bookISBN.setText(ISBN);
+                new BookDescriptionReceiver(ISBN, bookTitle, bookAuthor, bookDesc).execute(ISBN);
+            } else {
+                Log.d(TAG, "onActivityResult: Something went wrong in scan");
+            }
         }
     }
 }

@@ -1,12 +1,10 @@
 package com.stl.skipthelibrary;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Book implements Scannable {
+public class Book{
     final public static String TAG = "Book";
 
     private String uuid;
@@ -33,6 +31,22 @@ public class Book implements Scannable {
         this.requests = requests;
         this.images = images;
         this.rating = rating;
+    }
+
+    public boolean userIsInterested(String userName){
+        if (requests == null){
+            return false;
+        }
+
+        if (requests.getRequestors() != null && requests.getRequestors().contains(userName)){
+            return true;
+        }
+
+        if (requests.getAcceptedRequestor() != null && requests.getAcceptedRequestor().equals(userName)){
+            return true;
+        }
+
+        return false;
     }
 
     // Getters and Setters
@@ -92,13 +106,6 @@ public class Book implements Scannable {
 
     public String getUuid() {
         return uuid;
-    }
-
-    /**************************************************/
-
-    public Boolean scan() {
-        Log.d(TAG, "scan: OPEN UP THE SCANNER");
-        return false;
     }
 
     @Override
