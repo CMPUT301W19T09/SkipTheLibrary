@@ -1,12 +1,23 @@
 package com.stl.skipthelibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 
 
 public class SignUpActivity extends AppCompatActivity {
@@ -16,6 +27,11 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText lastNameText;
     private EditText emailAddressText;
     private EditText phoneNumberText;
+    private MaterialButton profilePhotoButton;
+    private CircleImageView profilePhotoImageView;
+    private ViewableImage profileImage;
+    public static final int PICK_PROFILE_IMAGE = 0;
+
 
 
     @Override
@@ -28,6 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
         lastNameText = findViewById(R.id.SignUpLastName);
         emailAddressText = findViewById(R.id.SignUpEmail);
         phoneNumberText = findViewById(R.id.SignUpPhoneNumber);
+        profilePhotoButton = findViewById(R.id.addProfileImage);
+        profilePhotoImageView = findViewById(R.id.newProfileImage);
 
         usernameText.addTextChangedListener(new TextValidator(usernameText) {
             @Override
@@ -94,7 +112,25 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        profilePhotoButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                  getIntent.setType("image/*");
+
+                  Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                  pickIntent.setType("image/*");
+
+                  Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                  chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                  startActivityForResult(chooserIntent, PICK_PROFILE_IMAGE);
+              }
+          }
+        );
     }
+
 
     public void RegisterOnClick(View view) {
         String userName = usernameText.getText().toString();
@@ -106,13 +142,41 @@ public class SignUpActivity extends AppCompatActivity {
         SignUpValidator signUpValidator = new SignUpValidator(userName, password, firstName, lastName, emailAddress, phoneNumber);
         if (signUpValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
-            databaseHelper.createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber);
+            databaseHelper.createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber, profileImage);
         }
         else{
             Toast.makeText(SignUpActivity.this, "Please fix the above errors", Toast.LENGTH_SHORT).show();
             return;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_PROFILE_IMAGE) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a photo.
+                // The Intent's data Uri identifies which photo was selected.
+                Uri imageUri = data.getData();
+                profilePhotoImageView.setImageURI(imageUri);
+                try {
+                    profileImage = new ViewableImage(getBitmapFromUri(imageUri));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
     }
 
 }
