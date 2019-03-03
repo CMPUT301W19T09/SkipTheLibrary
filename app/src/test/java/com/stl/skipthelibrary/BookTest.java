@@ -16,7 +16,7 @@ public class BookTest {
 
     @Before
     public void setUp(){
-        book = new Book(new BookDescription("test title", "test synopsis", "test author", null),
+        book = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author", null),
                 "testUserName", new RequestHandler(new State()), null, null);
     }
 
@@ -29,7 +29,7 @@ public class BookTest {
 
     @Test
     public void testSetUUID() {
-        UUID uuid = UUID.randomUUID();
+        String uuid = UUID.randomUUID().toString();
         book.setUuid(uuid);
         assertEquals(uuid, book.getUuid());
     }

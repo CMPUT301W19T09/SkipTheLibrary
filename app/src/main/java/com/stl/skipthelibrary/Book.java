@@ -7,23 +7,27 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Book implements Scannable {
-    public String TAG = getClass().getSimpleName();
+    final public static String TAG = "Book";
 
-    private UUID uuid;
+    private String uuid;
+    private String ISBN;
     private BookDescription description;
     private String ownerUserName;
     private RequestHandler requests;
     private ArrayList<ViewableImage> images;
     private Rating rating;
 
-
-    public Book(BookDescription description, String ownerUserName) {
-        this(description,ownerUserName,new RequestHandler(), new ArrayList<ViewableImage>(), new Rating());
+    public Book() {
+        this.uuid = UUID.randomUUID().toString();
     }
 
+    public Book(BookDescription description, String ISBN, String ownerUserName) {
+        this(ISBN, description, ownerUserName,new RequestHandler(), new ArrayList<ViewableImage>(), new Rating());
+    }
 
-    public Book(BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
-        this.uuid = UUID.randomUUID();
+    public Book(String ISBN, BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {
+        this.uuid = UUID.randomUUID().toString();
+        this.ISBN = ISBN;
         this.description = description;
         this.ownerUserName = ownerUserName;
         this.requests = requests;
@@ -31,11 +35,17 @@ public class Book implements Scannable {
         this.rating = rating;
     }
 
-
     // Getters and Setters
 
+    public String getISBN() {
+        return ISBN;
+    }
 
-    public void setUuid(UUID uuid) {
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
@@ -80,7 +90,7 @@ public class Book implements Scannable {
         this.ownerUserName = ownerUserName;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
@@ -96,8 +106,8 @@ public class Book implements Scannable {
         if (this == o) return true;
         if (!(o instanceof Book)) return false;
         Book book = (Book) o;
-        return Objects.equals(TAG, book.TAG) &&
-                Objects.equals(getUuid(), book.getUuid()) &&
+        return Objects.equals(getUuid(), book.getUuid()) &&
+                Objects.equals(getISBN(), book.getISBN()) &&
                 Objects.equals(getDescription(), book.getDescription()) &&
                 Objects.equals(getOwnerUserName(), book.getOwnerUserName()) &&
                 Objects.equals(getRequests(), book.getRequests()) &&
@@ -107,6 +117,6 @@ public class Book implements Scannable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(TAG, getUuid(), getDescription(), getOwnerUserName(), getRequests(), getImages(), getRating());
+        return Objects.hash(getUuid(), getISBN(), getDescription(), getOwnerUserName(), getRequests(), getImages(), getRating());
     }
 }

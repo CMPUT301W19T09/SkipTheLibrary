@@ -26,7 +26,7 @@ public class UserIdentityTest {
     @Test
     public void testAddBook(){
         assertEquals(0, ownerIdentity.getBookList().size());
-        Book book = new Book(null, null, null, null, null);
+        Book book = new Book(null, null, null, null, null, null);
         ownerIdentity.addBook(book);
         assertEquals(1, ownerIdentity.getBookList().size());
     }
@@ -34,10 +34,10 @@ public class UserIdentityTest {
     @Test
     public void testRemoveBook(){
         assertEquals(0, ownerIdentity.getBookList().size());
-        Book book1 = new Book(null, null, null, null, null);
+        Book book1 = new Book(null, null, null, null, null, null);
         ownerIdentity.addBook(book1);
 
-        Book book2 = new Book(null, null, null, null, null);
+        Book book2 = new Book(null, null, null, null, null, null);
         assertFalse(ownerIdentity.removeBook(book2));
         assertTrue(ownerIdentity.removeBook(book1));
     }
@@ -45,7 +45,7 @@ public class UserIdentityTest {
     @Test
     public void testSetBookList() {
         ArrayList<Book> books = new ArrayList<Book>();
-        Book book = new Book(new BookDescription("test title", "test synopsis", "test author", null),
+        Book book = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author", null),
                 "testUserName", new RequestHandler(new State()), null, null);
         books.add(book);
         ownerIdentity.setBookList(books);

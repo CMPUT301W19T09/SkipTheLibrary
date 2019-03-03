@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,10 +21,10 @@ public class MyBooksActivity extends AppCompatActivity {
     private static final String TAG = MyBooksActivity.class.getSimpleName();
     public static final int ADD = 1;
 
-    ArrayList<Book> books = new ArrayList<Book>();
-    RecyclerView recyclerView;
-    FloatingActionButton addBookButton;
-    Context mContext;
+    private RecyclerView recyclerView;
+    private FloatingActionButton addBookButton;
+    private Context mContext;
+    private FirebaseRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,33 +46,60 @@ public class MyBooksActivity extends AppCompatActivity {
             }
         });
 
-        getBooks();
         initRecyclerView();
     }
 
-    private void getBooks() {
-        //Currently just test data as firebase is empty
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.ACCEPTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.AVAILABLE,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.BORROWED,null, null)), null, new Rating()));
-        books.add(new Book(new BookDescription("test Title", "test Sysnopsis",
-                "test author", new Rating()),"testUsername",
-                new RequestHandler(new State(BookStatus.REQUESTED,null, null)), null, new Rating()));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
     }
 
     private void initRecyclerView(){
-        BookRecyclerAdapter adapter = new BookRecyclerAdapter(this, books);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        Query bookQuery = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(CurrentUser.getInstance().getUserName());
+
+        FirebaseRecyclerOptions<Book> options =
+                new FirebaseRecyclerOptions.Builder<Book>()
+                        .setQuery(bookQuery, Book.class)
+                        .build();
+
+        mAdapter = new BookRecyclerAdapter(this, options);
+        recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * onActivitResult method to get the result from startActivityFromResult
+     *
+     * @param requestCode The request code that was sent with the activity
+     * @param resultCode The status code for the result
+     * @param resultIntent The returning intent from the activity
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        Book book;
+        // Check which request it is that we're responding to
+        if (requestCode == ADD) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(mContext, "BOOK ADDED 🤪", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(mContext, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

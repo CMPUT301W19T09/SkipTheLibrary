@@ -33,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     public static final int PICK_PROFILE_IMAGE = 0;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,6 @@ public class SignUpActivity extends AppCompatActivity {
         phoneNumberText = findViewById(R.id.SignUpPhoneNumber);
         profilePhotoButton = findViewById(R.id.addProfileImage);
         profilePhotoImageView = findViewById(R.id.newProfileImage);
-        //profileImage = new ViewableImage(Uri.parse("android.resource://com.stl.skipthelibrary/" + R.drawable.ic_person_white_24dp));
 
         usernameText.addTextChangedListener(new TextValidator(usernameText) {
             @Override

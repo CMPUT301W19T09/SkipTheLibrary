@@ -3,6 +3,7 @@
     package="com.stl.skipthelibrary">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddBooksActivity"></activity>
+        <activity android:name=".ScannerActivity"></activity>
+        <activity
+            android:name=".AddBooksActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity">
@@ -29,6 +33,10 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".MyBooksActivity" />
+
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="barcode" />
     </application>
 
 </manifest>

@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
+    final public static String TAG = "LoginActivity";
 
     private EditText passwordText;
     private EditText emailText;
@@ -24,9 +26,15 @@ public class LoginActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         // user is already logged in
+        Log.d(TAG, "onCreate: "+databaseHelper.isUserLoggedIn());
         if (databaseHelper.isUserLoggedIn()){
-            databaseHelper.pullUserSignIn(databaseHelper.getFirebaseUser().getUid());
-            Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
+            try{
+                databaseHelper.pullUserSignIn(databaseHelper.getFirebaseUser().getUid());
+                Toast.makeText(this, "Automatically Signed In", Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e){
+                Toast.makeText(this, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         emailText.addTextChangedListener(new TextValidator(emailText) {

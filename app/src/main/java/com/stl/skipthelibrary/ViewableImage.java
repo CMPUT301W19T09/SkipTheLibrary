@@ -11,8 +11,9 @@ public class ViewableImage {
 
     private String imageString;
 
-    public ViewableImage(){
-        this.imageString = "default string";
+    
+    public ViewableImage() {
+        setImageString("default string");
     }
 
     public ViewableImage(Bitmap bitmap) {

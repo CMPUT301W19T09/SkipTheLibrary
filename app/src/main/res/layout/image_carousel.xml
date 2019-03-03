@@ -18,7 +18,8 @@
         android:background="@android:color/transparent"
         android:elevation="5dp"
         android:contentDescription="@string/save_button"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        app:srcCompat="@android:drawable/ic_menu_save" 
+        android:onClick="saveBookOnClick"/>
 
 
     <ImageView
