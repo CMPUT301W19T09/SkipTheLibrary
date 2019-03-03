@@ -39,7 +39,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
         currentUser = CurrentUser.getInstance();
 
-        myProfileImage.setImageBitmap(currentUser.getImage().decode());
+        if (currentUser.getImage() != null) {
+            myProfileImage.setImageBitmap(currentUser.getImage().decode());
+        }
         myProfileName.setText(currentUser.getName());
         myProfileUsername.setText("@"+currentUser.getUserName());
         myProfileEmail.setText("Email: "+currentUser.getContactInfo().getEmail());
