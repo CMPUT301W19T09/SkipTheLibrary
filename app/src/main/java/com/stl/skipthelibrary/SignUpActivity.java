@@ -1,11 +1,13 @@
 package com.stl.skipthelibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
@@ -46,6 +48,8 @@ public class SignUpActivity extends AppCompatActivity {
         phoneNumberText = findViewById(R.id.SignUpPhoneNumber);
         profilePhotoButton = findViewById(R.id.addProfileImage);
         profilePhotoImageView = findViewById(R.id.newProfileImage);
+
+        profileImage = new ViewableImage(BitmapFactory.decodeResource(getResources(), R.drawable.default_avatar));
 
         usernameText.addTextChangedListener(new TextValidator(usernameText) {
             @Override
