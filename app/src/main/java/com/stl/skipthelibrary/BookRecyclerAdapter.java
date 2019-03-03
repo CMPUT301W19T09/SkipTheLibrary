@@ -1,9 +1,12 @@
 package com.stl.skipthelibrary;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
+    private static String TAG = "RecyclerViewAdapter";
     private Context context;
     private ArrayList<Book> books;
 
@@ -57,6 +61,21 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         else if (status.equals(BookStatus.BORROWED.name())){
             holder.status.setBackgroundTintList(context.getColorStateList(R.color.BORROWED));
         }
+
+
+
+        holder.bookArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "clicked on book arrow");
+                Intent intent = new Intent(context, ViewBookActivity.class);
+                //intent.putExtra("book", measurements.get(i));
+                context.startActivity(intent);
+            }
+        });
+
+
+
     }
 
     @Override
@@ -73,6 +92,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         TextView title;
         TextView author;
         TextView status;
+        ImageButton bookArrow;
 
         // ViewHolder constructor
         public ViewHolder(View itemView) {
@@ -82,6 +102,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             title = itemView.findViewById(R.id.BookListItemTitle);
             author = itemView.findViewById(R.id.BookListItemAuthor);
             status = itemView.findViewById(R.id.BookListItemStatus);
+            bookArrow = itemView.findViewById(R.id.BookListItemRightArrow);
         }
 
     }
