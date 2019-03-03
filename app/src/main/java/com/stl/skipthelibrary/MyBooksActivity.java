@@ -57,14 +57,15 @@ public class MyBooksActivity extends AppCompatActivity {
 
     private void getBooks() {
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        databaseHelper.getDatabaseReference().child("Books").addChildEventListener(new ChildEventListener() {
+        databaseHelper.getDatabaseReference().child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(CurrentUser.getInstance().getUserName())
+                .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Book book = dataSnapshot.getValue(Book.class);
-                if (book.getOwnerUserName().equals(CurrentUser.getInstance().getUserName())){
-                    books.add(book);
-                    adapter.notifyDataSetChanged();
-                }
+                books.add(book);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
