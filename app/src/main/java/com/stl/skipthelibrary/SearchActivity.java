@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -27,8 +29,9 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    public void cancelSearchOnClick() {
-        setResult(Activity.RESULT_CANCELED);
+    public void cancelSearchOnClick(View view) {
+        Intent intent = new Intent();
+        setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }
 }
