@@ -10,8 +10,8 @@ public class User {
     private String userID;
     private ViewableImage image;
     private ContactInfo contactInfo;
-    private UserIdentity ownerUserIdentity;
-    private UserIdentity borrowerUserIdentity;
+    private Rating ownerRating;
+    private Rating borrowerRating;
     private ArrayList<Notification> notifications;
 
     public User(){
@@ -20,9 +20,9 @@ public class User {
         this.userID = UUID.randomUUID().toString();
         this.image = null;
         this.contactInfo = null;
-        this.ownerUserIdentity = null;
-        this.borrowerUserIdentity = null;
-        this.notifications = new ArrayList<Notification>();
+        this.ownerRating = new Rating();
+        this.borrowerRating = new Rating();
+        this.notifications = new ArrayList<>();
     }
 
     public User(String name, String userName, String userID, ContactInfo contactInfo, ViewableImage image) {
@@ -31,19 +31,19 @@ public class User {
         this.userID = userID;
         this.contactInfo = contactInfo;
         this.image = image;
-        this.ownerUserIdentity = new UserIdentity(UserMode.OWNER);
-        this.borrowerUserIdentity = new UserIdentity(UserMode.BORROWER);
-        this.notifications = new ArrayList<Notification>();
+        this.ownerRating = new Rating();
+        this.borrowerRating = new Rating();
+        this.notifications = new ArrayList<>();
     }
 
-    public User(String name, String userName, String userID, ViewableImage image, ContactInfo contactInfo, UserIdentity ownerUserIdentity, UserIdentity borrowerUserIdentity, ArrayList<Notification> notifications) {
+    public User(String name, String userName, String userID, ViewableImage image, ContactInfo contactInfo, Rating ownerRating, Rating borrowerRating, ArrayList<Notification> notifications) {
         this.name = name;
         this.userName = userName;
         this.userID = userID;
         this.image = image;
         this.contactInfo = contactInfo;
-        this.ownerUserIdentity = ownerUserIdentity;
-        this.borrowerUserIdentity = borrowerUserIdentity;
+        this.ownerRating = ownerRating;
+        this.borrowerRating = borrowerRating;
         this.notifications = notifications;
     }
 
@@ -97,28 +97,28 @@ public class User {
         this.contactInfo = contactInfo;
     }
 
-    public UserIdentity getOwnerUserIdentity() {
-        return ownerUserIdentity;
+    public Rating getOwnerRating() {
+        return ownerRating;
     }
 
-    public void setOwnerUserIdentity(UserIdentity ownerUserIdentity) {
-        this.ownerUserIdentity = ownerUserIdentity;
+    public void setOwnerRating(Rating ownerRating) {
+        this.ownerRating = ownerRating;
     }
 
-    public UserIdentity getBorrowerUserIdentity() {
-        return borrowerUserIdentity;
+    public Rating getBorrowerRating() {
+        return borrowerRating;
     }
 
-    public void setBorrowerUserIdentity(UserIdentity borrowerUserIdentity) {
-        this.borrowerUserIdentity = borrowerUserIdentity;
+    public void setBorrowerRating(Rating borrowerRating) {
+        this.borrowerRating = borrowerRating;
     }
 
     @Override
     public String toString() {
         return "{Name = " + name + " ,userName = " + userName + " ,userID = " + userID
                 + " ,contactInfo = " + contactInfo.toString() + " ,ownerUserIdentity = "
-                + ownerUserIdentity.toString() + " ,borrowerUserIdentity = "
-                + borrowerUserIdentity.toString() + "}";
+                + ownerRating.toString() + " ,borrowerUserIdentity = "
+                + borrowerRating.toString() + "}";
     }
 
     @Override
@@ -131,13 +131,13 @@ public class User {
                 Objects.equals(getUserID(), user.getUserID()) &&
                 Objects.equals(getImage(), user.getImage()) &&
                 Objects.equals(getContactInfo(), user.getContactInfo()) &&
-                Objects.equals(getOwnerUserIdentity(), user.getOwnerUserIdentity()) &&
-                Objects.equals(getBorrowerUserIdentity(), user.getBorrowerUserIdentity()) &&
+                Objects.equals(getOwnerRating(), user.getOwnerRating()) &&
+                Objects.equals(getBorrowerRating(), user.getBorrowerRating()) &&
                 Objects.equals(getNotifications(), user.getNotifications());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getUserName(), getUserID(), getImage(), getContactInfo(), getOwnerUserIdentity(), getBorrowerUserIdentity(), getNotifications());
+        return Objects.hash(getName(), getUserName(), getUserID(), getImage(), getContactInfo(), getOwnerRating(), getBorrowerRating(), getNotifications());
     }
 }

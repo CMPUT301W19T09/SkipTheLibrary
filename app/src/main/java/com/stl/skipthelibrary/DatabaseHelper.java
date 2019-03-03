@@ -111,7 +111,6 @@ public class DatabaseHelper {
 
         Gson gson = new Gson();
         Intent intent = new Intent(context, NotificationActivity.class);
-        intent.putExtra("User", gson.toJson(user));
         context.startActivity(intent);
     }
 
@@ -127,12 +126,6 @@ public class DatabaseHelper {
     // Book Functions
     //TODO:Make this work
     public void addBook(Book book){
-        CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
-
-        getDatabaseReference().child("Users").child(firebaseUser.getUid())
-
-                .setValue(CurrentUser.getInstance());
-
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
     }
