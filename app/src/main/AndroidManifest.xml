@@ -12,10 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScannerActivity"></activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchBookActivity" />
+        <activity android:name=".ScannerActivity" />
         <activity
             android:name=".AddBooksActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity">

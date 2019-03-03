@@ -6,8 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,11 +23,13 @@ import java.util.ArrayList;
 
 public class BorrowersBooksActivity extends AppCompatActivity {
     public static final String TAG = BorrowersBooksActivity.class.getSimpleName();
+    public static final int SEARCH = 1;
 
     private RecyclerView recyclerView;
     private FloatingActionButton searchBookButton;
     private ArrayList<Book> books = new ArrayList<>();
     private BookRecyclerAdapter adapter;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +37,23 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_borrowerbooks);
         recyclerView = findViewById(R.id.borrowerBookRecyclerView);
         searchBookButton = findViewById(R.id.searchBookButton);
+
+        mContext = getApplicationContext();
+
         adapter = new BookRecyclerAdapter(this, books);
+
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.borrow);
+
+        searchBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, SearchActivity.class);
+                startActivityForResult(intent, SEARCH);
+            }
+        });
 
         getBooks();
         initRecyclerView();
@@ -116,6 +134,26 @@ public class BorrowersBooksActivity extends AppCompatActivity {
     private void initRecyclerView(){
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    /**
+     * onActivitResult method to get the result from startActivityFromResult
+     *
+     * @param requestCode The request code that was sent with the activity
+     * @param resultCode The status code for the result
+     * @param resultIntent The returning intent from the activity
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        // Check which request it is that we're responding to
+        if (requestCode == SEARCH) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "BOOK SEARCHED 🤪", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

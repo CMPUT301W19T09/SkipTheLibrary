@@ -1,5 +1,6 @@
 package com.stl.skipthelibrary;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ public class MyBooksActivity extends AppCompatActivity {
     private FloatingActionButton addBookButton;
     private ArrayList<Book> books = new ArrayList<>();
     private BookRecyclerAdapter adapter;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MyBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ownerbooks);
         recyclerView = findViewById(R.id.ownerBooksRecyclerView);
         addBookButton = findViewById(R.id.addBookButton);
+        mContext = getApplicationContext();
 
         adapter = new BookRecyclerAdapter(this, books);
 
@@ -45,7 +48,7 @@ public class MyBooksActivity extends AppCompatActivity {
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyBooksActivity.this, AddBooksActivity.class);
+                Intent intent = new Intent(mContext, AddBooksActivity.class);
                 startActivityForResult(intent, ADD);
             }
         });
