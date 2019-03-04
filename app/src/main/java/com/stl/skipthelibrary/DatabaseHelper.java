@@ -40,7 +40,29 @@ public class DatabaseHelper {
     }
 
     // AUTH Methods
-    public void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
+    public void createAccountIfValid(final String userName, final String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
+        databaseReference.child("Users").orderByChild("userName").equalTo(userName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(context, "That username already exists. Please choose another",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber, image);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {

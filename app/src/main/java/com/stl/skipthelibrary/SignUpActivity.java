@@ -1,16 +1,12 @@
 package com.stl.skipthelibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,7 +14,6 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
 
 
@@ -146,7 +141,7 @@ public class SignUpActivity extends AppCompatActivity {
         SignUpValidator signUpValidator = new SignUpValidator(userName, password, firstName, lastName, emailAddress, phoneNumber);
         if (signUpValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
-            databaseHelper.createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber, profileImage);
+            databaseHelper.createAccountIfValid(userName, password, firstName, lastName, emailAddress, phoneNumber, profileImage);
         }
         else{
             Toast.makeText(SignUpActivity.this, "Please fix the above errors", Toast.LENGTH_SHORT).show();
