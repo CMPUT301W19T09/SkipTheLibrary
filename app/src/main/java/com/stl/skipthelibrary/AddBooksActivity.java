@@ -116,4 +116,8 @@ public class AddBooksActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

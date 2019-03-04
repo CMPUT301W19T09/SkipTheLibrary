@@ -214,4 +214,8 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
 }

@@ -178,4 +178,8 @@ public class SearchActivity extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

@@ -183,4 +183,8 @@ public class SignUpActivity extends AppCompatActivity {
         return image;
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
 }

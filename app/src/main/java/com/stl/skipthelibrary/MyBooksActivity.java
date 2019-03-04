@@ -213,4 +213,8 @@ public class MyBooksActivity extends AppCompatActivity {
             Toast.makeText(this, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }
