@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -51,6 +53,23 @@ public class SearchActivity extends AppCompatActivity {
         backButton = findViewById(R.id.BookListItemLeftArrow);
         searchButton = findViewById(R.id.searchBookButton);
 
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                search();
+            }
+        });
+
         searchBooks();
         initRecyclerView();
     }
@@ -64,6 +83,7 @@ public class SearchActivity extends AppCompatActivity {
                 Book book = dataSnapshot.getValue(Book.class);
                 if (! (book.getOwnerUserName().equals(CurrentUser.getInstance().getUserName()))){
                     books.add(book);
+                    search();
                 }
             }
 
@@ -80,6 +100,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 if (idToReplace != null){
                     books.set(idToReplace,book);
+                    search();
                 }
             }
 
@@ -96,6 +117,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 if (idToRemove != null){
                     books.remove(books.get(idToRemove));
+                    search();
                 }
             }
 
@@ -118,7 +140,7 @@ public class SearchActivity extends AppCompatActivity {
 
     // ON CLICK LISTENERS
 
-    public void searchOnClick(View view) {
+    public void search() {
         ArrayList<Book> newFilteredBooks = new ArrayList<>();
         String search = searchBar.getText().toString();
         List<String> searchText = Arrays.asList(search.split(" "));

@@ -14,8 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
+            android:orientation="horizontal">
 
 
 
@@ -32,25 +31,17 @@
             <AutoCompleteTextView
                 android:id="@+id/SearchBar"
                 style="@style/Base.Theme.MaterialComponents"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
                 android:hint="@android:string/search_go"
+                android:drawableRight="@drawable/ic_search_white_24dp"
                 android:textAlignment="viewStart"
                 android:textSize="24sp"
                 android:layout_marginStart="8dp"
                 android:singleLine="true"
-                android:imeOptions="actionDone"
-                android:layout_weight="9"/>
+                android:imeOptions="actionDone" />
 
-            <ImageView
-                android:id="@+id/SearchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical|end"
-                android:layout_weight="1"
-                android:onClick="searchOnClick"
-                android:src="@drawable/ic_search_white_24dp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
