@@ -64,4 +64,8 @@ public class MyProfileActivity extends AppCompatActivity {
     public void sendPhoneCallOnClick(View view) {
         currentUser.getContactInfo().startCall();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

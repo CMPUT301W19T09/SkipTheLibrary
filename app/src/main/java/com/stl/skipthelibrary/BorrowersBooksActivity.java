@@ -6,10 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,11 +24,19 @@ import java.util.ArrayList;
 
 public class BorrowersBooksActivity extends AppCompatActivity {
     public static final String TAG = BorrowersBooksActivity.class.getSimpleName();
+    public static final int SEARCH = 1;
 
     private RecyclerView recyclerView;
     private FloatingActionButton searchBookButton;
     private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Book> filteredBooks = new ArrayList<>();
+    private ArrayList<BookStatus> filters = new ArrayList<>();
     private BookRecyclerAdapter adapter;
+    private Context mContext;
+
+    private Chip requestedChip;
+    private Chip acceptedChip;
+    private Chip borrowedChip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +44,64 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_borrowerbooks);
         recyclerView = findViewById(R.id.borrowerBookRecyclerView);
         searchBookButton = findViewById(R.id.searchBookButton);
-        adapter = new BookRecyclerAdapter(this, books);
+
+        mContext = getApplicationContext();
+
+        adapter = new BookRecyclerAdapter(this, filteredBooks);
+
+        requestedChip = findViewById(R.id.RequestedChip);
+        acceptedChip = findViewById(R.id.AcceptedChip);
+        borrowedChip = findViewById(R.id.BorrowedChip);
+        updateFilter();
+
+        requestedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        acceptedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        borrowedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.borrow);
 
+        searchBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, SearchActivity.class);
+                startActivityForResult(intent, SEARCH);
+            }
+        });
+
         getBooks();
         initRecyclerView();
+    }
+
+    private void updateFilter() {
+        ArrayList<BookStatus> newFilters = new ArrayList<>();
+        if (requestedChip.isChecked()){
+            newFilters.add(BookStatus.REQUESTED);
+        }
+        if (acceptedChip.isChecked()){
+            newFilters.add(BookStatus.ACCEPTED);
+        }
+        if (borrowedChip.isChecked()){
+            newFilters.add(BookStatus.BORROWED);
+        }
+        filters = newFilters;
+        updateFilteredBooks();
     }
 
     private void getBooks() {
@@ -49,7 +112,7 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                 Book book = dataSnapshot.getValue(Book.class);
                 if (book.userIsInterested(CurrentUser.getInstance().getUserName())){
                     books.add(book);
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -74,13 +137,13 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                     else{
                         books.remove(books.get(idToReplace));
                     }
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
                 // if the book was not in our record but the user is now interested in it
                 // we add the book to their collection.
                 else if(book.userIsInterested(CurrentUser.getInstance().getUserName())){
                     books.add(book);
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -97,7 +160,7 @@ public class BorrowersBooksActivity extends AppCompatActivity {
 
                 if (idToRemove != null){
                     books.remove(books.get(idToRemove));
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -112,10 +175,47 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         });
     }
 
+    private void updateFilteredBooks(){
+        ArrayList<Book> newFilteredBooks = new ArrayList<>();
+        for (Book book: books){
+            if (filters.contains(book.getRequests().getState().getBookStatus())){
+                newFilteredBooks.add(book);
+            }
+        }
+        filteredBooks.clear();
+        filteredBooks.addAll(newFilteredBooks);
+
+        adapter.notifyDataSetChanged();
+    }
+
 
     private void initRecyclerView(){
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    /**
+     * onActivitResult method to get the result from startActivityFromResult
+     *
+     * @param requestCode The request code that was sent with the activity
+     * @param resultCode The status code for the result
+     * @param resultIntent The returning intent from the activity
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        // Check which request it is that we're responding to
+        if (requestCode == SEARCH) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "BOOK SEARCHED 🤪", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
 }

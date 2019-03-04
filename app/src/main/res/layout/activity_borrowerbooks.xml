@@ -103,6 +103,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="40dp"
-        app:srcCompat="@drawable/ic_search_white_24dp" />
+        app:srcCompat="@drawable/ic_search_white_24dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

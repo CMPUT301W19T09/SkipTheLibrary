@@ -5,87 +5,88 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:orientation="vertical"
-    android:background="@drawable/grey_gradient"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
-
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="@string/mybooks"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
-
-    <android.widget.HorizontalScrollView
-        android:id="@+id/BorrowerFilters"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
+        android:background="@drawable/grey_gradient"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="0dp">
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
-        <com.google.android.material.chip.ChipGroup
-            style="@style/Widget.MaterialComponents.ChipGroup"
-            android:layout_width="500dp"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/mybooks"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+
+        <android.widget.HorizontalScrollView
+            android:id="@+id/BorrowerFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                style="@style/Widget.MaterialComponents.ChipGroup"
+                android:layout_width="500dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:scrollbars="none"
+                android:singleLine="true"
+                app:chipSpacing="10dp"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/AvailableChip"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/available" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/RequestedChip"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/requested" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/AcceptedChip"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/accepted" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/LentChip"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/lent" />
+            </com.google.android.material.chip.ChipGroup>
+        </android.widget.HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ownerBooksRecyclerView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:singleLine="true"
-            app:chipSpacing="10dp"
-            android:layout_marginBottom="10dp"
-            app:singleLine="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/AvailableChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/available" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/RequestedChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/requested" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/AcceptedChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/accepted" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/LentChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/lent" />
-        </com.google.android.material.chip.ChipGroup>
-    </android.widget.HorizontalScrollView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ownerBooksRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/book_list_item" />
+            tools:listitem="@layout/book_list_item" />
 
 
-
-</LinearLayout>
+    </LinearLayout>
 
 <com.google.android.material.bottomnavigation.BottomNavigationView
 android:id="@+id/bottom_navigation"

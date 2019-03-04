@@ -181,4 +181,8 @@ public class AddBooksActivity extends AppCompatActivity {
         parcelFileDescriptor.close();
         return image;
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }
