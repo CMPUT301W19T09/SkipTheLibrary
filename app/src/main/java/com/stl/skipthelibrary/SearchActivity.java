@@ -145,32 +145,25 @@ public class SearchActivity extends AppCompatActivity {
         String search = searchBar.getText().toString();
         List<String> searchText = Arrays.asList(search.split(" "));
 
-        boolean containedInTitle;
-        boolean containedInAuthor;
-        boolean containedInSynopsis;
+        boolean contained;
 
         for (Book book: books){
             if (book.getRequests().getState().getBookStatus().equals(BookStatus.ACCEPTED) ||
                     book.getRequests().getState().getBookStatus().equals(BookStatus.BORROWED)) {
                 continue;
             }
-            containedInTitle = true;
-            containedInAuthor = true;
-            containedInSynopsis = true;
+            contained = true;
 
             // Filter based on search here
             for (String text: searchText) {
-                if (!book.getDescription().getTitle().toLowerCase().contains(text.toLowerCase())){
-                    containedInTitle = false;
-                }
-                if (!book.getDescription().getAuthor().toLowerCase().contains(text.toLowerCase())){
-                    containedInAuthor = false;
-                }
-                if (!book.getDescription().getSynopsis().toLowerCase().contains(text.toLowerCase())) {
-                    containedInSynopsis = false;
+                if (!book.getDescription().getTitle().toLowerCase().contains(text.toLowerCase()) &&
+                        !book.getDescription().getAuthor().toLowerCase().contains(text.toLowerCase()) &&
+                        !book.getDescription().getSynopsis().toLowerCase().contains(text.toLowerCase())) {
+
+                    contained = false;
                 }
             }
-            if (containedInTitle || containedInAuthor || containedInSynopsis) {
+            if (contained) {
                 newFilteredBooks.add(book);
             }
         }
