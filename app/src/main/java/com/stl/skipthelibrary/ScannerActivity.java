@@ -96,7 +96,7 @@ public class ScannerActivity extends AppCompatActivity {
 
         for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes){
             if (barcode.getValueType() == FirebaseVisionBarcode.TYPE_ISBN){
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 intent.putExtra("ISBN", barcode.getDisplayValue());
                 setResult(Activity.RESULT_OK, intent);
                 finish();
