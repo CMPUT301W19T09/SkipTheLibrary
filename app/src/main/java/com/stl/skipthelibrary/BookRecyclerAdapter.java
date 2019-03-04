@@ -1,5 +1,6 @@
 package com.stl.skipthelibrary;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -16,11 +19,32 @@ import androidx.recyclerview.widget.RecyclerView;
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
     private Context context;
     private ArrayList<Book> books;
+    private Book mRecentlyDeletedItem;
+    private int mRecentlyDeletedItemPosition;
 
     public BookRecyclerAdapter(Context context, ArrayList<Book> books) {
         this.context = context;
         this.books = books;
     }
+
+    // GETTERS AND SETTERS
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ArrayList<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
+    /////
+
 
     @NonNull
     @Override
@@ -86,19 +110,41 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     }
 
-    public Context getContext() {
-        return context;
+    public void deleteItem(int position) {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        mRecentlyDeletedItem = books.get(position);
+        mRecentlyDeletedItemPosition = position;
+        books.remove(position);
+        notifyItemRemoved(position);
+        databaseHelper.deleteBook(mRecentlyDeletedItem);
+        showUndoSnackbar();
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    private void showUndoSnackbar() {
+        View view = null;
+        if (context.getClass() == MyBooksActivity.class) {
+            view = ((Activity) context).findViewById(R.id.ownerBooksRecyclerView);
+        } else {
+            return;
+        }
+
+        Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text,
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                undoDelete();
+            }
+        });
+        snackbar.show();
     }
 
-    public ArrayList<Book> getBooks() {
-        return books;
+    private void undoDelete() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        books.add(mRecentlyDeletedItemPosition,
+                mRecentlyDeletedItem);
+        databaseHelper.addBook(mRecentlyDeletedItem);
+        notifyItemInserted(mRecentlyDeletedItemPosition);
     }
 
-    public void setBooks(ArrayList<Book> books) {
-        this.books = books;
-    }
 }
