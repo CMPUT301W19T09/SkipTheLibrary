@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder> {
 
-    List<ViewableImage> bookImages;
+    private List<ViewableImage> bookImages;
     Context mContext;
 
     public HorizontalAdapter(List<ViewableImage> bookImages, Context context) {
