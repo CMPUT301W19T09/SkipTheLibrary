@@ -8,21 +8,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/rounded_top_corners_rectangle"
+        android:backgroundTint="@color/magenta"
         android:gravity="center"
-        android:orientation="vertical"
-        android:backgroundTint="@color/magenta">
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            style="@android:style/Widget.Material.ImageButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:elevation="5dp"
-            android:scaleType="centerInside"
-            app:srcCompat="@android:drawable/arrow_up_float" />
+
 
         <TextView
             android:id="@+id/TitleTextView"
@@ -45,7 +37,6 @@
             android:textAlignment="center"
             android:textColor="@color/white" />
 
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -62,44 +53,44 @@
             android:layout_height="300dp"
             android:layout_marginTop="8dp"
             android:scaleType="center"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            android:background="@drawable/artemis_fowl_cover" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteY="308dp">
 
             <View
                 android:id="@+id/divider1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@id/rating_label"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/rating_label"
-                android:layout_width="61dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/rating"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"
-                app:layout_constraintBottom_toTopOf="@+id/BookRating"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <RatingBar
                 android:id="@+id/BookRating"
                 style="@style/ratingBarSmall"
                 android:layout_width="82dp"
-                android:layout_height="15dp"
+                android:layout_height="12dp"
+                android:layout_margin="8dp"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:progressTint="@color/white"
                 android:rating="3"
                 android:stepSize="0.1"
-                app:layout_constraintBottom_toTopOf="@+id/divider2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rating_label" />
@@ -108,9 +99,9 @@
                 android:id="@+id/divider2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
                 android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rating_label" />
+                app:layout_constraintTop_toBottomOf="@+id/BookRating" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -121,18 +112,21 @@
             android:text="@string/details"
             android:textColor="@color/white"
             android:textSize="24sp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"/>
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:text="This part will contain all of the nice book details well formatted using some sort of toString method that makes it all look gooooood"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="24dp"/>
 
     </LinearLayout>
 
+</LinearLayout>
 </LinearLayout>
