@@ -179,7 +179,4 @@ public class SearchActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-    }
 }
