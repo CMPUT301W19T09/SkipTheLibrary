@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,8 +20,8 @@ public class Book{
         this.uuid = UUID.randomUUID().toString();
     }
 
-    public Book(BookDescription description, String ISBN, String ownerUserName) {
-        this(ISBN, description, ownerUserName,new RequestHandler(), new ArrayList<ViewableImage>(), new Rating());
+    public Book(BookDescription description, String ISBN, String ownerUserName, ArrayList<ViewableImage> images) {
+        this(ISBN, description, ownerUserName,new RequestHandler(), images, new Rating());
     }
 
     public Book(String ISBN, BookDescription description, String ownerUserName, RequestHandler requests, ArrayList<ViewableImage> images, Rating rating) {

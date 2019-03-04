@@ -1,26 +1,43 @@
 package com.stl.skipthelibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.gson.Gson;
+
+import com.google.android.material.button.MaterialButton;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddBooksActivity extends AppCompatActivity {
     final public static String TAG = AddBooksActivity.class.getSimpleName();
+    final public static int PICK_BOOK_IMAGE = 2;
 
     private Context mContext;
     private EditText bookTitle;
     private EditText bookAuthor;
     private EditText bookISBN;
     private EditText bookDesc;
+    private RecyclerView bookImageRecyclerview;
+    private HorizontalAdapter horizontalAdapter;
+    private List<ViewableImage> bookImages = new ArrayList<>();
+    private MaterialButton addBookImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +49,13 @@ public class AddBooksActivity extends AppCompatActivity {
         bookAuthor = findViewById(R.id.AddBookAuthor);
         bookISBN = findViewById(R.id.AddBookISBN);
         bookDesc = findViewById(R.id.AddBookDesc);
+        addBookImageButton = findViewById(R.id.addBookImageButton);
+
+        bookImageRecyclerview = findViewById(R.id.bookImagesRecyclerview);
+        horizontalAdapter=new HorizontalAdapter(bookImages, getApplicationContext());
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(AddBooksActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        bookImageRecyclerview.setLayoutManager(horizontalLayoutManager);
+        bookImageRecyclerview.setAdapter(horizontalAdapter);
 
         bookTitle.addTextChangedListener(new TextValidator(bookTitle) {
             @Override
@@ -68,6 +92,28 @@ public class AddBooksActivity extends AppCompatActivity {
                 }
             }
         });
+
+        addBookImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bookImages.size() < 5) {
+                    Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    getIntent.setType("image/*");
+
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    pickIntent.setType("image/*");
+
+                    Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                    startActivityForResult(chooserIntent, PICK_BOOK_IMAGE);
+                }
+                else {
+                    Toast.makeText(mContext, "Maximum number of images added", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        });
     }
 
     public void saveBookOnClick(View view) {
@@ -80,14 +126,12 @@ public class AddBooksActivity extends AppCompatActivity {
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
-            Book newBook = new Book(bookDescription, isbn,CurrentUser.getInstance().getUserName());
+            Book newBook = new Book(bookDescription, isbn, CurrentUser.getInstance().getUserName(), (ArrayList<ViewableImage>) bookImages);
             databaseHelper.addBook(newBook);
             Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
 
-            Gson gson = new Gson();
             Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
 
-            intent.putExtra("Book", gson.toJson(newBook));
             setResult(Activity.RESULT_OK, intent);
             finish();
         }
@@ -115,7 +159,20 @@ public class AddBooksActivity extends AppCompatActivity {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
             }
         }
+        else if(requestCode == PICK_BOOK_IMAGE & resultCode == RESULT_OK){
+            // The user picked a photo.
+            // The Intent's data Uri identifies which photo was selected.
+            Uri imageUri = data.getData();
+            try {
+                ViewableImage newBookImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
+                bookImages.add(newBookImage);
+                horizontalAdapter.notifyDataSetChanged();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
 
     @Override
     public void onBackPressed() {
