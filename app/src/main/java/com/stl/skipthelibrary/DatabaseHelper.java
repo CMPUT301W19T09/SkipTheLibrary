@@ -124,10 +124,13 @@ public class DatabaseHelper {
 
     /////////
     // Book Functions
-    //TODO:Make this work
     public void addBook(Book book){
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
+    }
+
+    public void deleteBook(Book book){
+        getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
     }
 
 

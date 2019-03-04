@@ -47,5 +47,7 @@
     <string name="profilePhoto">Profile Photo</string>
     <string name="upload">upload</string>
     <string name="addImage">Add Image</string>
+    <string name="snack_bar_text">Book Deleted</string>
+    <string name="snack_bar_undo">UNDO</string>
 
 </resources>

@@ -159,16 +159,20 @@ public class AddBooksActivity extends AppCompatActivity {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
             }
         }
-        else if(requestCode == PICK_BOOK_IMAGE & resultCode == RESULT_OK){
-            // The user picked a photo.
-            // The Intent's data Uri identifies which photo was selected.
-            Uri imageUri = data.getData();
-            try {
-                ViewableImage newBookImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
-                bookImages.add(newBookImage);
-                horizontalAdapter.notifyDataSetChanged();
-            } catch (IOException e) {
-                e.printStackTrace();
+        else if(requestCode == PICK_BOOK_IMAGE){
+            if ( resultCode == RESULT_OK) {
+                // The user picked a photo.
+                // The Intent's data Uri identifies which photo was selected.
+                Uri imageUri = data.getData();
+                try {
+                    ViewableImage newBookImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
+                    bookImages.add(newBookImage);
+                    horizontalAdapter.notifyDataSetChanged();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.d(TAG, "onActivityResult: Error in picking image");
             }
         }
     }
