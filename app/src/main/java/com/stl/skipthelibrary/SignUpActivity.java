@@ -165,7 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 profilePhotoImageView.setImageURI(imageUri);
                 try {
-                    profileImage = new ViewableImage(getBitmapFromUri(imageUri));
+                    profileImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -174,14 +174,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
-    }
 
     @Override
     public void onBackPressed() {

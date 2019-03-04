@@ -164,7 +164,7 @@ public class AddBooksActivity extends AppCompatActivity {
             // The Intent's data Uri identifies which photo was selected.
             Uri imageUri = data.getData();
             try {
-                ViewableImage newBookImage = new ViewableImage(getBitmapFromUri(imageUri));
+                ViewableImage newBookImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
                 bookImages.add(newBookImage);
                 horizontalAdapter.notifyDataSetChanged();
             } catch (IOException e) {
@@ -173,14 +173,6 @@ public class AddBooksActivity extends AppCompatActivity {
         }
     }
 
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
-    }
 
     @Override
     public void onBackPressed() {
