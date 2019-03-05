@@ -143,7 +143,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         books.add(mRecentlyDeletedItemPosition,
                 mRecentlyDeletedItem);
-        databaseHelper.addBook(mRecentlyDeletedItem);
+        databaseHelper.addBookIfValid(mRecentlyDeletedItem, false);
         notifyItemInserted(mRecentlyDeletedItemPosition);
     }
 

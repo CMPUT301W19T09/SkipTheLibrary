@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +17,6 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,13 +123,7 @@ public class AddBooksActivity extends AppCompatActivity {
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
             Book newBook = new Book(bookDescription, isbn, CurrentUser.getInstance().getUserName(), (ArrayList<ViewableImage>) bookImages);
-            databaseHelper.addBook(newBook);
-            Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
-
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            databaseHelper.addBookIfValid(newBook, true);
         }
         else{
             Toast.makeText(mContext, bookValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();
