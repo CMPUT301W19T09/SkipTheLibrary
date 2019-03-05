@@ -123,7 +123,7 @@ public class AddBooksActivity extends AppCompatActivity {
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
             Book newBook = new Book(bookDescription, isbn, CurrentUser.getInstance().getUserName(), (ArrayList<ViewableImage>) bookImages);
-            databaseHelper.addBookIfValid(newBook);
+            databaseHelper.addBookIfValid(newBook, true);
         }
         else{
             Toast.makeText(mContext, bookValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();

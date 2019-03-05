@@ -148,7 +148,7 @@ public class DatabaseHelper {
 
     /////////
     // Book Functions
-    public void addBookIfValid(final Book book){
+    public void addBookIfValid(final Book book, final boolean displayMessageAndFinish){
         databaseReference.child("Books")
                 .orderByChild("ownerUserName")
                 .equalTo(CurrentUser.getInstance().getUserName())
@@ -163,7 +163,7 @@ public class DatabaseHelper {
                         return;
                     }
                 }
-                addValidBook(book);
+                addValidBook(book, displayMessageAndFinish);
 
             }
 
@@ -174,13 +174,16 @@ public class DatabaseHelper {
         });
     }
 
-    private void addValidBook(Book book){
+    private void addValidBook(Book book, boolean displayMessageAndFinish){
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
 
-        Intent intent = new Intent(context.getApplicationContext(), MyBooksActivity.class);
-        ((Activity) context).setResult(Activity.RESULT_OK, intent);
-        ((Activity) context).finish();
+        if(displayMessageAndFinish){
+            Toast.makeText(context, "Book Added!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context.getApplicationContext(), MyBooksActivity.class);
+            ((Activity) context).setResult(Activity.RESULT_OK, intent);
+            ((Activity) context).finish();
+        }
     }
 
     public void deleteBook(Book book){
