@@ -3,6 +3,7 @@ package com.stl.skipthelibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -211,10 +212,10 @@ public class MyBooksActivity extends AppCompatActivity {
         if (requestCode == ADD) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "BOOK ADDED 🤪", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Book Added Successfully!");
             }
         } else {
-            Toast.makeText(this, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Book Was not Added Successfully.");
         }
     }
 
