@@ -17,8 +17,6 @@ public class NotificationActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.home);
-
-        Toast.makeText(this, CurrentUser.getInstance().getImage().getImageString().length() + "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
