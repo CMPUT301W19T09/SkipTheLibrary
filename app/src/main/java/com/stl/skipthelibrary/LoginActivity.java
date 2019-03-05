@@ -34,6 +34,12 @@ public class LoginActivity extends AppCompatActivity {
             }
             catch (Exception e){
                 Toast.makeText(this, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
+                try{
+                    databaseHelper.signOut();
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
         }
 
@@ -73,5 +79,9 @@ public class LoginActivity extends AppCompatActivity {
     public void signUpOnClick(View view) {
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

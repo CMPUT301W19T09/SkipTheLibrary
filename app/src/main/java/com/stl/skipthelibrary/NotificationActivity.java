@@ -18,4 +18,8 @@ public class NotificationActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.home);
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
 }

@@ -12,8 +12,8 @@ public class CurrentUser {
     }
 
     public static void setUser(User user) {
-        getInstance().setBorrowerUserIdentity(user.getBorrowerUserIdentity());
-        getInstance().setOwnerUserIdentity(user.getOwnerUserIdentity());
+        getInstance().setOwnerRating(user.getOwnerRating());
+        getInstance().setBorrowerRating(user.getBorrowerRating());
         getInstance().setContactInfo(user.getContactInfo());
         getInstance().setImage(user.getImage());
         getInstance().setName(user.getName());

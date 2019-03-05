@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
 
 
@@ -46,6 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
         phoneNumberText = findViewById(R.id.SignUpPhoneNumber);
         profilePhotoButton = findViewById(R.id.addProfileImage);
         profilePhotoImageView = findViewById(R.id.newProfileImage);
+
+        profileImage = new ViewableImage(BitmapFactory.decodeResource(getResources(), R.drawable.default_avatar));
 
         usernameText.addTextChangedListener(new TextValidator(usernameText) {
             @Override
@@ -142,7 +141,7 @@ public class SignUpActivity extends AppCompatActivity {
         SignUpValidator signUpValidator = new SignUpValidator(userName, password, firstName, lastName, emailAddress, phoneNumber);
         if (signUpValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
-            databaseHelper.createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber, profileImage);
+            databaseHelper.createAccountIfValid(userName, password, firstName, lastName, emailAddress, phoneNumber, profileImage);
         }
         else{
             Toast.makeText(SignUpActivity.this, "Please fix the above errors", Toast.LENGTH_SHORT).show();
@@ -161,22 +160,13 @@ public class SignUpActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 profilePhotoImageView.setImageURI(imageUri);
                 try {
-                    profileImage = new ViewableImage(getBitmapFromUri(imageUri));
+                    profileImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
             }
         }
-    }
-
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
     }
 
 }
