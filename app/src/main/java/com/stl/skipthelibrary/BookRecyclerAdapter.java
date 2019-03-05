@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             public void onClick(View v) {
                 Log.d(TAG, "clicked on book arrow");
                 Intent intent = new Intent(context, ViewBookActivity.class);
-                //intent.putExtra("book", measurements.get(i));
+                intent.putExtra("bookUUID", books.get(position).getUuid());
                 context.startActivity(intent);
             }
         });

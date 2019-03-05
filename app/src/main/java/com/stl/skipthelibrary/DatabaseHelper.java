@@ -99,6 +99,28 @@ public class DatabaseHelper {
         });
     }
 
+    public void pullBook(final String bookUUID, final MyCallBack myCallBack) {
+        databaseReference.child("Books").child(bookUUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Book book = dataSnapshot.getValue(Book.class);
+                if (book == null){
+                    Toast.makeText(context, "This book has been deleted.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.d(TAG, "Book Recieved: book = " + book.getDescription().getTitle().toString());
+                myCallBack.onCallBack(book);
+                return;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     private void UserRetrieved(User user){
         if (user == null){
             Toast.makeText(context, "Your account has been deleted.", Toast.LENGTH_SHORT).show();

@@ -14,10 +14,8 @@
         android:gravity="center"
         android:orientation="vertical">
 
-
-
-        <TextView
-            android:id="@+id/TitleTextView"
+        <EditText
+            android:id="@+id/title_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
@@ -27,8 +25,8 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/AuthorTextView"
+        <EditText
+            android:id="@+id/author_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
@@ -48,7 +46,7 @@
 
 
         <ImageView
-            android:id="@+id/BookImageCarousel"
+            android:id="@+id/book_image_carousel_element"
             android:layout_width="200dp"
             android:layout_height="300dp"
             android:layout_marginTop="8dp"
@@ -57,8 +55,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout_editor_absoluteY="308dp">
+            android:layout_height="wrap_content">
 
             <View
                 android:id="@+id/divider1"
@@ -81,11 +78,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <RatingBar
-                android:id="@+id/BookRating"
+                android:id="@+id/rating_element"
                 style="@style/ratingBarSmall"
-                android:layout_width="82dp"
-                android:layout_height="12dp"
-                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:progressTint="@color/white"
@@ -101,7 +97,8 @@
                 android:layout_height="1dp"
                 android:layout_marginVertical="8dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/BookRating" />
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/rating_element" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -115,8 +112,8 @@
             android:layout_marginHorizontal="8dp"
             android:layout_marginVertical="8dp"/>
 
-        <TextView
-            android:id="@+id/textView4"
+        <EditText
+            android:id="@+id/synopsis_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
