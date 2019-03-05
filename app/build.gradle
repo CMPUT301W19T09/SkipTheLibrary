@@ -27,11 +27,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-database:16.1.0'
     implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
-
-    testImplementation 'junit:junit:4.12'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
-    androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
@@ -44,6 +40,18 @@ dependencies {
 
     // camera for scanning
     implementation 'com.wonderkiln:camerakit:0.13.1'
+
+    //For Testing
+    androidTestImplementation 'androidx.test:core:1.0.0'
+
+    // AndroidJUnitRunner and JUnit Rules
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
+
+    //For UI Testing
+    implementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
 
 }
 
