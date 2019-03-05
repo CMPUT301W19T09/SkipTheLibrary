@@ -18,7 +18,7 @@
         <activity
             android:name=".AddBooksActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".MyProfileActivity" />
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
