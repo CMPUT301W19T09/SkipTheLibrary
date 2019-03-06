@@ -13,6 +13,7 @@ public class ViewBookActivity extends AppCompatActivity {
 
     private Button button;
     private View view;
+    private String isbn_code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,10 @@ public class ViewBookActivity extends AppCompatActivity {
         // Check which request we're responding to
         if(requestCode == ScannerActivity.SCAN_BOOK) {
             if (resultCode == RESULT_OK){
-
+                isbn_code = data.getStringExtra("ISBN");
+                //TODO: what getStringExtra has? I assume it just ISBN code here
+                //TODO: if bookID.isbncode == isbn_code{switch: state: Request: borrowed, borrowed: returned}
+                //TODO: how to detect two people get same isbn? if one scanned another not?
             }else{
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
             }
