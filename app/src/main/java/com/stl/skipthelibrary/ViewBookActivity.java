@@ -51,8 +51,6 @@ public class ViewBookActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
 
@@ -123,6 +121,7 @@ public class ViewBookActivity extends AppCompatActivity {
         book.getDescription().setAuthor(author_element.getText().toString());
         book.getDescription().setSynopsis(synopsis_element.getText().toString());
         book.getRating().addRating( (double) rating_element.getNumStars());
+        databaseHelper.updateBook(book);
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 
@@ -149,9 +152,42 @@ public class DatabaseHelper {
 
     /////////
     // Book Functions
-    public void addBook(Book book){
+    public void addBookIfValid(final Book book, final boolean displayMessageAndFinish){
+        databaseReference.child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(CurrentUser.getInstance().getUserName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean validISBN = true;
+                for (DataSnapshot data: dataSnapshot.getChildren()){
+                    Book currentBook = data.getValue(Book.class);
+                    if (currentBook.getISBN().equals(book.getISBN())){
+                        Toast.makeText(context, "You already have this book!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                addValidBook(book, displayMessageAndFinish);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addValidBook(Book book, boolean displayMessageAndFinish){
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
+
+        if(displayMessageAndFinish){
+            Toast.makeText(context, "Book Added!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context.getApplicationContext(), MyBooksActivity.class);
+            ((Activity) context).setResult(Activity.RESULT_OK, intent);
+            ((Activity) context).finish();
+        }
     }
 
     public void deleteBook(Book book){
@@ -177,6 +213,11 @@ public class DatabaseHelper {
 
             }
         });
+    }
+
+    public void updateBook(Book book){
+        databaseReference.child("Books").child(book.getUuid()).setValue(book);
+        Log.d("Updating book", "new book should be replaced");
     }
 
 

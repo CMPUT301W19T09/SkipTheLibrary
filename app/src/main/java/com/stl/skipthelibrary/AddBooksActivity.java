@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,11 +17,13 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity is used to add a book. It is called from MyBooksActivity and calls ScannerActivity.
+ */
 public class AddBooksActivity extends AppCompatActivity {
     final public static String TAG = AddBooksActivity.class.getSimpleName();
     final public static int PICK_BOOK_IMAGE = 2;
@@ -39,25 +38,37 @@ public class AddBooksActivity extends AppCompatActivity {
     private List<ViewableImage> bookImages = new ArrayList<>();
     private MaterialButton addBookImageButton;
 
+    /**
+     * OnCreate Bind UI elements, set up the image RecyclerViews and listeners
+     * @param savedInstanceState: the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addbooks);
         mContext = getApplicationContext();
 
+        // Bind UI elements
         bookTitle = findViewById(R.id.AddBookTitle);
         bookAuthor = findViewById(R.id.AddBookAuthor);
         bookISBN = findViewById(R.id.AddBookISBN);
         bookDesc = findViewById(R.id.AddBookDesc);
         addBookImageButton = findViewById(R.id.addBookImageButton);
 
+        // setup recyclerview
         bookImageRecyclerview = findViewById(R.id.bookImagesRecyclerview);
         horizontalAdapter=new HorizontalAdapter(bookImages, getApplicationContext());
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(AddBooksActivity.this, LinearLayoutManager.HORIZONTAL, false);
         bookImageRecyclerview.setLayoutManager(horizontalLayoutManager);
         bookImageRecyclerview.setAdapter(horizontalAdapter);
 
+        //setup listeners
         bookTitle.addTextChangedListener(new TextValidator(bookTitle) {
+            /**
+             * Validates the input
+             * @param textView: the textView to validate
+             * @param text: the text to validate
+             */
             @Override
             public void validate(TextView textView, String text) {
                 if (!(new BookValidator(text,null,null,null).isTitleValid())){
@@ -67,6 +78,11 @@ public class AddBooksActivity extends AppCompatActivity {
         });
 
         bookAuthor.addTextChangedListener(new TextValidator(bookAuthor) {
+            /**
+             * Validates the input
+             * @param textView: the textView to validate
+             * @param text: the text to validate
+             */
             @Override
             public void validate(TextView textView, String text) {
                 if (!(new BookValidator(null,text,null,null).isAuthorValid())){
@@ -76,6 +92,11 @@ public class AddBooksActivity extends AppCompatActivity {
         });
 
         bookISBN.addTextChangedListener(new TextValidator(bookISBN) {
+            /**
+             * Validates the input
+             * @param textView: the textView to validate
+             * @param text: the text to validate
+             */
             @Override
             public void validate(TextView textView, String text) {
                 if (!(new BookValidator(null,null,text,null).isISBNValid())){
@@ -94,6 +115,10 @@ public class AddBooksActivity extends AppCompatActivity {
         });
 
         addBookImageButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When the add book image button is selected allow the user to select an image
+             * @param v: the view clicked on
+             */
             @Override
             public void onClick(View v) {
                 if (bookImages.size() < 5) {
@@ -116,6 +141,10 @@ public class AddBooksActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Save the book to the user's collection of books. Unless the book is not valid
+     * @param view: the save book button view
+     */
     public void saveBookOnClick(View view) {
         String title = bookTitle.getText().toString();
         String author = bookAuthor.getText().toString();
@@ -127,13 +156,7 @@ public class AddBooksActivity extends AppCompatActivity {
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
             Book newBook = new Book(bookDescription, isbn, CurrentUser.getInstance().getUserName(), (ArrayList<ViewableImage>) bookImages);
-            databaseHelper.addBook(newBook);
-            Toast.makeText(mContext, "Book Added", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(getApplicationContext(), MyBooksActivity.class);
-
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            databaseHelper.addBookIfValid(newBook, true);
         }
         else{
             Toast.makeText(mContext, bookValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();
@@ -142,18 +165,33 @@ public class AddBooksActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Start the scanner to scan the book
+     * @param view: the scan book's button view
+     */
     public void scanBookOnClick(View view) {
         Intent intent = new Intent(this, ScannerActivity.class);
         startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
     }
 
+    /**
+     * Retrieve request's made to other activities.
+     * @param requestCode: the request code made
+     * @param resultCode: the returned code
+     * @param data: the intent passed back
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // if the request is from the scanner
         if(requestCode == ScannerActivity.SCAN_BOOK) {
+            // if successful
             if (resultCode == RESULT_OK) {
+                // get the scanned ISBN
                 String ISBN = data.getStringExtra("ISBN");
                 bookISBN.setText(ISBN);
+
+                // fill in the book's title, author, and description automatically through an API call
                 new BookDescriptionReceiver(ISBN, bookTitle, bookAuthor, bookDesc).execute(ISBN);
             } else {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
@@ -177,6 +215,9 @@ public class AddBooksActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * On back pressed go to MyBooksActivity.
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MyBooksActivity.class);
