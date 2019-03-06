@@ -30,7 +30,9 @@ public class NavigationHandler implements BottomNavigationView.OnNavigationItemS
                 if (context.getClass() == MyProfileActivity.class){
                     break;
                 }
+
                 intent = new Intent(context, MyProfileActivity.class);
+
                 context.startActivity(intent);
                 break;
             case R.id.my_books:
