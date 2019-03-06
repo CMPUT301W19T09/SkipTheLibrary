@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 
@@ -40,7 +43,29 @@ public class DatabaseHelper {
     }
 
     // AUTH Methods
-    public void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
+    public void createAccountIfValid(final String userName, final String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
+        databaseReference.child("Users").orderByChild("userName").equalTo(userName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(context, "That username already exists. Please choose another",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber, image);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -99,6 +124,9 @@ public class DatabaseHelper {
         });
     }
 
+
+
+
     private void UserRetrieved(User user){
         if (user == null){
             Toast.makeText(context, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
@@ -124,16 +152,72 @@ public class DatabaseHelper {
 
     /////////
     // Book Functions
-    //TODO:Make this work
-    public void addBook(Book book){
-        CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
+    public void addBookIfValid(final Book book, final boolean displayMessageAndFinish){
+        databaseReference.child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(CurrentUser.getInstance().getUserName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean validISBN = true;
+                for (DataSnapshot data: dataSnapshot.getChildren()){
+                    Book currentBook = data.getValue(Book.class);
+                    if (currentBook.getISBN().equals(book.getISBN())){
+                        Toast.makeText(context, "You already have this book!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                addValidBook(book, displayMessageAndFinish);
 
-        getDatabaseReference().child("Users").child(firebaseUser.getUid())
+            }
 
-                .setValue(CurrentUser.getInstance());
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void addValidBook(Book book, boolean displayMessageAndFinish){
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
+
+        if(displayMessageAndFinish){
+            Toast.makeText(context, "Book Added!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context.getApplicationContext(), MyBooksActivity.class);
+            ((Activity) context).setResult(Activity.RESULT_OK, intent);
+            ((Activity) context).finish();
+        }
+    }
+
+    public void deleteBook(Book book){
+        getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
+    }
+
+    public void pullBook(final String bookUUID, final MyCallBack myCallBack) {
+        databaseReference.child("Books").child(bookUUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Book book = dataSnapshot.getValue(Book.class);
+                if (book == null){
+                    Toast.makeText(context, "This book has been deleted.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.d(TAG, "Book Recieved: book = " + book.getDescription().getTitle().toString());
+                myCallBack.onCallBack(book);
+                return;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void updateBook(Book book){
+        databaseReference.child("Books").child(book.getUuid()).setValue(book);
+        Log.d("Updating book", "new book should be replaced");
     }
 
 

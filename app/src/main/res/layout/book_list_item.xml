@@ -36,7 +36,10 @@
                 android:fontFamily="@font/poppins"
                 android:text="@string/author"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:maxLines="1"
+                android:maxLength="20"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/BookListItemStatus"

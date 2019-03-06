@@ -1,11 +1,15 @@
 package com.stl.skipthelibrary;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +31,15 @@ public class MyBooksActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton addBookButton;
     private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Book> filteredBooks = new ArrayList<>();
+    private ArrayList<BookStatus> filters = new ArrayList<>();
     private BookRecyclerAdapter adapter;
+    private Context mContext;
+
+    private Chip requestedChip;
+    private Chip acceptedChip;
+    private Chip borrowedChip;
+    private Chip availableChip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +47,40 @@ public class MyBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ownerbooks);
         recyclerView = findViewById(R.id.ownerBooksRecyclerView);
         addBookButton = findViewById(R.id.addBookButton);
+        mContext = getApplicationContext();
 
-        adapter = new BookRecyclerAdapter(this, books);
+        adapter = new BookRecyclerAdapter(this, filteredBooks);
+
+        requestedChip = findViewById(R.id.RequestedChip);
+        acceptedChip = findViewById(R.id.AcceptedChip);
+        borrowedChip = findViewById(R.id.LentChip);
+        availableChip = findViewById(R.id.AvailableChip);
+        updateFilter();
+
+        requestedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        acceptedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        borrowedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
+        availableChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateFilter();
+            }
+        });
 
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
@@ -45,13 +90,44 @@ public class MyBooksActivity extends AppCompatActivity {
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MyBooksActivity.this, AddBooksActivity.class);
+                Intent intent = new Intent(mContext, AddBooksActivity.class);
                 startActivityForResult(intent, ADD);
             }
         });
 
         getBooks();
         initRecyclerView();
+    }
+
+    private void updateFilter() {
+        ArrayList<BookStatus> newFilters = new ArrayList<>();
+        if (requestedChip.isChecked()){
+            newFilters.add(BookStatus.REQUESTED);
+        }
+        if (acceptedChip.isChecked()){
+            newFilters.add(BookStatus.ACCEPTED);
+        }
+        if (borrowedChip.isChecked()){
+            newFilters.add(BookStatus.BORROWED);
+        }
+        if (availableChip.isChecked()){
+            newFilters.add(BookStatus.AVAILABLE);
+        }
+        filters = newFilters;
+        updateFilteredBooks();
+    }
+
+    private void updateFilteredBooks() {
+        ArrayList<Book> newFilteredBooks = new ArrayList<>();
+        for (Book book: books){
+            if (filters.contains(book.getRequests().getState().getBookStatus())){
+                newFilteredBooks.add(book);
+            }
+        }
+        filteredBooks.clear();
+        filteredBooks.addAll(newFilteredBooks);
+
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -65,7 +141,7 @@ public class MyBooksActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Book book = dataSnapshot.getValue(Book.class);
                 books.add(book);
-                adapter.notifyDataSetChanged();
+                updateFilteredBooks();
             }
 
             @Override
@@ -81,7 +157,7 @@ public class MyBooksActivity extends AppCompatActivity {
 
                 if (idToReplace != null){
                     books.set(idToReplace,book);
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -98,7 +174,7 @@ public class MyBooksActivity extends AppCompatActivity {
 
                 if (idToRemove != null){
                     books.remove(books.get(idToRemove));
-                    adapter.notifyDataSetChanged();
+                    updateFilteredBooks();
                 }
             }
 
@@ -118,6 +194,9 @@ public class MyBooksActivity extends AppCompatActivity {
     private void initRecyclerView(){
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
@@ -133,10 +212,14 @@ public class MyBooksActivity extends AppCompatActivity {
         if (requestCode == ADD) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "BOOK ADDED 🤪", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Book Added Successfully!");
             }
         } else {
-            Toast.makeText(this, "SOMETHING WONG MY FRIEND", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Book Was not Added Successfully.");
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

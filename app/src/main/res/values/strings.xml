@@ -46,5 +46,9 @@
     <string name="contactInfo">Contact Information</string>
     <string name="profilePhoto">Profile Photo</string>
     <string name="upload">upload</string>
+    <string name="addImage">Add Image</string>
+    <string name="snack_bar_text">Book Deleted</string>
+    <string name="snack_bar_undo">UNDO</string>
+    <string name="scan_now">Scan now</string>
 
 </resources>

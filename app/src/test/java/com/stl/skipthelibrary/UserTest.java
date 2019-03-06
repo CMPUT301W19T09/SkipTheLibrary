@@ -49,20 +49,6 @@ public class UserTest {
     }
 
     @Test
-    public void testSetOwnerUserIdentity(){
-        UserIdentity ownerUserIdentity = new UserIdentity(UserMode.OWNER);
-        user.setOwnerUserIdentity(ownerUserIdentity);
-        assertEquals(ownerUserIdentity, user.getOwnerUserIdentity());
-    }
-
-    @Test
-    public void testSetBorrowerUserIdentity(){
-        UserIdentity borrowerUserIdentity = new UserIdentity(UserMode.BORROWER);
-        user.setBorrowerUserIdentity(borrowerUserIdentity);
-        assertEquals(borrowerUserIdentity, user.getBorrowerUserIdentity());
-    }
-
-    @Test
     public void testSetNotifications(){
         ArrayList<Notification> notifications = new ArrayList<>();
         Notification notification = new Notification(NotificationType.NEW_REQUEST, "test message");
