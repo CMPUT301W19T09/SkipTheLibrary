@@ -44,4 +44,15 @@ public class ViewBookActivity extends AppCompatActivity {
         startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if(requestCode == ScannerActivity.SCAN_BOOK) {
+            if (resultCode == RESULT_OK){
+                
+            }else{
+
+            }
+        }
+    }
 }
