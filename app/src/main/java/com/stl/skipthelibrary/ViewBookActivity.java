@@ -35,6 +35,7 @@ public class ViewBookActivity extends AppCompatActivity {
         if(requestCode == ScannerActivity.SCAN_BOOK) {
             if (resultCode == RESULT_OK){
                 isbn_code = data.getStringExtra("ISBN");
+                
                 //TODO: what getStringExtra has? I assume it just ISBN code here
                 //TODO: if bookID.isbncode == isbn_code{switch: state: Request: borrowed, borrowed: returned}
                 //TODO: how to detect two people get same isbn? if one scanned another not?
