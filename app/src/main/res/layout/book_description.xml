@@ -1,131 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app = "http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_top_corners_rectangle"
-        android:backgroundTint="@color/magenta"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/magenta">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_top_corners_rectangle"
+            android:backgroundTint="@color/magenta" />
 
         <EditText
             android:id="@+id/title_element"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_height="1dp"
-            android:layout_margin="0dp"
-            android:fontFamily="@font/poppins_semibold"
+            app:layout_constraintEnd_toStartOf="@id/edit_button"
             android:text="@string/title"
-            android:textAlignment="center"
+            android:textSize="24dp"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:fontFamily="@font/poppins"
+            android:textAlignment="center" />
+
+        <ImageButton
+            android:id="@+id/save_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:background="@android:drawable/ic_menu_save"/>
+
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:background="@android:drawable/ic_menu_edit"/>
 
         <EditText
             android:id="@+id/author_element"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/title_element"
-            android:layout_height="1dp"
-            android:layout_margin="0dp"
-            android:fontFamily="@font/poppins"
             android:text="@string/author"
             android:textAlignment="center"
-            android:textColor="@color/white" />
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/magenta"
-        android:gravity="center"
-        android:orientation="vertical">
-
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins" />
 
         <ImageView
-            android:id="@+id/book_image_carousel_element"
-            android:layout_width="200dp"
-            android:layout_height="300dp"
-            android:layout_marginTop="8dp"
-            android:scaleType="center"
-            android:background="@drawable/artemis_fowl_cover" />
+            android:id="@+id/book_image"
+            android:layout_width="150dp"
+            android:layout_height="225dp"
+            app:layout_constraintTop_toBottomOf="@id/author_element"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/artemis_fowl_cover"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <View
-                android:id="@+id/divider1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="8dp"
-                android:background="@color/white"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/rating_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="@string/rating"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1" />
-
-            <RatingBar
-                android:id="@+id/rating_element"
-                style="@style/ratingBarSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:progressTint="@color/white"
-                android:rating="3"
-                android:stepSize="0.1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rating_label" />
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="8dp"
-                android:background="@color/white"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/rating_element" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="1dp"
+            android:layout_marginVertical="8dp"
+            android:background="@color/white"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/book_image" />
 
         <TextView
-            android:id="@+id/BookDetailsHeading"
+            android:id="@+id/rating_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:text="@string/rating"
+            app:layout_constraintTop_toBottomOf="@id/book_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins"
+            />
+
+        <RatingBar
+            android:id="@+id/rating_bar_element"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ratingBarSmall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rating_header"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressTint="@color/white"
+            android:rating="3"
+            android:stepSize="0.1"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="8dp"
+            android:background="@color/white"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/rating_bar_element" />
+
+        <TextView
+            android:id="@+id/book_details_heading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
+            app:layout_constraintTop_toBottomOf="@id/rating_bar_element"
+            android:fontFamily="@font/poppins"
             android:text="@string/details"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="8dp"/>
+            android:textSize="20sp"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="8dp" />
 
         <EditText
             android:id="@+id/synopsis_element"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/book_details_heading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:fontFamily="@font/poppins"
-            android:text="This part will contain all of the nice book details well formatted using some sort of toString method that makes it all look gooooood"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="14sp"
             android:backgroundTint="@color/magenta"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="24dp"/>
 
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="8dp"
+            android:background="@color/white"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/synopsis_element" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
