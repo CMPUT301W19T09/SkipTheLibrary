@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * Allows user's to log in both automatically and manually, also allows users to create a new
+ * account
+ */
 public class LoginActivity extends AppCompatActivity {
     final public static String TAG = "LoginActivity";
 
@@ -25,6 +29,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_RC = 1;
 
+    /**
+     * Bind UI Elements and initialize listeners
+     * @param savedInstanceState: the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +42,11 @@ public class LoginActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         emailText.addTextChangedListener(new TextValidator(emailText) {
+            /**
+             * Determines if the email is valid
+             * @param textView: the textview to validate
+             * @param text: the text to validate
+             */
             @Override
             public void validate(TextView textView, String text) {
                 if (!(new SignInValidator(text,null).isEmailNameValid())){
@@ -42,6 +55,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         passwordText.addTextChangedListener(new TextValidator(passwordText) {
+            /**
+             * Determines if the password is valid
+             * @param textView: the textview to validate
+             * @param text: the text to validate
+             */
             @Override
             public void validate(TextView textView, String text) {
                 if (!(new SignInValidator(null,text).isPasswordValid())){
@@ -55,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         autoLogIn();
     }
 
+    /**
+     * Determine which permissions are set and request all permissions which are not set
+     */
     private void requestPermissions() {
         boolean coarseLocationNeeded = ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -87,6 +108,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Log the user in automatically if they are already signed in and they have accepted all
+     * permissions
+     */
     private void autoLogIn(){
         if (permissionsAccepted){
             // user is already logged in
@@ -112,6 +137,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Allow the user to manually sign in if their information is correct and they have accepted
+     * all permissions
+     * @param view
+     */
     public void signInOnClick(View view) {
         if (permissionsAccepted){
             String email = emailText.getText().toString();
@@ -131,6 +161,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Allow the user to sign up if they have accepted all permissions
+     * @param view: the sign up button
+     */
     public void signUpOnClick(View view) {
         if (permissionsAccepted){
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -142,6 +176,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check the results of requesting permissions, if they all passed set a flag and then re-
+     * attempt to automatically log in
+     * @param requestCode: the request code of the permissions
+     * @param permissions: the array of permissions
+     * @param grantResults: the array of results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -157,6 +198,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Disable the back button for security
+     */
     @Override
     public void onBackPressed() {
     }
