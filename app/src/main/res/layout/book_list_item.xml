@@ -60,11 +60,11 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/BookListItemRightArrow"
         android:layout_width="40dp"
         android:layout_height="75dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/right_arrow" />
+        android:background="@drawable/right_arrow" />
 
 </LinearLayout>
