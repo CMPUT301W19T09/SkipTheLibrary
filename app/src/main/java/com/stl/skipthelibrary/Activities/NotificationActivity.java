@@ -10,7 +10,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
-import com.stl.skipthelibrary.MapBoxActivity;
 import com.stl.skipthelibrary.R;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,10 +44,12 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == MapBoxActivity.SET_LOCATION) {
-            String locationString = data.getStringExtra("Location");
-            Gson gson = new Gson();
-            Location location = gson.fromJson(locationString, Location.class);
-            Toast.makeText(this, location.getLatitude() + " \n " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+            if (requestCode == RESULT_OK){
+                String locationString = data.getStringExtra("Location");
+                Gson gson = new Gson();
+                Location location = gson.fromJson(locationString, Location.class);
+                Toast.makeText(this, location.getLatitude() + " \n " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
     /**

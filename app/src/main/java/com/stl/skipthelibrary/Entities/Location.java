@@ -3,6 +3,10 @@ package com.stl.skipthelibrary.Entities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import com.google.android.gms.location.LocationListener;
 
 import java.util.Objects;
 
@@ -27,14 +31,6 @@ public class Location {
     public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-
-    // TODO: Fix permission handling
-    @SuppressLint("MissingPermission")
-    static Location getCurrentLocation(Context context){
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        android.location.Location androidLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        return new Location(androidLocation.getLatitude(), androidLocation.getLongitude());
     }
 
     /**
