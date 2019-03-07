@@ -21,7 +21,8 @@ import com.google.gson.Gson;
 import androidx.annotation.NonNull;
 
 /**
- * Created by Luke Slevinsky on 2019-02-18.
+ * The database helper. This class interacts heavily with the database to do all database heavy
+ * tasks that can be abstracted outside of an activity.
  */
 public class DatabaseHelper {
     public final String TAG = getClass().getSimpleName();
@@ -31,6 +32,10 @@ public class DatabaseHelper {
     private FirebaseUser firebaseUser;
     private Context context;
 
+    /**
+     * The default constructor
+     * @param context: the current construct
+     */
     public DatabaseHelper(Context context) {
         firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -39,8 +44,54 @@ public class DatabaseHelper {
         this.context = context;
     }
 
-    // AUTH Methods
-    public void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber){
+    /**
+     * Create an Account in FireBase if the username is unique
+     * @param userName: the user's username
+     * @param password: the user's password
+     * @param firstName: the user's first name
+     * @param lastName: the user's last name
+     * @param emailAddress: the user's email address
+     * @param phoneNumber: the user's phone number
+     * @param image: the user's profile picture
+     */
+    public void createAccountIfValid(final String userName, final String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
+        databaseReference.child("Users").orderByChild("userName").equalTo(userName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+            /**
+             * Determines if the username is already taken, if not creates the account
+             * @param dataSnapshot: the current data snapshot
+             */
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(context, "That username already exists. Please choose another",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else{
+                    createAccount(userName, password, firstName, lastName, emailAddress, phoneNumber, image);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /**
+     * Creates a user's account
+     * @param userName: the user's username
+     * @param password: the user's password
+     * @param firstName: the user's first name
+     * @param lastName: the user's last name
+     * @param emailAddress: the user's email address
+     * @param phoneNumber: the user's phone number
+     * @param image: the user's profile picture
+     */
+    private void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -50,7 +101,7 @@ public class DatabaseHelper {
                             Toast.makeText(context, "Authentication Succeeded.", Toast.LENGTH_SHORT).show();
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             accountCreated(new User(firstName + " " + lastName, userName, firebaseUser.getUid()
-                                    , new ContactInfo(emailAddress, phoneNumber, null)));
+                                    , new ContactInfo(emailAddress, phoneNumber, null), image));
                         }
                         else {
                             Toast.makeText(context, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -59,12 +110,21 @@ public class DatabaseHelper {
                 });
     }
 
+    /**
+     * After an account is created we update the database and go back to the login screen
+     * @param user: the created user
+     */
     private void accountCreated(User user){
         databaseReference.child("Users").child(user.getUserID()).setValue(user);
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
     }
 
+    /**
+     * Sign a user in, if not successful display why
+     * @param email: the user's email address
+     * @param password: the user's password
+     */
     public void signIn(String email, String password){
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -84,8 +144,16 @@ public class DatabaseHelper {
                 });
     }
 
+    /**
+     * Pull a signed in user from the database through their userID
+     * @param userID: the user's Unique ID
+     */
     public void pullUserSignIn(String userID) {
         databaseReference.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            /**
+             * Get the user from the data snapshot
+             * @param dataSnapshot: the current data snapshot
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -99,6 +167,10 @@ public class DatabaseHelper {
         });
     }
 
+    /**
+     * Once a user is retrieved from the database we can set them to be the current user
+     * @param user: the current user
+     */
     private void UserRetrieved(User user){
         if (user == null){
             Toast.makeText(context, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
@@ -111,91 +183,166 @@ public class DatabaseHelper {
 
         Gson gson = new Gson();
         Intent intent = new Intent(context, NotificationActivity.class);
-        intent.putExtra("User", gson.toJson(user));
         context.startActivity(intent);
     }
 
+    /**
+     * Determines if the user is currently logged in
+     * @return true if the user is logged in, false otherwise.
+     */
     public boolean isUserLoggedIn(){
         return firebaseUser != null;
     }
 
+    /**
+     * Sign the user out
+     */
     public void signOut(){
         firebaseAuth.signOut();
     }
 
-    /////////
-    // Book Functions
-    //TODO:Make this work
-    public void addBook(Book book){
-        CurrentUser.getInstance().getOwnerUserIdentity().addBook(book);
+    /**
+     * Add a book to the database if the user does not have any other identical books
+     * @param book: the book to add
+     * @param displayMessageAndFinish: whether or not to print a display message and finish
+     */
+    public void addBookIfValid(final Book book, final boolean displayMessageAndFinish){
+        databaseReference.child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(CurrentUser.getInstance().getUserName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            /**
+             * Determines if the user already has a book with the same ISBN, if not then adds it
+             * @param dataSnapshot: the current snap shot
+             */
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean validISBN = true;
+                for (DataSnapshot data: dataSnapshot.getChildren()){
+                    Book currentBook = data.getValue(Book.class);
+                    if (currentBook.getISBN().equals(book.getISBN())){
+                        Toast.makeText(context, "You already have this book!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                addValidBook(book, displayMessageAndFinish);
 
-        getDatabaseReference().child("Users").child(firebaseUser.getUid())
-                .setValue(CurrentUser.getInstance());
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /**
+     * Adds a book to the user's collection in firebase
+     * @param book: the book to add
+     * @param displayMessageAndFinish: whether or not to print a display message and finish
+     */
+    private void addValidBook(Book book, boolean displayMessageAndFinish){
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
+
+        if(displayMessageAndFinish){
+            Toast.makeText(context, "Book Added!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context.getApplicationContext(), MyBooksActivity.class);
+            ((Activity) context).setResult(Activity.RESULT_OK, intent);
+            ((Activity) context).finish();
+        }
+    }
+
+    public void updateBook(Book newbook){
+        databaseReference.child("Books").child(newbook.getUuid()).setValue(newbook);
+        Log.d("Updating book", "new book should be replaced");
     }
 
 
-    public BookDescription pullBookDescription(String isbn) {
-        Log.d(TAG, "pullBookDescription: Here we should pull the book desciption");
-        throw new UnsupportedOperationException("Not implemented yet");
+    /**
+     * Delete a book from firebase
+     * @param book: the book to delete
+     */
+    public void deleteBook(Book book){
+        getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
     }
 
-    public Rating pullBookRating(String isbn) {
-        Log.d(TAG, "pullBookDescription: Here we should pull the book desciption");
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public void sendNotificaition(String userName, Notification notification) {
-        Log.d(TAG, "sendNotificaition: Here we should send notifications");
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public Boolean authenticateUser(String userName, Notification notification) {
-        Log.d(TAG, "sendNotificaition: Here we should send notifications");
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-
-    //getters and setters
-
+    /**
+     * Gets the current FireBaseAuth instance
+     * @return the current FireBaseAuth instance
+     */
     public FirebaseAuth getFirebaseAuth() {
         return firebaseAuth;
     }
 
+    /**
+     * Sets the current FireBaseAuth instance
+     * @param firebaseAuth: the current FireBaseAuth instance
+     */
     public void setFirebaseAuth(FirebaseAuth firebaseAuth) {
         this.firebaseAuth = firebaseAuth;
     }
 
+    /**
+     * Gets the current FireBaseDatabase instance
+     * @return the current FireBaseDatabase instance
+     */
     public FirebaseDatabase getDatabase() {
         return database;
     }
 
+    /**
+     * Sets the current FireBaseDatabase instance
+     * @param database: the current FireBaseDatabase instance
+     */
     public void setDatabase(FirebaseDatabase database) {
         this.database = database;
     }
 
+    /**
+     * Gets the current FireBaseReference instance
+     * @return the current FireBaseReference instance
+     */
     public DatabaseReference getDatabaseReference() {
         return databaseReference;
     }
 
+    /**
+     * Sets the current FireBaseReference instance
+     * @param databaseReference: the current FireBaseReference instance
+     */
     public void setDatabaseReference(DatabaseReference databaseReference) {
         this.databaseReference = databaseReference;
     }
 
+    /**
+     * Sets the current context
+     * @return the current context
+     */
     public Context getContext() {
         return context;
     }
 
+    /**
+     * Sets the context
+     * @param context: the current context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
 
+    /**
+     * Gets the current FirebaseUser instance
+     * @return the current FirebaseUser instance
+     */
     public FirebaseUser getFirebaseUser() {
         return firebaseUser;
     }
 
+    /**
+     * Sets the current FirebaseUser instance
+     * @param firebaseUser:the current FirebaseUser instance
+     */
     public void setFirebaseUser(FirebaseUser firebaseUser) {
         this.firebaseUser = firebaseUser;
     }

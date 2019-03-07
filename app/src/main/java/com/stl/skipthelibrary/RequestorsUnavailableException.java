@@ -1,7 +1,7 @@
 package com.stl.skipthelibrary;
 
 /**
- * Created by Luke Slevinsky on 2019-02-18.
+ * Raised by the request handler accepting or denying a request from a user who is not a requestor
  */
 public class RequestorsUnavailableException extends RuntimeException {
 }

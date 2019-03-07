@@ -22,13 +22,27 @@
         android:onClick="saveBookOnClick"/>
 
 
-    <ImageView
-        android:id="@+id/AddBookImageCarousel"
-        android:layout_width="200dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="center"
-        android:contentDescription="@string/img_carousel"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookImagesRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        tools:listitem="@layout/book_image_list_item" >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addBookImageButton"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/light_grey"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center"
+        android:text="@string/addImage"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:backgroundTint="@color/light_grey"
+        app:cornerRadius="40dp"
+        app:icon="@drawable/ic_add_white_24dp" />
 
 </LinearLayout>

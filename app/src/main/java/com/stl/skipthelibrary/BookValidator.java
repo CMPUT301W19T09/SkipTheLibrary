@@ -3,7 +3,7 @@ package com.stl.skipthelibrary;
 import java.util.regex.Pattern;
 
 /**
- * Created by Luke Slevinsky on 2019-02-20.
+ * Determines if a newly added book is valid
  */
 public class BookValidator implements Validatable{
 
@@ -13,6 +13,13 @@ public class BookValidator implements Validatable{
     private String desc;
     private String errorMessage;
 
+    /**
+     * Constuctor
+     * @param title: the book's title
+     * @param author: the book's author
+     * @param isbn: the book's isbn
+     * @param desc: the book's description
+     */
     public BookValidator(String title, String author, String isbn, String desc) {
         this.title = title;
         this.author = author;
@@ -21,6 +28,10 @@ public class BookValidator implements Validatable{
         this.errorMessage = "No errors detected";
     }
 
+    /**
+     * Determines if the title is valid
+     * @return true if valid, false otherwise
+     */
     public boolean isTitleValid(){
         Boolean valid = Pattern.compile("[0-9a-zA-Z'_ .!?]+").matcher(title).matches();
 
@@ -30,6 +41,11 @@ public class BookValidator implements Validatable{
 
         return valid;
     }
+
+    /**
+     * Determines if the author is valid
+     * @return true if valid, false otherwise
+     */
     public boolean isAuthorValid(){
         Boolean valid = Pattern.compile("[a-zA-Z_' \\-.]+").matcher(author).matches();
 
@@ -39,6 +55,11 @@ public class BookValidator implements Validatable{
 
         return valid;
     }
+
+    /**
+     * Determines if the ISBN is valid
+     * @return true if valid, false otherwise
+     */
     public boolean isISBNValid(){
         Boolean valid = Pattern.compile("(?:[x0-9]\\-?){13}").matcher(isbn).matches();
 
@@ -48,6 +69,11 @@ public class BookValidator implements Validatable{
 
         return valid;
     }
+
+    /**
+     * Determines if the description is valid
+     * @return true if valid, false otherwise
+     */
     public boolean isDescriptionValid(){
         Boolean valid = desc.length() > 0;
 
@@ -58,12 +84,19 @@ public class BookValidator implements Validatable{
         return valid;
     }
 
-
+    /**
+     * Determines if the book is valid
+     * @return true if valid, false otherwise
+     */
     @Override
     public boolean isValid() {
         return isTitleValid() && isAuthorValid() && isISBNValid() && isDescriptionValid();
     }
 
+    /**
+     * Determines the error message to display
+     * @return the error message
+     */
     @Override
     public String getErrorMessage() {
         return errorMessage;

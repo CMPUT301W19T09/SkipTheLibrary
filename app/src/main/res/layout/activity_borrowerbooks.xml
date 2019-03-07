@@ -92,7 +92,7 @@
         app:menu="@menu/bottom_menu_basic" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton3"
+        android:id="@+id/searchBookButton"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,6 +103,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="40dp"
-        app:srcCompat="@drawable/ic_search_white_24dp" />
+        app:srcCompat="@drawable/ic_search_white_24dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
