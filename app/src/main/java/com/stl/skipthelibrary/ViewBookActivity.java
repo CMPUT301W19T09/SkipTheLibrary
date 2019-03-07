@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -24,6 +26,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 
 public class ViewBookActivity extends AppCompatActivity {
     final public static String TAG = "ViewBookActivityTag";
@@ -38,6 +44,7 @@ public class ViewBookActivity extends AppCompatActivity {
     private EditText synopsis_element;
     private ImageButton edit_button;
     private ImageButton save_button;
+    private ViewStub stub;
 
     //Owner Requested Fields
 
@@ -69,6 +76,7 @@ public class ViewBookActivity extends AppCompatActivity {
         //Book Description
         setContentView(R.layout.book_details);
         databaseHelper = new DatabaseHelper(this);
+        stub = ViewBookActivity.this.findViewById(R.id.generic_bottom_screen_id);
         user = CurrentUser.getInstance();
         bindBookDescriptionElements();
         getIncomingIntents();
@@ -121,12 +129,51 @@ public class ViewBookActivity extends AppCompatActivity {
      */
     private void getIncomingIntents() {
         String bookID = getIntent().getExtras().getString("bookUUID");
-        databaseHelper.pullBook(bookID, new MyCallBack() {
+
+        databaseHelper.getDatabaseReference().child("Books").orderByChild("uuid").equalTo(bookID)
+                .addChildEventListener(new ChildEventListener() {
+            /**
+             * When a new child is added add it to the list of books
+             * @param dataSnapshot: the current snapshot
+             * @param s: the ID
+             */
             @Override
-            public void onCallBack(Book retrievedBook) {
-                book = retrievedBook;
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                book = dataSnapshot.getValue(Book.class);
                 handleBookArrival();
-                Log.d("TAG", "Book received:  "+ book.getDescription().getTitle());
+            }
+
+            /**
+             * When a child is changes update them
+             * @param dataSnapshot: the current snapshot
+             * @param s: the ID
+             */
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(ViewBookActivity.this, "This book has been modified.",
+                        Toast.LENGTH_SHORT).show();
+                ViewBookActivity.this.finish();
+
+            }
+
+            /**
+             * If a child is deleted delete them from the list of our books
+             * @param dataSnapshot: the current snapshot
+             */
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Toast.makeText(ViewBookActivity.this,
+                        "The book you're looking at has been deleted.", Toast.LENGTH_SHORT).show();
+                ViewBookActivity.this.finish();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
@@ -176,8 +223,6 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     private void setBottomScreen(int resourcefile){
-        Log.d(TAG, "Screen is: "+ resourcefile);
-        ViewStub stub = (ViewStub) findViewById(R.id.generic_bottom_screen_id);
         stub.setLayoutResource(resourcefile);
         View inflated = stub.inflate();
     }

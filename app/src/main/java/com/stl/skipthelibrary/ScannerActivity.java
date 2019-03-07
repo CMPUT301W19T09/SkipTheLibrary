@@ -27,11 +27,18 @@ import com.wonderkiln.camerakit.CameraView;
 
 import java.util.List;
 
+/**
+ * The scanner activity launches the scanner and returns the ISBN of the scanned barcode
+ */
 public class ScannerActivity extends AppCompatActivity {
     public static final int SCAN_BOOK = 1;
 
-    CameraView cameraView;
+    private CameraView cameraView;
 
+    /**
+     * Bind UI elements and setup listners and begin scanning
+     * @param savedInstanceState: the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +58,10 @@ public class ScannerActivity extends AppCompatActivity {
 
             }
 
+            /**
+             * On retrieving an image send the corresponding bitmap to be processed
+             * @param cameraKitImage: the cameraKitImage which can be used to get the bitmap
+             */
             @Override
             public void onImage(CameraKitImage cameraKitImage) {
                 Bitmap bitmap = Bitmap.createScaledBitmap(cameraKitImage.getBitmap(), cameraView.getWidth(),
@@ -65,10 +76,19 @@ public class ScannerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * When the scan now button is pressed we the current image is captured
+     * @param view: the scan now button
+     */
     public void confirmScanOnClick(View view) {
         cameraView.captureImage();
     }
 
+    /**
+     * Processes the image received from the camera. Detect any barcodes found and send them to be
+     * processed.
+     * @param bitmap: the bitmap to process
+     */
     private void processBitMap(Bitmap bitmap){
         FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionBarcodeDetectorOptions options = new FirebaseVisionBarcodeDetectorOptions.Builder()
@@ -89,6 +109,11 @@ public class ScannerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Process the result of the barcode, if the ISBN if found return the ISBN code to the calling
+     * activity. Otherwise, display the correct error message.
+     * @param firebaseVisionBarcodes: the list of barcodes
+     */
     private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
         if (firebaseVisionBarcodes.size() == 0){
             Toast.makeText(this, "Nothing found to scan. Please try again", Toast.LENGTH_SHORT).show();
