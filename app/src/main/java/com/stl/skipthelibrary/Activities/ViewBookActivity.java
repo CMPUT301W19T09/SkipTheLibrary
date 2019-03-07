@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.RequestHandler;
