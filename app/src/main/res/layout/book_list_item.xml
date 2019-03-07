@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/username"
-            android:textColor="@color/highlight_blue"
+            android:textColor="@color/highlight"
             android:textSize="18sp"
             android:layout_marginStart="8dp"
             android:maxLines="1"
