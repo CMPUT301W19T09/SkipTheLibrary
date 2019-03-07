@@ -1,5 +1,8 @@
 package com.stl.skipthelibrary;
 
+import com.stl.skipthelibrary.Entities.Rating;
+import com.stl.skipthelibrary.Exceptions.RatingOutOfBoundsException;
+
 import org.junit.Before;
 import org.junit.Test;
 

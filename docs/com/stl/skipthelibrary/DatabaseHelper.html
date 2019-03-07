@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.stl.skipthelibrary.DatabaseHelper</li>
+<li>com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper</li>
 </ul>
 </li>
 </ul>
@@ -169,14 +169,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#addBookIfValid-com.stl.skipthelibrary.Book-boolean-">addBookIfValid</a></span>(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;book,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#addBookIfValid-com.stl.skipthelibrary.Entities.Book-boolean-">addBookIfValid</a></span>(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;book,
               boolean&nbsp;displayMessageAndFinish)</code>
 <div class="block">Add a book to the database if the user does not have any other identical books</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#createAccountIfValid-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-com.stl.skipthelibrary.ViewableImage-">createAccountIfValid</a></span>(java.lang.String&nbsp;userName,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#createAccountIfValid-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-com.stl.skipthelibrary.Entities.ViewableImage-">createAccountIfValid</a></span>(java.lang.String&nbsp;userName,
                     java.lang.String&nbsp;password,
                     java.lang.String&nbsp;firstName,
                     java.lang.String&nbsp;lastName,
@@ -188,7 +188,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#deleteBook-com.stl.skipthelibrary.Book-">deleteBook</a></span>(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;book)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#deleteBook-com.stl.skipthelibrary.Entities.Book-">deleteBook</a></span>(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;book)</code>
 <div class="block">Delete a book from firebase</div>
 </td>
 </tr>
@@ -279,7 +279,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#updateBook-com.stl.skipthelibrary.Book-">updateBook</a></span>(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;newbook)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/stl/skipthelibrary/DatabaseHelper.html#updateBook-com.stl.skipthelibrary.Entities.Book-">updateBook</a></span>(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;newbook)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -342,7 +342,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createAccountIfValid-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-com.stl.skipthelibrary.ViewableImage-">
+<a name="createAccountIfValid-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-com.stl.skipthelibrary.Entities.ViewableImage-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -422,7 +422,7 @@ extends java.lang.Object</pre>
 <div class="block">Sign the user out</div>
 </li>
 </ul>
-<a name="addBookIfValid-com.stl.skipthelibrary.Book-boolean-">
+<a name="addBookIfValid-com.stl.skipthelibrary.Entities.Book-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -438,7 +438,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="updateBook-com.stl.skipthelibrary.Book-">
+<a name="updateBook-com.stl.skipthelibrary.Entities.Book-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -447,7 +447,7 @@ extends java.lang.Object</pre>
 <pre>public&nbsp;void&nbsp;updateBook(<a href="../../../com/stl/skipthelibrary/Book.html" title="class in com.stl.skipthelibrary">Book</a>&nbsp;newbook)</pre>
 </li>
 </ul>
-<a name="deleteBook-com.stl.skipthelibrary.Book-">
+<a name="deleteBook-com.stl.skipthelibrary.Entities.Book-">
 <!--   -->
 </a>
 <ul class="blockList">

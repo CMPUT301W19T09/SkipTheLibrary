@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grey_gradient"
-    tools:context=".ProfileActivity">
+    tools:context=".Activities.ProfileActivity">
 
     <TextView
         android:id="@+id/MyProfileTitle"

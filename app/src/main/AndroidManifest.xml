@@ -14,33 +14,33 @@
         android:roundIcon="@mipmap/default_avatar_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".ScannerActivity" />
+        <activity android:name=".Activities.SearchActivity"></activity>
+        <activity android:name=".Activities.ScannerActivity" />
         <activity
-            android:name=".AddBooksActivity"
+            android:name=".Activities.AddBooksActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activities.ProfileActivity" />
+        <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BorrowersBooksActivity" />
-        <activity android:name=".NotificationActivity" />
+        <activity android:name=".Activities.BorrowersBooksActivity" />
+        <activity android:name=".Activities.NotificationActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".MyBooksActivity" />
+        <activity android:name=".Activities.MyBooksActivity" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
-        <activity android:name=".ViewBookActivity" />
+        <activity android:name=".Activities.ViewBookActivity" />
     </application>
 
 </manifest>
