@@ -223,9 +223,6 @@ public class ViewBookActivity extends AppCompatActivity {
     //Borrower Request
     private void configureBorrowerRequest() {
         Button button = inflated.findViewById(R.id.requestButton);
-        button.setText(R.string.requestbutton);
-        button.setBackgroundColor(getColor(R.color.REQUESTED));
-        button.setTextColor(getColor(R.color.black));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
