@@ -37,18 +37,20 @@
 
             <com.google.android.material.chip.ChipGroup
                 style="@style/Widget.MaterialComponents.ChipGroup"
-                android:layout_width="500dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
                 android:scrollbars="none"
                 android:singleLine="true"
+                android:layout_gravity="center_horizontal"
                 app:chipSpacing="10dp"
                 app:singleLine="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/AvailableChip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/available" />
@@ -56,7 +58,7 @@
                 <com.google.android.material.chip.Chip
                     android:id="@+id/RequestedChip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/requested" />
@@ -64,7 +66,7 @@
                 <com.google.android.material.chip.Chip
                     android:id="@+id/AcceptedChip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/accepted" />
@@ -72,7 +74,7 @@
                 <com.google.android.material.chip.Chip
                     android:id="@+id/LentChip"
                     style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/lent" />

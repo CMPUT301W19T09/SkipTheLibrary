@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
@@ -77,6 +78,7 @@ public class ViewBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Book Description
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.book_details);
         databaseHelper = new DatabaseHelper(this);
         stub = findViewById(R.id.generic_bottom_screen_id);
@@ -89,7 +91,7 @@ public class ViewBookActivity extends AppCompatActivity {
      * This method catches the incoming data (BookUUID) that is sent via an intent on screen switch.
      */
     private void getIncomingIntents() {
-        String bookID = getIntent().getExtras().getString("bookUUID");
+        String bookID = getIntent().getExtras().getString(BookRecyclerAdapter.BOOK_ID);
 
         childEventListener = databaseHelper.getDatabaseReference()
                 .child("Books").orderByChild("uuid").equalTo(bookID)
@@ -111,6 +113,7 @@ public class ViewBookActivity extends AppCompatActivity {
                      * @param s: the ID
                      */
                     @Override
+                    //TODO:Make books edit on the go
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Toast.makeText(ViewBookActivity.this, "This book has been modified.",
                                 Toast.LENGTH_SHORT).show();
