@@ -1,5 +1,10 @@
 package com.stl.skipthelibrary;
 
+import com.stl.skipthelibrary.Entities.Location;
+import com.stl.skipthelibrary.Entities.State;
+import com.stl.skipthelibrary.Enums.BookStatus;
+import com.stl.skipthelibrary.Enums.HandoffState;
+
 import org.junit.Before;
 import org.junit.Test;
 

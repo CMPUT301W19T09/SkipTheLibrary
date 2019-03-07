@@ -1,5 +1,8 @@
 package com.stl.skipthelibrary;
 
+import com.stl.skipthelibrary.Entities.Notification;
+import com.stl.skipthelibrary.Enums.NotificationType;
+
 import org.junit.Before;
 import org.junit.Test;
 
