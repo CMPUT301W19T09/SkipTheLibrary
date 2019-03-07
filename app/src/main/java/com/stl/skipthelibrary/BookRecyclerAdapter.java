@@ -16,36 +16,65 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * The recycler adapter for books. Used to display a list of books.
+ */
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
     private Context context;
     private ArrayList<Book> books;
     private Book mRecentlyDeletedItem;
     private int mRecentlyDeletedItemPosition;
 
+    /**
+     * The constructor
+     * @param context: the context of the container
+     * @param books: the list of books to display
+     */
     public BookRecyclerAdapter(Context context, ArrayList<Book> books) {
         this.context = context;
         this.books = books;
     }
 
-    // GETTERS AND SETTERS
+    /**
+     * Gets the context
+     * @return the context
+     */
+
     public Context getContext() {
         return context;
     }
 
+    /**
+     * sets the context
+     * @param context: the context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
 
+    /**
+     * gets the arraylist of books
+     * @returnthe arraylist of books
+     */
     public ArrayList<Book> getBooks() {
         return books;
     }
 
+    /**
+     * sets the arraylist of books
+     * @param books: the arraylist of books
+     */
     public void setBooks(ArrayList<Book> books) {
         this.books = books;
     }
-    /////
 
 
+    /**
+     * On creating the viewholder inflate the xml and return the adapter viewholder
+     * @param parent: the parent viewgroup
+     * @param viewType: the id of the viewtype
+     * @return
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,6 +82,11 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         return new BookRecyclerAdapter.ViewHolder(view);
     }
 
+    /**
+     * Bind the UI elements of the ViewHolder
+     * @param holder: the viewholder which contains the UI elements
+     * @param position: the book in the book array we are displaying
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         String title = books.get(position).getDescription().getTitle();
@@ -83,14 +117,20 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         }
     }
 
+    /**
+     * Return the number of books to display
+     * @return the number of books
+     */
     @Override
     public int getItemCount() {
         return books.size();
     }
 
 
-    // Inner Class ViewHolder defines all of the elements in the corresponding xml file.
-    // it allows us to set their properties during onBind.
+    /**
+     * Inner Class ViewHolder defines all of the elements in the corresponding xml file.
+     *  it allows us to set their properties during onBind.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout parentLayout;
         ImageView rightArrow;
@@ -98,7 +138,10 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         TextView author;
         TextView status;
 
-        // ViewHolder constructor
+        /**
+         * ViewHolder constructor
+         * @param itemView: the current itemview
+         */
         public ViewHolder(View itemView) {
             super(itemView);
             parentLayout = itemView.findViewById(R.id.book_list_parent_view);
@@ -110,6 +153,10 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
 
     }
 
+    /**
+     * Delete an item from the arraylist
+     * @param position: the position of the book we are deleting
+     */
     public void deleteItem(int position) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         mRecentlyDeletedItem = books.get(position);
@@ -120,6 +167,9 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         showUndoSnackbar();
     }
 
+    /**
+     * Create the undo snackbar functionality to a delete can be reversed
+     */
     private void showUndoSnackbar() {
         View view = null;
         if (context.getClass() == MyBooksActivity.class) {
@@ -139,11 +189,14 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         snackbar.show();
     }
 
+    /**
+     * Undo a delete
+     */
     private void undoDelete() {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         books.add(mRecentlyDeletedItemPosition,
                 mRecentlyDeletedItem);
-        databaseHelper.addBook(mRecentlyDeletedItem);
+        databaseHelper.addBookIfValid(mRecentlyDeletedItem, false);
         notifyItemInserted(mRecentlyDeletedItemPosition);
     }
 

@@ -24,7 +24,7 @@ public class ViewableImage {
     public ViewableImage(Bitmap bitmap) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();
         encode(b);
     }

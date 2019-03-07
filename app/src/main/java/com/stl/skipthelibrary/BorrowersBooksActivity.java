@@ -22,6 +22,10 @@ import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 
+/**
+ * This activity is where borrowers can see and filter all of the books they are interested in.
+ * This includes books they have requested, are currently borrowing, or have been approved to borrow
+ */
 public class BorrowersBooksActivity extends AppCompatActivity {
     public static final String TAG = BorrowersBooksActivity.class.getSimpleName();
     public static final int SEARCH = 1;
@@ -38,6 +42,10 @@ public class BorrowersBooksActivity extends AppCompatActivity {
     private Chip acceptedChip;
     private Chip borrowedChip;
 
+    /**
+     * OnCreate bind all UI elements and set listeners
+     * @param savedInstanceState: the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,18 +63,33 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         updateFilter();
 
         requestedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Update the filter when the chip is checked or unchecked
+             * @param compoundButton: the compound button
+             * @param b: which state the button was clicked in
+             */
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
             }
         });
         acceptedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Update the filter when the chip is checked or unchecked
+             * @param compoundButton: the compound button
+             * @param b: which state the button was clicked in
+             */
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
             }
         });
         borrowedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Update the filter when the chip is checked or unchecked
+             * @param compoundButton: the compound button
+             * @param b: which state the button was clicked in
+             */
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
@@ -78,6 +101,10 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.borrow);
 
         searchBookButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * When the user selects this button they will be taken to the search for books screen
+             * @param view: the current view
+             */
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, SearchActivity.class);
@@ -89,6 +116,9 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
+    /**
+     * Update the filter condition depending on which chips are checked
+     */
     private void updateFilter() {
         ArrayList<BookStatus> newFilters = new ArrayList<>();
         if (requestedChip.isChecked()){
@@ -104,9 +134,17 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         updateFilteredBooks();
     }
 
+    /**
+     * get all books the user is interested in from firebase
+     */
     private void getBooks() {
         final DatabaseHelper databaseHelper = new DatabaseHelper(this);
         databaseHelper.getDatabaseReference().child("Books").addChildEventListener(new ChildEventListener() {
+            /**
+             * When a new child is added add it to the list of books if the user is interested in it
+             * @param dataSnapshot: the current snapshot
+             * @param s: the ID
+             */
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Book book = dataSnapshot.getValue(Book.class);
@@ -116,6 +154,11 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                 }
             }
 
+            /**
+             * When a child is changes update them if the user is interested in them
+             * @param dataSnapshot: the current snapshot
+             * @param s: the ID
+             */
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Book book = dataSnapshot.getValue(Book.class);
@@ -147,6 +190,10 @@ public class BorrowersBooksActivity extends AppCompatActivity {
                 }
             }
 
+            /**
+             * If a child is deleted delete them from the list of our books
+             * @param dataSnapshot: the current snapshot
+             */
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Book book = dataSnapshot.getValue(Book.class);
@@ -175,6 +222,9 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Update the which books to display based on the filters present
+     */
     private void updateFilteredBooks(){
         ArrayList<Book> newFilteredBooks = new ArrayList<>();
         for (Book book: books){
@@ -189,6 +239,9 @@ public class BorrowersBooksActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Initialize the recycler view
+     */
     private void initRecyclerView(){
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -214,6 +267,9 @@ public class BorrowersBooksActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Disable the back button on screens with the navigation bar
+     */
     @Override
     public void onBackPressed() {
     }
