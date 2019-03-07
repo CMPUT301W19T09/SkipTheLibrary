@@ -1,8 +1,7 @@
 package com.stl.skipthelibrary;
 
 
-import android.net.Uri;
-
+import com.stl.skipthelibrary.Entities.ViewableImage;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/rounded_top_corners_rectangle"
     android:backgroundTint="@color/magenta"
-    tools:context=".AddBooksActivity">
+    tools:context=".Activities.AddBooksActivity">
 
 
     <EditText
