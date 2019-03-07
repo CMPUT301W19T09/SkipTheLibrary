@@ -3,6 +3,8 @@ package com.stl.skipthelibrary;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,9 +98,14 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         String title = books.get(position).getDescription().getTitle();
         String author = books.get(position).getDescription().getAuthor();
         String status = books.get(position).getRequests().getState().getBookStatus().name();
-
+        final String userName = books.get(position).getOwnerUserName();
         holder.title.setText(title);
         holder.author.setText(author);
+
+        SpannableString userNameUnderLined = new SpannableString("@" + userName);
+        userNameUnderLined.setSpan(new UnderlineSpan(), 0, userNameUnderLined.length(), 0);
+        holder.userName.setText( userNameUnderLined);
+
         if (context.getClass() == MyBooksActivity.class && status.equals(BookStatus.BORROWED.name())){
             holder.status.setText(context.getString(R.string.lent).toUpperCase());
         }
@@ -131,6 +138,18 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             }
         });
 
+        holder.userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra(ProfileActivity.USER_NAME,
+                        userName);
+                context.startActivity(intent);
+            }
+        });
+
+
+
 
     }
 
@@ -155,6 +174,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         TextView author;
         TextView status;
         ImageView bookArrow;
+        TextView userName;
 
         /**
          * ViewHolder constructor
@@ -168,6 +188,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             author = itemView.findViewById(R.id.BookListItemAuthor);
             status = itemView.findViewById(R.id.BookListItemStatus);
             bookArrow = itemView.findViewById(R.id.BookListItemRightArrow);
+            userName = itemView.findViewById(R.id.ownerUserName);
         }
 
     }
