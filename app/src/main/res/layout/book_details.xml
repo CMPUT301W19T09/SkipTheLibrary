@@ -14,7 +14,7 @@
         android:stretchColumns="1">
 
         <include layout="@layout/book_description"/>
-        <ViewStub layout="@layout/generic_bottom_screen"
+        <ViewStub android:layout="@layout/generic_bottom_screen"
             android:id="@+id/generic_bottom_screen_id"/>
 
 
