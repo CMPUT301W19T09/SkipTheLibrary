@@ -5,6 +5,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
+import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
+import com.stl.skipthelibrary.Activities.SearchActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

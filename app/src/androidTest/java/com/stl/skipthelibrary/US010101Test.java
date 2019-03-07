@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
+import com.stl.skipthelibrary.Activities.AddBooksActivity;
+import com.stl.skipthelibrary.Activities.MyBooksActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

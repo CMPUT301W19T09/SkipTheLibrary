@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.view.View;
 
 import com.robotium.solo.Solo;
+import com.stl.skipthelibrary.Activities.MyBooksActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
