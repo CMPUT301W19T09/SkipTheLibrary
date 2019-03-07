@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary;
 
+import com.stl.skipthelibrary.Validators.SignUpValidator;
+
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,10 +1,14 @@
 package com.stl.skipthelibrary;
 
-import android.view.View;
+import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.BookDescription;
+import com.stl.skipthelibrary.Entities.Rating;
+import com.stl.skipthelibrary.Entities.RequestHandler;
+import com.stl.skipthelibrary.Entities.State;
+import com.stl.skipthelibrary.Entities.ViewableImage;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.Description;
 
 import java.util.ArrayList;
 import java.util.UUID;
