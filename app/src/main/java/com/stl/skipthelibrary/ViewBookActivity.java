@@ -148,6 +148,25 @@ public class ViewBookActivity extends AppCompatActivity {
         if (user.getUserName().equals(book.getOwnerUserName())) {
             edit_button.setVisibility(View.VISIBLE);
             save_button.setVisibility(View.GONE);
+            
+            edit_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setBookDescriptionFieldsEditable(true);
+                    save_button.setVisibility(View.VISIBLE);
+                    edit_button.setVisibility(View.GONE);
+                }
+            });
+
+            save_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setBookDescriptionFieldsEditable(false);
+                    save_button.setVisibility(View.GONE);
+                    edit_button.setVisibility(View.VISIBLE);
+                    updateBookDesriptionFields();
+                }
+            });
         }
         else {
             edit_button.setVisibility(View.GONE);
@@ -174,24 +193,6 @@ public class ViewBookActivity extends AppCompatActivity {
                 setBottomScreen(R.layout.bookscreen_pending);
                 configureOwnerPending();
             }
-            edit_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setBookDescriptionFieldsEditable(true);
-                    save_button.setVisibility(View.VISIBLE);
-                    edit_button.setVisibility(View.GONE);
-                }
-            });
-
-            save_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setBookDescriptionFieldsEditable(false);
-                    save_button.setVisibility(View.GONE);
-                    edit_button.setVisibility(View.VISIBLE);
-                    updateBookDesriptionFields();
-                }
-            });
         }
         else{//user is borrower
             if ((!book.userIsInterested(user.getUserName()) && bookStatus==BookStatus.REQUESTED) ||
