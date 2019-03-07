@@ -6,6 +6,7 @@ import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.State;
 import com.stl.skipthelibrary.Entities.ViewableImage;
+import com.stl.skipthelibrary.Enums.BookStatus;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,8 @@ public class BookTest {
 
     @Test
     public void testSetRequests() {
-        RequestHandler requests = new RequestHandler(new State());
+        State state = new State(BookStatus.ACCEPTED, null, null);
+        RequestHandler requests = new RequestHandler(state);
         book.setRequests(requests);
         assertEquals(requests, book.getRequests());
     }
@@ -72,5 +74,38 @@ public class BookTest {
         String name = "test user name";
         book.setOwnerUserName(name);
         assertEquals(name, book.getOwnerUserName());
+    }
+
+    @Test
+    public void testSetISBN() {
+        String isbn = "test ISBN";
+        book.setISBN(isbn);
+        assertEquals(isbn, book.getISBN());
+        book.setISBN(null);
+        assertEquals(null, book.getISBN());
+    }
+
+    @Test
+    public void testUserIsInterested() {
+        book.getRequests().addRequestor("test user");
+        assertFalse(book.userIsInterested("test name"));
+        assertFalse(book.userIsInterested(""));
+        assertTrue(book.userIsInterested("test user"));
+        book.getRequests().addRequestor("");
+        assertTrue(book.userIsInterested(""));
+        book.setRequests(null);
+        assertFalse(book.userIsInterested("test user"));
+    }
+
+    @Test
+    public void testEquals() {
+        Book secondBook = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author", null),
+                "testUserName", new RequestHandler(new State()), null, null);
+        secondBook.setUuid(book.getUuid());
+        assertTrue(book.equals(secondBook));
+        secondBook.setOwnerUserName("test name");
+        assertFalse(book.equals(secondBook));
+        secondBook = book;
+        assertTrue(book.equals(secondBook));
     }
 }
