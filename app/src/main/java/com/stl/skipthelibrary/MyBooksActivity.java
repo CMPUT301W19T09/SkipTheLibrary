@@ -65,44 +65,52 @@ public class MyBooksActivity extends AppCompatActivity {
         updateFilter();
 
         requestedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             /**
              * Update the filter when the chip is checked or unchecked
              * @param compoundButton: the compound button
              * @param b: which state the button was clicked in
              */
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
             }
         });
         acceptedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             /**
              * Update the filter when the chip is checked or unchecked
              * @param compoundButton: the compound button
              * @param b: which state the button was clicked in
              */
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
             }
         });
         borrowedChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             /**
              * Update the filter when the chip is checked or unchecked
              * @param compoundButton: the compound button
              * @param b: which state the button was clicked in
              */
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
             }
         });
         availableChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             /**
              * Update the filter when the chip is checked or unchecked
              * @param compoundButton: the compound button
              * @param b: which state the button was clicked in
              */
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateFilter();
@@ -130,9 +138,11 @@ public class MyBooksActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
+
     /**
      * Update the filter condition depending on which chips are checked
      */
+
     private void updateFilter() {
         ArrayList<BookStatus> newFilters = new ArrayList<>();
         if (requestedChip.isChecked()){
@@ -151,9 +161,11 @@ public class MyBooksActivity extends AppCompatActivity {
         updateFilteredBooks();
     }
 
+
     /**
      * Update the which books to display based on the filters present
      */
+
     private void updateFilteredBooks() {
         ArrayList<Book> newFilteredBooks = new ArrayList<>();
         for (Book book: books){
@@ -276,6 +288,7 @@ public class MyBooksActivity extends AppCompatActivity {
     /**
      * Disable the back button on screens with the navigation bar
      */
+
     @Override
     public void onBackPressed() {
     }

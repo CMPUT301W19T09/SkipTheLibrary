@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+
 /**
  * Displays a user's profile, can display either the current user's profile or the profile of
  * another user
@@ -42,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * Bind UI elements, get the user to display, determine whether or not the user to display is
      * the current user
+     *
      * @param savedInstanceState
      */
     @Override
@@ -65,15 +67,15 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userName = intent.getExtras().getString(USER_NAME);
         isUserTheCurrentUser = userName.equals(CurrentUser.getInstance().getUserName());
-        if (!isUserTheCurrentUser){
+        if (!isUserTheCurrentUser) {
             logoutButton.setVisibility(View.GONE);
             navigation.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
             navigation.setSelectedItemId(R.id.profile);
         }
         setUser(userName);
+        isUserTheCurrentUser = userName.equals(CurrentUser.getInstance().getUserName());
     }
 
     /**
@@ -89,36 +91,35 @@ public class ProfileActivity extends AppCompatActivity {
 
     /**
      * Get the user who's profile we want to display
+     *
      * @param userName: the user's username
      */
     private void setUser(String userName) {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(userName)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            /**
-             * Get the specified user
-             * @param dataSnapshot: the current snapshot
-             */
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot data: dataSnapshot.getChildren()){
-                    User user = data.getValue(User.class);
-                    userRetrieved(user);
-                    return;
-                }
-            }
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot data : dataSnapshot.getChildren()) {
+                            User user = data.getValue(User.class);
+                            userRetrieved(user);
+                            return;
+                        }
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
     }
 
     /**
      * Once we get the user, bind the user data to the UI
+     *
      * @param retrievedUser: the retired user
      */
+
     private void userRetrieved(User retrievedUser) {
         user = retrievedUser;
         user.getContactInfo().setContext(this);
@@ -126,23 +127,25 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileImage.setImageBitmap(user.getImage().decode());
 
         myProfileName.setText(user.getName());
-        myProfileUsername.setText("@"+ user.getUserName());
-        myProfileEmail.setText("Email: "+ user.getContactInfo().getEmail());
-        myProfilePhoneNumber.setText("Phone Number: "+ user.getContactInfo().getPhoneNumber().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+        myProfileUsername.setText("@" + user.getUserName());
+        myProfileEmail.setText("Email: " + user.getContactInfo().getEmail());
+        myProfilePhoneNumber.setText("Phone Number: " + user.getContactInfo().getPhoneNumber().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
         progressDialog.hide();
 
-        if (!isUserTheCurrentUser){
+        if (!isUserTheCurrentUser) {
             title.setText(user.getUserName() + "'s Profile");
         }
 
     }
 
+
     /**
      * If the user is viewing their own profile then allow them to logout
+     *
      * @param view: the logout button
      */
     public void logoutOnClick(View view) {
-        if (isUserTheCurrentUser){
+        if (isUserTheCurrentUser) {
             databaseHelper.signOut();
             Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
@@ -153,24 +156,15 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * If the user is not viewing their own profile then allow them to send an email to the user
      * they are viewing
+     *
      * @param view: the logout button
      */
     public void sendEmailOnClick(View view) {
-        if (!isUserTheCurrentUser){
+        if (!isUserTheCurrentUser) {
             user.getContactInfo().startEmail();
         }
     }
 
-    /**
-     * If the user is not viewing their own profile then allow them to send a call to the user
-     * they are viewing
-     * @param view: the logout button
-     */
-    public void sendPhoneCallOnClick(View view) {
-        if (!isUserTheCurrentUser){
-            user.getContactInfo().startCall();
-        }
-    }
 
     /**
      * Disable the back button if the user is viewing their own profile as they have the navigation
@@ -178,8 +172,9 @@ public class ProfileActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        if (!isUserTheCurrentUser){
+        if (!isUserTheCurrentUser) {
             super.onBackPressed();
         }
     }
 }
+

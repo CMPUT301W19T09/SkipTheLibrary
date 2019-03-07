@@ -13,8 +13,8 @@
         android:layout_height="match_parent"
         android:stretchColumns="1">
 
-        <include layout="@layout/book_description"/>
-        <include layout="@layout/generic_bottom_screen" />
+        <include layout="@layout/book_description_2"/>
+        <include layout="@layout/generic_bottom_screen_owner_lend" />
 
 </TableLayout>
 </ScrollView>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 
@@ -54,14 +57,12 @@ public class DatabaseHelper {
      * @param phoneNumber: the user's phone number
      * @param image: the user's profile picture
      */
+
+    // AUTH Methods
     public void createAccountIfValid(final String userName, final String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
         databaseReference.child("Users").orderByChild("userName").equalTo(userName)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
 
-            /**
-             * Determines if the username is already taken, if not creates the account
-             * @param dataSnapshot: the current data snapshot
-             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -81,6 +82,7 @@ public class DatabaseHelper {
         });
     }
 
+
     /**
      * Creates a user's account
      * @param userName: the user's username
@@ -91,7 +93,10 @@ public class DatabaseHelper {
      * @param phoneNumber: the user's phone number
      * @param image: the user's profile picture
      */
-    private void createAccount(final String userName, String password, final String firstName, final String lastName, final String emailAddress, final String phoneNumber, final ViewableImage image){
+
+    private void createAccount(final String userName, String password, final String firstName,
+                               final String lastName, final String emailAddress, final String phoneNumber,
+                               final ViewableImage image){
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -170,12 +175,11 @@ public class DatabaseHelper {
 
 
 
-
-
     /**
      * Once a user is retrieved from the database we can set them to be the current user
      * @param user: the current user
      */
+
     private void UserRetrieved(User user){
         if (user == null){
             Toast.makeText(context, "Your account has been deleted.", Toast.LENGTH_SHORT).show();
@@ -206,20 +210,21 @@ public class DatabaseHelper {
         firebaseAuth.signOut();
     }
 
+
     /**
      * Add a book to the database if the user does not have any other identical books
      * @param book: the book to add
      * @param displayMessageAndFinish: whether or not to print a display message and finish
      */
+
+    // Book Functions
+
     public void addBookIfValid(final Book book, final boolean displayMessageAndFinish){
         databaseReference.child("Books")
                 .orderByChild("ownerUserName")
                 .equalTo(CurrentUser.getInstance().getUserName())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            /**
-             * Determines if the user already has a book with the same ISBN, if not then adds it
-             * @param dataSnapshot: the current snap shot
-             */
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean validISBN = true;
@@ -240,12 +245,12 @@ public class DatabaseHelper {
             }
         });
     }
-
     /**
      * Adds a book to the user's collection in firebase
      * @param book: the book to add
      * @param displayMessageAndFinish: whether or not to print a display message and finish
      */
+
     private void addValidBook(Book book, boolean displayMessageAndFinish){
         getDatabaseReference().child("Books").child(book.getUuid())
                 .setValue(book);
@@ -258,10 +263,12 @@ public class DatabaseHelper {
         }
     }
 
+
     /**
      * Delete a book from firebase
      * @param book: the book to delete
      */
+
     public void deleteBook(Book book){
         getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
     }
@@ -288,8 +295,8 @@ public class DatabaseHelper {
         });
     }
 
-    public void updateBook(Book book){
-        databaseReference.child("Books").child(book.getUuid()).setValue(book);
+    public void updateBook(Book newbook){
+        databaseReference.child("Books").child(newbook.getUuid()).setValue(newbook);
         Log.d("Updating book", "new book should be replaced");
     }
 

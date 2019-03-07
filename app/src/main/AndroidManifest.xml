@@ -41,7 +41,7 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".ViewBookActivity"></activity>
+        <activity android:name=".ViewBookActivity" />
     </application>
 
 </manifest>

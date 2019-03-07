@@ -15,5 +15,7 @@
     <color name="AVAILABLE">#417600</color>
     <color name="REQUESTED">#F5A83C</color>
     <color name="BORROWED">#D91D1B</color>
+    <color name="green">#A4C639</color>
+    <color name="yellow">#ffff00</color>
 
 </resources>

@@ -29,6 +29,7 @@ public class NotificationActivity extends AppCompatActivity {
     /**
      * Disable back presses on screen with the navigation bar
      */
+
     @Override
     public void onBackPressed() {
     }

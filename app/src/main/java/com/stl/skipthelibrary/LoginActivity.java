@@ -15,10 +15,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
 /**
  * Allows user's to log in both automatically and manually, also allows users to create a new
  * account
  */
+
 public class LoginActivity extends AppCompatActivity {
     final public static String TAG = "LoginActivity";
 
@@ -73,9 +75,11 @@ public class LoginActivity extends AppCompatActivity {
         autoLogIn();
     }
 
+
     /**
      * Determine which permissions are set and request all permissions which are not set
      */
+
     private void requestPermissions() {
         boolean coarseLocationNeeded = ActivityCompat
                 .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -108,10 +112,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Log the user in automatically if they are already signed in and they have accepted all
      * permissions
      */
+
     private void autoLogIn(){
         if (permissionsAccepted){
             // user is already logged in
@@ -176,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Check the results of requesting permissions, if they all passed set a flag and then re-
      * attempt to automatically log in
@@ -183,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param permissions: the array of permissions
      * @param grantResults: the array of results
      */
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -198,9 +206,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Disable the back button for security
      */
+
     @Override
     public void onBackPressed() {
     }
