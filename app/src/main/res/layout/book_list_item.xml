@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            >
 
             <TextView
                 android:id="@+id/BookListItemAuthor"
@@ -53,6 +53,18 @@
                 android:paddingEnd="8dp"
                 android:text="@string/status" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/ownerUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textColor="@color/highlight_blue"
+            android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:ellipsize="end"
+            android:layout_marginBottom="8dp"/>
     </LinearLayout>
 
     <View
