@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by Luke Slevinsky on 2019-03-03.
+ * Allow books to be deleted by sliding the book on the recycler adapter
  */
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     final public static String TAG = SwipeToDeleteCallback.class.getSimpleName();
@@ -22,6 +22,10 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private Drawable icon;
     private final ColorDrawable background;
 
+    /**
+     * The constructor, set up the icon and background color
+     * @param adapter: the books recyclerview adapter
+     */
     public SwipeToDeleteCallback(BookRecyclerAdapter adapter) {
         super(0,ItemTouchHelper.LEFT);
         mAdapter = adapter;
@@ -30,6 +34,16 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         background = new ColorDrawable(Color.RED);
     }
 
+    /**
+     * Draws the background and icons when a swipe occurs
+     * @param c: the canvas
+     * @param recyclerView: the recycler view
+     * @param viewHolder: the viewholder
+     * @param dX: how much swiped in X direction
+     * @param dY: how much swiped in Y direction
+     * @param actionState: the action state
+     * @param isCurrentlyActive: if it is currently active
+     */
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {
