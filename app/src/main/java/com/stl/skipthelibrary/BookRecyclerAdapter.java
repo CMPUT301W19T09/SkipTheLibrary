@@ -120,7 +120,8 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             holder.status.setBackgroundTintList(context.getColorStateList(R.color.BORROWED));
         }
 
-        holder.bookArrow.setOnClickListener(new View.OnClickListener() {
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "clicked on book arrow");
@@ -153,7 +154,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         TextView title;
         TextView author;
         TextView status;
-        ImageButton bookArrow;
+        ImageView bookArrow;
 
         /**
          * ViewHolder constructor

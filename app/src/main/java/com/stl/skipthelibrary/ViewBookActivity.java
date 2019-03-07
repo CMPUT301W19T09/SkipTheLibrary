@@ -45,6 +45,7 @@ public class ViewBookActivity extends AppCompatActivity {
     private ImageButton edit_button;
     private ImageButton save_button;
     private ViewStub stub;
+    ChildEventListener childEventListener;
 
     //Owner Requested Fields
 
@@ -130,7 +131,8 @@ public class ViewBookActivity extends AppCompatActivity {
     private void getIncomingIntents() {
         String bookID = getIntent().getExtras().getString("bookUUID");
 
-        databaseHelper.getDatabaseReference().child("Books").orderByChild("uuid").equalTo(bookID)
+        childEventListener = databaseHelper.getDatabaseReference()
+                .child("Books").orderByChild("uuid").equalTo(bookID)
                 .addChildEventListener(new ChildEventListener() {
                     /**
                      * When a new child is added add it to the list of books
@@ -253,7 +255,7 @@ public class ViewBookActivity extends AppCompatActivity {
         if (isEditable) {
             title_element.setEnabled(true);
             author_element.setEnabled(true);
-            rating_element.setEnabled(true);
+            rating_element.setEnabled(false);
             synopsis_element.setEnabled(true);
         } else {
             title_element.setEnabled(false);
@@ -330,4 +332,13 @@ public class ViewBookActivity extends AppCompatActivity {
     //Pending Screen
 
 
+    @Override
+    public void finish() {
+        if (childEventListener!=null){
+            databaseHelper.getDatabaseReference().child("Books").orderByChild("uuid")
+                    .equalTo(getIntent().getExtras().getString("bookUUID"))
+                    .removeEventListener(childEventListener);
+        }
+        super.finish();
+    }
 }
