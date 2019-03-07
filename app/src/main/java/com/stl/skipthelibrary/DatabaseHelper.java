@@ -253,6 +253,12 @@ public class DatabaseHelper {
         }
     }
 
+    public void updateBook(Book newbook){
+        databaseReference.child("Books").child(newbook.getUuid()).setValue(newbook);
+        Log.d("Updating book", "new book should be replaced");
+    }
+
+
     /**
      * Delete a book from firebase
      * @param book: the book to delete

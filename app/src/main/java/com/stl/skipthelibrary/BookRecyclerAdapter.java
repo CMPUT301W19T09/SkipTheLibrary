@@ -2,9 +2,12 @@ package com.stl.skipthelibrary;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * The recycler adapter for books. Used to display a list of books.
  */
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
+    private static String TAG = "RecyclerViewAdapter";
     private Context context;
     private ArrayList<Book> books;
     private Book mRecentlyDeletedItem;
@@ -115,6 +119,19 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         else if (status.equals(BookStatus.BORROWED.name())){
             holder.status.setBackgroundTintList(context.getColorStateList(R.color.BORROWED));
         }
+
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "clicked on book arrow");
+                Intent intent = new Intent(context, ViewBookActivity.class);
+                intent.putExtra("bookUUID", books.get(position).getUuid());
+                context.startActivity(intent);
+            }
+        });
+
+
     }
 
     /**
@@ -137,6 +154,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
         TextView title;
         TextView author;
         TextView status;
+        ImageView bookArrow;
 
         /**
          * ViewHolder constructor
@@ -149,6 +167,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             title = itemView.findViewById(R.id.BookListItemTitle);
             author = itemView.findViewById(R.id.BookListItemAuthor);
             status = itemView.findViewById(R.id.BookListItemStatus);
+            bookArrow = itemView.findViewById(R.id.BookListItemRightArrow);
         }
 
     }
