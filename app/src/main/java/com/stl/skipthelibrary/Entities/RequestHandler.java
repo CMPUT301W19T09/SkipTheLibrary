@@ -153,7 +153,6 @@ public class RequestHandler {
      */
     public void denyRequestor(String user) throws  RequestorsUnavailableException{
         if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
-        setAcceptedRequestor(user);
 //        sendNotificaition();
         getRequestors().remove(user);
         throw new UnsupportedOperationException("Not implemented yet");
