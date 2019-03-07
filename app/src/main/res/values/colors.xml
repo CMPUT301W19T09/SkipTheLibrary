@@ -14,6 +14,6 @@
     <color name="AVAILABLE">#417600</color>
     <color name="REQUESTED">#F5A83C</color>
     <color name="BORROWED">#D91D1B</color>
-    <color name="highlight_blue">#0000FF</color>
+    <color name="highlight">@color/ACCEPTED</color>
 
 </resources>
