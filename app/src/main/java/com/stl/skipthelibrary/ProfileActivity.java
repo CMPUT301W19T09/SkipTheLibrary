@@ -130,6 +130,7 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileEmail.setText("Email: "+ user.getContactInfo().getEmail());
         myProfilePhoneNumber.setText("Phone Number: "+ user.getContactInfo().getPhoneNumber().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
         progressDialog.hide();
+        progressDialog.dismiss();
 
         if (!isUserTheCurrentUser){
             title.setText(user.getUserName() + "'s Profile");
