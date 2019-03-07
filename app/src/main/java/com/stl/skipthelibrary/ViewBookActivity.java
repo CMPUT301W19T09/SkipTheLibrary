@@ -46,7 +46,8 @@ public class ViewBookActivity extends AppCompatActivity {
     private ImageButton save_button;
     private ViewStub stub;
     private View inflated;
-    ChildEventListener childEventListener;
+    private ChildEventListener childEventListener;
+
 
     //Owner Requested Fields
 
