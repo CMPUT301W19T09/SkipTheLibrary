@@ -5,11 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.ScannerActivity">
-    <com.wonderkiln.camerakit.CameraView
+    <com.camerakit.CameraKitView
         android:id="@+id/scanner_camera_view"
         android:layout_width="match_parent"
-        app:ckPermissions="picture"
-        android:layout_height="match_parent"/>
+        app:camera_permissions="camera"
+        android:layout_height="match_parent"
+        app:camera_flash="auto"
+        app:camera_facing="back"
+        app:camera_focus="auto"
+        android:focusableInTouchMode="true"
+        app:camera_imageJpegQuality="100"
+        app:camera_imageMegaPixels="2"
+        />
     <Button
         android:id="@+id/scanner_scan_button"
         app:layout_constraintBottom_toBottomOf="parent"
