@@ -49,35 +49,39 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/AvailableChip"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/available" />
+                    android:text="@string/available"
+                    app:chipBackgroundColor="@color/chip_colors_available"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/RequestedChip"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/requested" />
+                    android:text="@string/requested"
+                    app:chipBackgroundColor="@color/chip_colors_requested"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/AcceptedChip"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/accepted" />
+                    android:text="@string/accepted"
+                    app:chipBackgroundColor="@color/chip_colors_accepted"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/LentChip"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/lent" />
+                    android:text="@string/lent"
+                    app:chipBackgroundColor="@color/chip_colors_borrowed"/>
             </com.google.android.material.chip.ChipGroup>
         </android.widget.HorizontalScrollView>
 
