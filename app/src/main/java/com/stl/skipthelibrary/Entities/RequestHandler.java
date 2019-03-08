@@ -122,8 +122,8 @@ public class RequestHandler {
      */
     public void confirmReturned(){
        getState().setBookStatus(BookStatus.AVAILABLE);
-       getState().setHandoffState(null);
-       setAcceptedRequestor(null);
+       getState().setHandoffState(HandoffState.OWNER_RECEIVED);
+       setAcceptedRequestor("");
     }
 
     /**
