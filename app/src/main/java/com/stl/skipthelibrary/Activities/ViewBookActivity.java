@@ -350,18 +350,17 @@ public class ViewBookActivity extends AppCompatActivity {
         // Check which request we're responding to
         if (requestCode == ScannerActivity.SCAN_BOOK) {
             if (resultCode == RESULT_OK) {
-                RequestHandler requestHandler = new RequestHandler();
                 isbn_code = data.getStringExtra("ISBN");
 
                 if (isbn_code.equals(book.getISBN()) && CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
                     switch (book.getRequests().getState().getHandoffState()) {
                         case READY_FOR_PICKUP:
-                            requestHandler.lendBook();
+                            book.getRequests().lendBook();
                             Toast.makeText(this, "The Book is Lent", Toast.LENGTH_SHORT).show();
                             databaseHelper.updateBook(book);
                             break;
                         case BORROWER_RETURNED:
-                            requestHandler.confirmReturned();
+                            book.getRequests().confirmReturned();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
                             databaseHelper.updateBook(book);
                             break;
@@ -369,12 +368,12 @@ public class ViewBookActivity extends AppCompatActivity {
                 }else if(isbn_code.equals(book.getISBN()) && !CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
                     switch (book.getRequests().getState().getHandoffState()) {
                         case OWNER_LENT:
-                            requestHandler.confirmBorrowed();
+                            book.getRequests().confirmBorrowed();
                             Toast.makeText(this, "The Book is Borrowed", Toast.LENGTH_SHORT).show();
                             databaseHelper.updateBook(book);
                             break;
                         case BORROWER_RECEIVED:
-                            requestHandler.returnBook();
+                            book.getRequests().returnBook();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
                             databaseHelper.updateBook(book);
                             break;
