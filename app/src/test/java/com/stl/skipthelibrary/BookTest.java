@@ -41,7 +41,7 @@ public class BookTest {
 
     @Test
     public void testSetRequests() {
-        State state = new State(BookStatus.ACCEPTED, null, null);
+        State state = new State();
         RequestHandler requests = new RequestHandler(state);
         book.setRequests(requests);
         assertEquals(requests, book.getRequests());
