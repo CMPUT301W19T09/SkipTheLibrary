@@ -3,22 +3,17 @@ package com.stl.skipthelibrary.BindersAndAdapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 import com.stl.skipthelibrary.Activities.MapBoxActivity;
-import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
-import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.R;
 
 import java.util.ArrayList;
@@ -27,11 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static android.app.Activity.RESULT_OK;
-
 public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecyclerAdapter.ViewHolder> {
-    private final static String TAG = "RequestorRecyclerA";
-    public static final int REQUEST_CODE = 1;
     private ArrayList<String> requestors;
     private Context context;
     private Book book;
@@ -52,9 +43,11 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final String username = requestors.get(position);
-        Log.d(TAG, username );
-        holder.userName.setText(username);
 
+        SpannableString userNameUnderLined = new SpannableString("@" + username);
+        userNameUnderLined.setSpan(new UnderlineSpan(), 0, userNameUnderLined.length(), 0);
+
+        holder.userName.setText( userNameUnderLined);
 
         holder.approveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +64,16 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
                 book.getRequests().denyRequestor(username);
                 DatabaseHelper databaseHelper = new DatabaseHelper(context);
                 databaseHelper.updateBook(book);
+            }
+        });
+
+        holder.userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra(ProfileActivity.USER_NAME,
+                        username);
+                context.startActivity(intent);
             }
         });
     }
@@ -103,19 +106,4 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
         }
 
     }
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == MapBoxActivity.SET_LOCATION) {
-            if (requestCode == RESULT_OK){
-                String locationString = data.getStringExtra("Location");
-                Gson gson = new Gson();
-                Location location = gson.fromJson(locationString, Location.class);
-                Toast.makeText(context, location.getLatitude() + " \n " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
-
 }

@@ -16,6 +16,7 @@
         android:textSize="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/highlight"
         android:layout_marginHorizontal="16dp"
         android:text="@string/username"/>
 

@@ -29,7 +29,7 @@ import java.util.List;
  * The scanner activity launches the scanner and returns the ISBN of the scanned barcode
  */
 public class ScannerActivity extends AppCompatActivity {
-    public static final int SCAN_BOOK = 2;
+    public static final int SCAN_BOOK = 3;
 
     private CameraKitView cameraKitView;
 
