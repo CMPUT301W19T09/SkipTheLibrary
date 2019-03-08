@@ -26,6 +26,8 @@ public class RatingTest {
         assertEquals(3.0, rating.getAverageRating(), 0);
         rating.addRating(4.5);
         assertEquals(3.5, rating.getAverageRating(), 0);
+
+        assertEquals(3, rating.getCount());
     }
 
     @Test(expected = RatingOutOfBoundsException.class)

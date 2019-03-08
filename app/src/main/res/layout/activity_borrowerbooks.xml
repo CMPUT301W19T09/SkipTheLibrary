@@ -35,38 +35,42 @@
 
         <com.google.android.material.chip.ChipGroup
             style="@style/Widget.MaterialComponents.ChipGroup"
-            android:layout_width="500dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:singleLine="true"
-            app:chipSpacing="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            app:chipSpacing="10dp"
             app:singleLine="true"
             >
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/RequestedChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="@string/requested"
+                app:chipBackgroundColor="@color/chip_colors_requested"
                 />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/AcceptedChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/accepted" />
+                android:text="@string/accepted"
+                app:chipBackgroundColor="@color/chip_colors_accepted"/>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/BorrowedChip"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="150dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/borrowed" />
+                android:text="@string/borrowed"
+                app:chipBackgroundColor="@color/chip_colors_borrowed"/>
         </com.google.android.material.chip.ChipGroup>
     </android.widget.HorizontalScrollView>
 

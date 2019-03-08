@@ -31,7 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * The recycler adapter for books. Used to display a list of books.
  */
 public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
-    private static String TAG = "RecyclerViewAdapter";
+    final public static String BOOK_ID = "bookUUID";
+    final private static String TAG = "RecyclerViewAdapter";
     private Context context;
     private ArrayList<Book> books;
     private Book mRecentlyDeletedItem;
@@ -139,7 +140,7 @@ public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapte
             public void onClick(View v) {
                 Log.d(TAG, "clicked on book arrow");
                 Intent intent = new Intent(context, ViewBookActivity.class);
-                intent.putExtra("bookUUID", books.get(position).getUuid());
+                intent.putExtra(BOOK_ID, books.get(position).getUuid());
                 context.startActivity(intent);
             }
         });

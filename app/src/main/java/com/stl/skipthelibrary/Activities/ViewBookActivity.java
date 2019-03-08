@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.RequestHandler;
@@ -44,7 +46,9 @@ public class ViewBookActivity extends AppCompatActivity {
     private ImageButton edit_button;
     private ImageButton save_button;
     private ViewStub stub;
+    private View inflated;
     private ChildEventListener childEventListener;
+
 
     //Owner Requested Fields
 
@@ -74,61 +78,20 @@ public class ViewBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Book Description
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.book_details);
         databaseHelper = new DatabaseHelper(this);
-        stub = ViewBookActivity.this.findViewById(R.id.generic_bottom_screen_id);
+        stub = findViewById(R.id.generic_bottom_screen_id);
         user = CurrentUser.getInstance();
         bindBookDescriptionElements();
         getIncomingIntents();
-
-
-        edit_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setBookDescriptionFieldsEditable(true);
-                save_button.setVisibility(View.VISIBLE);
-                edit_button.setVisibility(View.GONE);
-            }
-        });
-
-        save_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setBookDescriptionFieldsEditable(false);
-                save_button.setVisibility(View.GONE);
-                edit_button.setVisibility(View.VISIBLE);
-                updateBookDesriptionFields();
-            }
-        });
-
-        //Owner Requested
-
-
-        //Owner Handoff
-
-
-        //Owner Return
-
-
-        //Borrower Request
-
-
-        //Borrower Handoff
-
-
-        //Borrower Return
-
-
-        //Pending Screen
-
-
     }
 
     /**
      * This method catches the incoming data (BookUUID) that is sent via an intent on screen switch.
      */
     private void getIncomingIntents() {
-        String bookID = getIntent().getExtras().getString("bookUUID");
+        String bookID = getIntent().getExtras().getString(BookRecyclerAdapter.BOOK_ID);
 
         childEventListener = databaseHelper.getDatabaseReference()
                 .child("Books").orderByChild("uuid").equalTo(bookID)
@@ -150,6 +113,7 @@ public class ViewBookActivity extends AppCompatActivity {
                      * @param s: the ID
                      */
                     @Override
+                    //TODO:Make books edit on the go
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Toast.makeText(ViewBookActivity.this, "This book has been modified.",
                                 Toast.LENGTH_SHORT).show();
@@ -187,47 +151,123 @@ public class ViewBookActivity extends AppCompatActivity {
         if (user.getUserName().equals(book.getOwnerUserName())) {
             edit_button.setVisibility(View.VISIBLE);
             save_button.setVisibility(View.GONE);
+            
+            edit_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setBookDescriptionFieldsEditable(true);
+                    save_button.setVisibility(View.VISIBLE);
+                    edit_button.setVisibility(View.GONE);
+                }
+            });
+
+            save_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setBookDescriptionFieldsEditable(false);
+                    save_button.setVisibility(View.GONE);
+                    edit_button.setVisibility(View.VISIBLE);
+                    updateBookDesriptionFields();
+                }
+            });
+        }
+        else {
+            edit_button.setVisibility(View.GONE);
+            save_button.setVisibility(View.GONE);
         }
         selectBottom();
     }
 
     private void selectBottom() {
-
         BookStatus bookStatus = book.getRequests().getState().getBookStatus();
         HandoffState bookHandoffState = book.getRequests().getState().getHandoffState();
-
 
         if (user.getUserName().equals(book.getOwnerUserName())) {//user is owner
             if (bookStatus== BookStatus.REQUESTED) {
                 setBottomScreen(R.layout.bookscreen_owner_requested);
-            } else if (bookHandoffState== HandoffState.READY_FOR_PICKUP) {
+                configureOwnerRequested();
+            } else if (bookHandoffState==HandoffState.READY_FOR_PICKUP) {
                 setBottomScreen(R.layout.bookscreen_owner_handoff);
+                configureOwnerHandOff();
             } else if (bookHandoffState==HandoffState.BORROWER_RETURNED) {
                 setBottomScreen(R.layout.bookscreen_owner_return);
+                configureOwnerReturn();
             } else{
                 setBottomScreen(R.layout.bookscreen_pending);
+                configureOwnerPending();
             }
         }
         else{//user is borrower
-            if (bookStatus==BookStatus.REQUESTED) {
+            if ((!book.userIsInterested(user.getUserName()) && bookStatus==BookStatus.REQUESTED) ||
+                    bookStatus==BookStatus.AVAILABLE) {
                 setBottomScreen(R.layout.bookscreen_borrower_request);
+                configureBorrowerRequest();
             } else if (bookHandoffState==HandoffState.READY_FOR_PICKUP){
                 setBottomScreen(R.layout.bookscreen_borrower_handoff);
+                configureBorrowerHandoff();
             } else if (bookHandoffState==HandoffState.BORROWER_RECEIVED){
                 setBottomScreen(R.layout.bookscreen_borrower_return);
+                configureBorrowerReturn();
             } else{
                 setBottomScreen(R.layout.bookscreen_pending);
+                configureBorrowerPending();
             }
         }
-
-
     }
 
     private void setBottomScreen(int resourcefile){
         stub.setLayoutResource(resourcefile);
-        View inflated = stub.inflate();
+        inflated = stub.inflate();
     }
 
+    //Borrower Request
+    private void configureBorrowerRequest() {
+        Button button = inflated.findViewById(R.id.requestButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestHandler handler = book.getRequests();
+                handler.addRequestor(user.getUserName());
+                handler.getState().setBookStatus(BookStatus.REQUESTED);
+                databaseHelper.updateBook(book);
+            }
+        });
+    }
+
+    //Borrower Handoff
+    private void configureBorrowerHandoff() {
+
+    }
+
+    //Borrower Return
+    private void configureBorrowerReturn() {
+
+    }
+
+    //Pending Screen
+    private void configureBorrowerPending() {
+
+    }
+
+    //Owner Requested
+    private void configureOwnerRequested() {
+
+    }
+
+    //Owner HandOff
+    private void configureOwnerHandOff() {
+
+    }
+
+    //Owner Return
+    private void configureOwnerReturn() {
+
+    }
+
+    //Owner Pending
+    private void configureOwnerPending() {
+
+    }
 
     private void bindBookDescriptionElements() {
         title_element = findViewById(R.id.title_element);
