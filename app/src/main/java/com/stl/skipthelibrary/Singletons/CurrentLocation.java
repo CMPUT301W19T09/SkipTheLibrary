@@ -15,7 +15,7 @@ public class CurrentLocation {
     private Location location;
     private LocationListener locationListener;
 
-    public CurrentLocation(){
+    private CurrentLocation(){
         location = new Location(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
     }
 
