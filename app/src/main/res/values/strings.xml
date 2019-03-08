@@ -22,7 +22,7 @@
     <string name="author">by Author</string>
     <string name="rating">Rating</string>
     <string name="details">Details</string>
-    <string name="requesters">Requesters</string>
+    <string name="requests">Requests</string>
     <string name="accept">accept</string>
     <string name="deny">deny</string>
     <string name="borrowed">borrowed</string>
@@ -52,4 +52,7 @@
     <string name="snack_bar_undo">UNDO</string>
     <string name="scan_now">Scan now</string>
     <string name="requestbutton">Request</string>
+    <string name="approve_button_msg">Approve</string>
+    <string name="deny_button_msg">Deny</string>
+
 </resources>

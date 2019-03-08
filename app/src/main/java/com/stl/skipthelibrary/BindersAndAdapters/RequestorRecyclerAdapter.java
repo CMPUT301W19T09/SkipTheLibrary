@@ -1,17 +1,21 @@
 package com.stl.skipthelibrary.BindersAndAdapters;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.R;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecyclerAdapter.ViewHolder>{
@@ -34,6 +38,21 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
         String username = requestors.get(position);
         Log.d(TAG, username );
         holder.userName.setText(username);
+
+
+        holder.approveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        holder.denyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -46,8 +65,10 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
      *  it allows us to set their properties during onBind.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout parentLayout;
+        ConstraintLayout parentLayout;
         TextView userName;
+        Button approveButton;
+        Button denyButton;
 
         /**
          * ViewHolder constructor
@@ -57,6 +78,9 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
             super(itemView);
             parentLayout = itemView.findViewById(R.id.requestor_list_parent_view);
             userName = itemView.findViewById(R.id.requestor_username);
+            approveButton = itemView.findViewById(R.id.approve_button_id);
+            denyButton = itemView.findViewById(R.id.deny_button_id);
+
         }
 
     }
