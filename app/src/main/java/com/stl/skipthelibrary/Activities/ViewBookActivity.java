@@ -201,7 +201,7 @@ public class ViewBookActivity extends AppCompatActivity {
                     bookStatus == BookStatus.AVAILABLE) {
                 setBottomScreen(R.layout.bookscreen_borrower_request);
                 configureBorrowerRequest();
-            } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
+            } else if (bookHandoffState == HandoffState.OWNER_LENT) {
                 setBottomScreen(R.layout.bookscreen_borrower_handoff);
                 configureBorrowerHandoff();
             } else if (bookHandoffState == HandoffState.BORROWER_RECEIVED) {
