@@ -80,7 +80,7 @@ public class RequestHandlerTest {
         requestHandler.confirmReturned();
 
         assertEquals(requestHandler.getState().getBookStatus(), BookStatus.AVAILABLE);
-        assertEquals(requestHandler.getState().getHandoffState(), HandoffState.OWNER_RECEIVED);
+        assertEquals(requestHandler.getState().getHandoffState(), HandoffState.NULL_STATE);
     }
 
     @Test

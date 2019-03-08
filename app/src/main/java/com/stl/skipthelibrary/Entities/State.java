@@ -17,7 +17,7 @@ public class State {
      * The empty constructor
      */
     public State() {
-        this(BookStatus.AVAILABLE,null,null);
+        this(BookStatus.AVAILABLE,null,HandoffState.NULL_STATE);
     }
 
     /**
