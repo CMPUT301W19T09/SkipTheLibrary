@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -151,7 +152,7 @@ public class ViewBookActivity extends AppCompatActivity {
         if (user.getUserName().equals(book.getOwnerUserName())) {
             edit_button.setVisibility(View.VISIBLE);
             save_button.setVisibility(View.GONE);
-            
+
             edit_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -170,8 +171,7 @@ public class ViewBookActivity extends AppCompatActivity {
                     updateBookDesriptionFields();
                 }
             });
-        }
-        else {
+        } else {
             edit_button.setVisibility(View.GONE);
             save_button.setVisibility(View.GONE);
         }
@@ -183,39 +183,38 @@ public class ViewBookActivity extends AppCompatActivity {
         HandoffState bookHandoffState = book.getRequests().getState().getHandoffState();
 
         if (user.getUserName().equals(book.getOwnerUserName())) {//user is owner
-            if (bookStatus== BookStatus.REQUESTED) {
+            if (bookStatus == BookStatus.REQUESTED) {
                 setBottomScreen(R.layout.bookscreen_owner_requested);
                 configureOwnerRequested();
-            } else if (bookHandoffState==HandoffState.READY_FOR_PICKUP) {
+            } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
                 setBottomScreen(R.layout.bookscreen_owner_handoff);
                 configureOwnerHandOff();
-            } else if (bookHandoffState==HandoffState.BORROWER_RETURNED) {
+            } else if (bookHandoffState == HandoffState.BORROWER_RETURNED) {
                 setBottomScreen(R.layout.bookscreen_owner_return);
                 configureOwnerReturn();
-            } else{
+            } else {
                 setBottomScreen(R.layout.bookscreen_pending);
                 configureOwnerPending();
             }
-        }
-        else{//user is borrower
-            if ((!book.userIsInterested(user.getUserName()) && bookStatus==BookStatus.REQUESTED) ||
-                    bookStatus==BookStatus.AVAILABLE) {
+        } else {//user is borrower
+            if ((!book.userIsInterested(user.getUserName()) && bookStatus == BookStatus.REQUESTED) ||
+                    bookStatus == BookStatus.AVAILABLE) {
                 setBottomScreen(R.layout.bookscreen_borrower_request);
                 configureBorrowerRequest();
-            } else if (bookHandoffState==HandoffState.READY_FOR_PICKUP){
+            } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
                 setBottomScreen(R.layout.bookscreen_borrower_handoff);
                 configureBorrowerHandoff();
-            } else if (bookHandoffState==HandoffState.BORROWER_RECEIVED){
+            } else if (bookHandoffState == HandoffState.BORROWER_RECEIVED) {
                 setBottomScreen(R.layout.bookscreen_borrower_return);
                 configureBorrowerReturn();
-            } else{
+            } else {
                 setBottomScreen(R.layout.bookscreen_pending);
                 configureBorrowerPending();
             }
         }
     }
 
-    private void setBottomScreen(int resourcefile){
+    private void setBottomScreen(int resourcefile) {
         stub.setLayoutResource(resourcefile);
         inflated = stub.inflate();
     }
@@ -234,14 +233,70 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        // Check which request we're responding to
+//        if (requestCode == ScannerActivity.SCAN_BOOK) {
+//            if (resultCode == RESULT_OK) {
+//                RequestHandler requestHandler = new RequestHandler();
+//                isbn_code = data.getStringExtra("ISBN");
+//
+//                if (isbn_code.equals(book.getISBN()) && CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
+//                    switch (book.getRequests().getState().getHandoffState()) {
+//                        case READY_FOR_PICKUP:
+//                            requestHandler.lendBook();
+//                            Toast.makeText(this, "The Book is Lent", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        case BORROWER_RETURNED:
+//                            requestHandler.confirmReturned();
+//                            Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
+//                            break;
+//                    }
+//                }else if(isbn_code.equals(book.getISBN()) && !CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
+//                    switch (book.getRequests().getState().getHandoffState()) {
+//                        case OWNER_LENT:
+//                            requestHandler.confirmBorrowed();
+//                            Toast.makeText(this, "The Book is Borrowed", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        case BORROWER_RECEIVED:
+//                            requestHandler.returnBook();
+//                            Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
+//                            break;
+//                    }
+//                }else{
+//                    Toast.makeText(this, "Scanning ISBN does not Match the Book ISBN", Toast.LENGTH_SHORT).show();
+//                    Log.d(TAG, "Book ISBN not match the scanning ISBN");
+//                }
+//
+//            } else {
+//                Log.d(TAG, "onActivityResult: Something went wrong in scan");
+//            }
+//        }
+//    }
+
     //Borrower Handoff
     private void configureBorrowerHandoff() {
+        inflated.findViewById(R.id.borrowButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, ScannerActivity.class);
+                startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+            }
+
+        });
 
     }
 
     //Borrower Return
     private void configureBorrowerReturn() {
+        inflated.findViewById(R.id.returnButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, ScannerActivity.class);
+                startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+            }
 
+        });
     }
 
     //Pending Screen
@@ -256,12 +311,26 @@ public class ViewBookActivity extends AppCompatActivity {
 
     //Owner HandOff
     private void configureOwnerHandOff() {
+        inflated.findViewById(R.id.lendButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, ScannerActivity.class);
+                startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+            }
 
+        });
     }
 
     //Owner Return
     private void configureOwnerReturn() {
+        inflated.findViewById(R.id.returnedButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, ScannerActivity.class);
+                startActivityForResult(intent, ScannerActivity.SCAN_BOOK);
+            }
 
+        });
     }
 
     //Owner Pending
@@ -330,10 +399,12 @@ public class ViewBookActivity extends AppCompatActivity {
                         case READY_FOR_PICKUP:
                             requestHandler.lendBook();
                             Toast.makeText(this, "The Book is Lent", Toast.LENGTH_SHORT).show();
+                            databaseHelper.updateBook(book);
                             break;
                         case BORROWER_RETURNED:
                             requestHandler.confirmReturned();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
+                            databaseHelper.updateBook(book);
                             break;
                     }
                 }else if(isbn_code.equals(book.getISBN()) && !CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
@@ -341,10 +412,12 @@ public class ViewBookActivity extends AppCompatActivity {
                         case OWNER_LENT:
                             requestHandler.confirmBorrowed();
                             Toast.makeText(this, "The Book is Borrowed", Toast.LENGTH_SHORT).show();
+                            databaseHelper.updateBook(book);
                             break;
                         case BORROWER_RECEIVED:
                             requestHandler.returnBook();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
+                            databaseHelper.updateBook(book);
                             break;
                     }
                 }else{
