@@ -40,11 +40,15 @@ dependencies {
     implementation 'com.gtomato.android.library:carouselview:2.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    //map
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
 
     // camera for scanning
     implementation 'com.wonderkiln:camerakit:0.13.1'
-
+    
 }
 
 // Test Logging

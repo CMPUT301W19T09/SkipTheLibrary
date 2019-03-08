@@ -44,6 +44,7 @@
     <string name="ownerRating">Owner Rating</string>
     <string name="borrowerRating">Borrower Rating</string>
     <string name="contactInfo">Contact Information</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoidHltb29yZSIsImEiOiJjanNxbDVsNGIxOTk3NGFwOXpkY3gwczFqIn0.V5q6lH_Wy9kmkepqc17m_A</string>
     <string name="profilePhoto">Profile Photo</string>
     <string name="upload">upload</string>
     <string name="addImage">Add Image</string>
@@ -51,5 +52,4 @@
     <string name="snack_bar_undo">UNDO</string>
     <string name="scan_now">Scan now</string>
     <string name="requestbutton">Request</string>
-
 </resources>
