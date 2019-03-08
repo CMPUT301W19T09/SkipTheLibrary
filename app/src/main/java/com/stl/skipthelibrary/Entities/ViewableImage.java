@@ -73,6 +73,22 @@ public class ViewableImage {
     }
 
     /**
+     * Get a bitmap from URI
+     * @param uri: the URI to get the bitmap from
+     * @param context: the current context
+     * @return the bitmap
+     * @throws IOException: An IO Exception
+     */
+    public static Bitmap getBitmapFromUri(Uri uri, Context context) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                context.getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+
+    /**
      * Determines if the viewable image is identical to another object
      * @param o: An object to compare the viewable image to
      * @return true if o is identical to the current viewable image
@@ -93,22 +109,4 @@ public class ViewableImage {
     public int hashCode() {
         return Objects.hash(getImageString());
     }
-
-    /**
-     * Get a bitmap from URI
-     * @param uri: the URI to get the bitmap from
-     * @param context: the current context
-     * @return the bitmap
-     * @throws IOException: An IO Exception
-     */
-    public static Bitmap getBitmapFromUri(Uri uri, Context context) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                context.getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return image;
-    }
-
-
 }

@@ -256,10 +256,10 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * If the user is a borrower and it's their turn to borrow it, let them borrow it by scanning
      * the book
+     *
      */
     private void configureBorrowerHandoff() {
         inflated.findViewById(R.id.borrowButton).setOnClickListener(new View.OnClickListener() {
@@ -320,6 +320,7 @@ public class ViewBookActivity extends AppCompatActivity {
 
     /**
      * Configure the returned screen for an owner
+     * Owner get the book and scan the book to confirm the book is returned
      */
     private void configureOwnerReturn() {
         inflated.findViewById(R.id.returnedButton).setOnClickListener(new View.OnClickListener() {

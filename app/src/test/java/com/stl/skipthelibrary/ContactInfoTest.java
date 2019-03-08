@@ -57,4 +57,16 @@ public class ContactInfoTest {
         contactInfo.setPhoneNumber(phone_two);
         assertEquals(phone_two, contactInfo.getPhoneNumber());
     }
+
+    @Test
+    public void testEquals() {
+        ContactInfo secondContact = new ContactInfo(email, phone, null);
+        assertTrue(contactInfo.equals(secondContact));
+        secondContact.setEmail("testtitle@email.com");
+        assertFalse(contactInfo.equals(secondContact));
+        secondContact = contactInfo;
+        assertTrue(contactInfo.equals(secondContact));
+        secondContact = null;
+        assertFalse(contactInfo.equals(secondContact));
+    }
 }
