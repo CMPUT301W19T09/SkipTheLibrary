@@ -3,6 +3,8 @@ package com.stl.skipthelibrary.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
+import com.stl.skipthelibrary.BindersAndAdapters.RequestorRecyclerAdapter;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.RequestHandler;
@@ -30,6 +33,8 @@ import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
+
+import java.util.ArrayList;
 
 
 public class ViewBookActivity extends AppCompatActivity {
@@ -184,7 +189,7 @@ public class ViewBookActivity extends AppCompatActivity {
 
         if (user.getUserName().equals(book.getOwnerUserName())) {//user is owner
             if (bookStatus== BookStatus.REQUESTED) {
-                setBottomScreen(R.layout.bookscreen_owner_requested);
+                setBottomScreen(R.layout.requester_list);
                 configureOwnerRequested();
             } else if (bookHandoffState==HandoffState.READY_FOR_PICKUP) {
                 setBottomScreen(R.layout.bookscreen_owner_handoff);
@@ -250,8 +255,12 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     //Owner Requested
-    private void configureOwnerRequested() {
-
+    private void configureOwnerRequested(){
+        RecyclerView recyclerView = inflated.findViewById(R.id.RequesterRecyclerView);
+        RequestorRecyclerAdapter adapter = new RequestorRecyclerAdapter(book.getRequests().getRequestors());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Toast.makeText(this, "" + recyclerView.equals(null), Toast.LENGTH_SHORT).show();
     }
 
     //Owner HandOff

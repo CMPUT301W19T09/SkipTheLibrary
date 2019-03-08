@@ -12,5 +12,12 @@
         android:layout_margin="16dp"
         android:background="@color/light_grey" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/request_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 
 </LinearLayout>
