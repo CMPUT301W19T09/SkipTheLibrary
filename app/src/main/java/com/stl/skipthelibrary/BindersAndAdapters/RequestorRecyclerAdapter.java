@@ -1,5 +1,7 @@
 package com.stl.skipthelibrary.BindersAndAdapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,8 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.stl.skipthelibrary.Activities.MapBoxActivity;
+import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
+import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.R;
 
 import java.util.ArrayList;
@@ -18,11 +25,16 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecyclerAdapter.ViewHolder>{
-    private final static String TAG = "RequestorRecyclerA";
-    private ArrayList<String> requestors;
+import static android.app.Activity.RESULT_OK;
 
-    public RequestorRecyclerAdapter(ArrayList<String> requestors) {
+public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecyclerAdapter.ViewHolder> {
+    private final static String TAG = "RequestorRecyclerA";
+    public static final int REQUEST_CODE = 1;
+    private ArrayList<String> requestors;
+    private Context context;
+
+    public RequestorRecyclerAdapter(Context context, ArrayList<String> requestors) {
+        this.context = context;
         this.requestors = requestors;
     }
 
@@ -43,7 +55,8 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
         holder.approveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(view.getContext(), MapBoxActivity.class);
+                ((Activity) context).startActivityForResult(intent, MapBoxActivity.SET_LOCATION);
             }
         });
 
@@ -83,6 +96,18 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
 
         }
 
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == MapBoxActivity.SET_LOCATION) {
+            if (requestCode == RESULT_OK){
+                String locationString = data.getStringExtra("Location");
+                Gson gson = new Gson();
+                Location location = gson.fromJson(locationString, Location.class);
+                Toast.makeText(context, location.getLatitude() + " \n " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

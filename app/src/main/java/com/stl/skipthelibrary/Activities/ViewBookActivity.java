@@ -257,7 +257,7 @@ public class ViewBookActivity extends AppCompatActivity {
     //Owner Requested
     private void configureOwnerRequested(){
         RecyclerView recyclerView = inflated.findViewById(R.id.RequesterRecyclerView);
-        RequestorRecyclerAdapter adapter = new RequestorRecyclerAdapter(book.getRequests().getRequestors());
+        RequestorRecyclerAdapter adapter = new RequestorRecyclerAdapter(this, book.getRequests().getRequestors());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Toast.makeText(this, "" + recyclerView.equals(null), Toast.LENGTH_SHORT).show();
