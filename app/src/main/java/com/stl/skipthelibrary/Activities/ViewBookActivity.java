@@ -233,48 +233,7 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        // Check which request we're responding to
-//        if (requestCode == ScannerActivity.SCAN_BOOK) {
-//            if (resultCode == RESULT_OK) {
-//                RequestHandler requestHandler = new RequestHandler();
-//                isbn_code = data.getStringExtra("ISBN");
-//
-//                if (isbn_code.equals(book.getISBN()) && CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
-//                    switch (book.getRequests().getState().getHandoffState()) {
-//                        case READY_FOR_PICKUP:
-//                            requestHandler.lendBook();
-//                            Toast.makeText(this, "The Book is Lent", Toast.LENGTH_SHORT).show();
-//                            break;
-//                        case BORROWER_RETURNED:
-//                            requestHandler.confirmReturned();
-//                            Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-//                            break;
-//                    }
-//                }else if(isbn_code.equals(book.getISBN()) && !CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
-//                    switch (book.getRequests().getState().getHandoffState()) {
-//                        case OWNER_LENT:
-//                            requestHandler.confirmBorrowed();
-//                            Toast.makeText(this, "The Book is Borrowed", Toast.LENGTH_SHORT).show();
-//                            break;
-//                        case BORROWER_RECEIVED:
-//                            requestHandler.returnBook();
-//                            Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-//                            break;
-//                    }
-//                }else{
-//                    Toast.makeText(this, "Scanning ISBN does not Match the Book ISBN", Toast.LENGTH_SHORT).show();
-//                    Log.d(TAG, "Book ISBN not match the scanning ISBN");
-//                }
-//
-//            } else {
-//                Log.d(TAG, "onActivityResult: Something went wrong in scan");
-//            }
-//        }
-//    }
 
-    //Borrower Handoff
     private void configureBorrowerHandoff() {
         inflated.findViewById(R.id.borrowButton).setOnClickListener(new View.OnClickListener() {
             @Override
