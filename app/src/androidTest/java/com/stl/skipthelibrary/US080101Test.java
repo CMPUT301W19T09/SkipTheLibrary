@@ -2,10 +2,14 @@ package com.stl.skipthelibrary;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
@@ -15,6 +19,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.rule.ActivityTestRule;
 
@@ -65,19 +73,24 @@ public class US080101Test extends IntentsTestRule<MyBooksActivity> {
             solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "123-456-789-1011");
             solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Test Description");
 
-            Uri testImageUri = Uri.parse("content://com.google.android.apps.photos.contentprovider/-1/1/content%3A%2F%2Fmedia%2Fexternal%2Fimages%2Fmedia%2F25/ORIGINAL/NONE/1876073787");
+            Resources resources = solo.getCurrentActivity().getApplicationContext().getResources();
+            Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                    resources.getResourcePackageName(R.mipmap.ic_launcher) + '/' +
+                    resources.getResourceTypeName(R.mipmap.ic_launcher) + '/' +
+                    resources.getResourceEntryName(R.mipmap.ic_launcher));
+
             Intent resultData = new Intent();
-            resultData.setData(testImageUri);
-            Instrumentation.ActivityResult result =
-                    new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+            resultData.setData(imageUri);
+            Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
+                    Activity.RESULT_OK, resultData);
 
             // Set up result stubbing when an intent sent to "choose photo" is seen.
             intending(not(isInternal())).respondWith(result);
-            View addImageButton = solo.getView(R.id.addBookImageButton);
 
+            View addImageButton = solo.getView(R.id.addBookImageButton);
             solo.clickOnView(addImageButton);
 
-
+            solo.sleep(1000);
             solo.clickOnImageButton(0); //takes us back to my books activity
 
             solo.waitForActivity(MyBooksActivity.class);
