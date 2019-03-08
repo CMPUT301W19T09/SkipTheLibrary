@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
 import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
@@ -95,14 +96,16 @@ public class MapBoxActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Intent intent=new Intent();
                 intent.putExtra("Location", gson.toJson(location));
+                intent.putExtra("username",getIntent().getExtras().getString("username"));
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
 
-    @Override
-    public void finish() {
+
+        @Override
+        public void finish() {
         mapView.onDestroy();
         super.finish();
     }
