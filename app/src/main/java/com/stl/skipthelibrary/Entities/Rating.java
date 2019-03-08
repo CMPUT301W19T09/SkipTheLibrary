@@ -43,14 +43,6 @@ public class Rating {
     }
 
     /**
-     * Set the average Rating
-     * @param averageRating: the average rating
-     */
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
-    }
-
-    /**
      * Set the the total number of ratings
      * @param count: the total number of ratings
      */
@@ -59,11 +51,27 @@ public class Rating {
     }
 
     /**
+     * Get the max rating permitted
+     * @return the max rating permitted
+     */
+    public int getMaxRating() {
+        return maxRating;
+    }
+
+    /**
      * Set the max rating permitted
      * @param maxRating: the max rating permitted
      */
     public void setMaxRating(int maxRating) {
         this.maxRating = maxRating;
+    }
+
+    /**
+     * Get the max rating permitted
+     * @return the max rating permitted
+     */
+    public int getMinRating() {
+        return minRating;
     }
 
     /**
@@ -83,6 +91,14 @@ public class Rating {
     }
 
     /**
+     * Set the average Rating
+     * @param averageRating: the average rating
+     */
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    /**
      * Add a new rating
      * @param rating: the new rating to add
      * @throws RatingOutOfBoundsException : If the rating is outside [min,max] this exception is
@@ -97,21 +113,6 @@ public class Rating {
         averageRating = totalRating / (double) count;
     }
 
-    /**
-     * Get the max rating permitted
-     * @return the max rating permitted
-     */
-    public int getMaxRating() {
-        return maxRating;
-    }
-
-    /**
-     * Get the max rating permitted
-     * @return the max rating permitted
-     */
-    public int getMinRating() {
-        return minRating;
-    }
 
     /**
      * Convert the rating into a string
