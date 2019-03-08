@@ -1,5 +1,13 @@
 package com.stl.skipthelibrary.Entities;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import com.google.android.gms.location.LocationListener;
+
 import java.util.Objects;
 
 /**
@@ -79,4 +87,5 @@ public class Location {
     public int hashCode() {
         return Objects.hash(getLatitude(), getLongitude());
     }
+
 }
