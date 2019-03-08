@@ -38,6 +38,18 @@
       </value>
     </option>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/doc/allclasses-frame.html" />
+    <file url="file://$PROJECT_DIR$/doc/allclasses-noframe.html" />
+    <file url="file://$PROJECT_DIR$/doc/constant-values.html" />
+    <file url="file://$PROJECT_DIR$/doc/deprecated-list.html" />
+    <file url="file://$PROJECT_DIR$/doc/help-doc.html" />
+    <file url="file://$PROJECT_DIR$/doc/index.html" />
+    <file url="file://$PROJECT_DIR$/doc/overview-tree.html" />
+    <file url="file://$PROJECT_DIR$/doc/script.js" />
+    <file url="file://$PROJECT_DIR$/doc/serialized-form.html" />
+    <file url="file://$PROJECT_DIR$/doc/stylesheet.css" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

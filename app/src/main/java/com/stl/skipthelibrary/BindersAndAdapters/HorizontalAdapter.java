@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary.BindersAndAdapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.stl.skipthelibrary.Activities.ViewBookActivity.TAG;
 
 /**
  * The Horizontal RecyclerView Adapter used to display images for books
@@ -43,7 +46,6 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
         View v = LayoutInflater.from(mContext).inflate(R.layout.book_image_list_item, parent, false);
         return new BookImageViewHolder(v);
     }
-
     /**
      * Bind the UI elements and allow deletion of images
      * @param holder: the viewholder we use to bind data to
@@ -59,6 +61,29 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
                 notifyDataSetChanged();
             }
         });
+    }
+    /**
+     * Bind the UI elements and allow deletion of images
+     * @param holder: the viewholder we use to bind data to
+     * @param position: the position of the current element in the list of images
+     * @param editing: whether or not the user is currently editing the book description
+     */
+    @Override
+    public void onBindViewHolder(@NonNull BookImageViewHolder holder, final int position,  List<Object> editing) {
+        holder.bookImage.setImageBitmap(bookImages.get(position).decode());
+        Log.d(TAG, "onBindViewHolder: "+ editing);
+        if(editing.size() != 0 && ((boolean) (editing.get(0)))){
+            holder.deleteImageButton.setVisibility(View.VISIBLE);
+            holder.deleteImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bookImages.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
+        } else {
+            holder.deleteImageButton.setVisibility(View.GONE);
+        }
 
     }
 

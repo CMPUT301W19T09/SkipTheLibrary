@@ -3,8 +3,11 @@ package com.stl.skipthelibrary.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -17,20 +20,28 @@ import android.widget.RatingBar;
 
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
+import com.stl.skipthelibrary.BindersAndAdapters.HorizontalAdapter;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.User;
+import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ViewBookActivity extends AppCompatActivity {
@@ -44,11 +55,19 @@ public class ViewBookActivity extends AppCompatActivity {
     private EditText author_element;
     private RatingBar rating_element;
     private EditText synopsis_element;
+    private RecyclerView images_element;
+    private TextView noImages;
+    private ArrayList<ViewableImage> bookImages  = new ArrayList<>();
+    private HorizontalAdapter horizontalAdapter;
     private ImageButton edit_button;
     private ImageButton save_button;
     private ViewStub stub;
     private View inflated;
     private ChildEventListener childEventListener;
+    private MaterialButton addNewBookImageButton;
+
+    private Boolean[] EDITING_TRUE = {true};
+    private Boolean[] EDITING_FALSE = {false};
 
 
     //Owner Requested Fields
@@ -159,6 +178,29 @@ public class ViewBookActivity extends AppCompatActivity {
                     setBookDescriptionFieldsEditable(true);
                     save_button.setVisibility(View.VISIBLE);
                     edit_button.setVisibility(View.GONE);
+                    addNewBookImageButton.setVisibility(View.VISIBLE);
+                    addNewBookImageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (bookImages.size() < 5) {
+                                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                getIntent.setType("image/*");
+
+                                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                pickIntent.setType("image/*");
+
+                                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                                startActivityForResult(chooserIntent, AddBooksActivity.PICK_BOOK_IMAGE);
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "Maximum number of images added", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    });
+                    horizontalAdapter.notifyItemRangeChanged(0, horizontalAdapter.getItemCount(), true);
                 }
             });
 
@@ -168,6 +210,8 @@ public class ViewBookActivity extends AppCompatActivity {
                     setBookDescriptionFieldsEditable(false);
                     save_button.setVisibility(View.GONE);
                     edit_button.setVisibility(View.VISIBLE);
+                    addNewBookImageButton.setVisibility(View.INVISIBLE);
+                    horizontalAdapter.notifyItemRangeChanged(0, horizontalAdapter.getItemCount(), false);
                     updateBookDesriptionFields();
                 }
             });
@@ -320,6 +364,15 @@ public class ViewBookActivity extends AppCompatActivity {
         synopsis_element = findViewById(R.id.synopsis_element);
         edit_button = findViewById(R.id.edit_button);
         save_button = findViewById(R.id.save_button);
+        noImages = findViewById(R.id.noImageTextView);
+        addNewBookImageButton = findViewById(R.id.addNewBookImageButton);
+
+        // setup recyclerview
+        images_element = findViewById(R.id.bookImageRecyclerview);
+        horizontalAdapter=new HorizontalAdapter(bookImages, getApplicationContext());
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(ViewBookActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        images_element.setAdapter(horizontalAdapter);
+        images_element.setLayoutManager(horizontalLayoutManager);
 
         save_button.setVisibility(View.GONE);
         edit_button.setVisibility(View.GONE);
@@ -332,6 +385,15 @@ public class ViewBookActivity extends AppCompatActivity {
         rating_element.setMax(book.getRating().getMaxRating());
         rating_element.setNumStars((int) Math.round(book.getRating().getAverageRating()));
         synopsis_element.setText(book.getDescription().getSynopsis());
+        bookImages.addAll(book.getImages());
+        Log.d("BOOK PICS: ", bookImages.toString());
+        if(book.getImages().size() == 0){
+            noImages.setVisibility(View.VISIBLE);
+        }
+        else {
+            noImages.setVisibility(View.GONE);
+        }
+        horizontalAdapter.notifyDataSetChanged();
     }
 
     private void setBookDescriptionFieldsEditable(Boolean isEditable) {
@@ -353,6 +415,7 @@ public class ViewBookActivity extends AppCompatActivity {
         book.getDescription().setAuthor(author_element.getText().toString());
         book.getDescription().setSynopsis(synopsis_element.getText().toString());
         book.getRating().addRating((double) rating_element.getNumStars());
+        book.setImages(bookImages);
         databaseHelper.updateBook(book);
     }
 
@@ -401,6 +464,22 @@ public class ViewBookActivity extends AppCompatActivity {
 
             } else {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
+            }
+        }
+        else if(requestCode == AddBooksActivity.PICK_BOOK_IMAGE){
+            if ( resultCode == RESULT_OK) {
+                // The user picked a photo.
+                // The Intent's data Uri identifies which photo was selected.
+                Uri imageUri = data.getData();
+                try {
+                    ViewableImage newBookImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
+                    bookImages.add(newBookImage);
+                    horizontalAdapter.notifyItemRangeChanged(0, horizontalAdapter.getItemCount(), true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.d(TAG, "onActivityResult: Error in picking image");
             }
         }
     }
