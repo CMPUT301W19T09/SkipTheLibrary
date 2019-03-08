@@ -19,7 +19,7 @@ public class RequestHandler {
      * The empty constructor
      */
     public RequestHandler() {
-        this(new State(),new ArrayList<String>(), null);
+        this(new State(),new ArrayList<String>(), "");
 
     }
 
@@ -28,7 +28,7 @@ public class RequestHandler {
      * @param state: the state of the book
      */
     public RequestHandler(State state) {
-        this(state,new ArrayList<String>(), null);
+        this(state,new ArrayList<String>(), "");
 
     }
 
@@ -122,7 +122,7 @@ public class RequestHandler {
      */
     public void confirmReturned(){
        getState().setBookStatus(BookStatus.AVAILABLE);
-       getState().setHandoffState(HandoffState.OWNER_RECEIVED);
+       getState().setHandoffState(HandoffState.NULL_STATE);
        setAcceptedRequestor("");
     }
 

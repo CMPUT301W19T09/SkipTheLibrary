@@ -28,6 +28,8 @@ import com.stl.skipthelibrary.R;
 
 public class MapBoxActivity extends AppCompatActivity {
     public static final int SET_LOCATION = 1;
+    private static final double DEFAULT_LATITUDE = 53.527322;
+    private static final double DEFAULT_LONGITUDE = -113.529477;
     private MapView mapView;
     private Location location;
     private ImageView dropPinView;
@@ -65,6 +67,8 @@ public class MapBoxActivity extends AppCompatActivity {
 
         if (androidLocation == null){
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,  locationListener);
+            location = new Location(DEFAULT_LATITUDE,DEFAULT_LONGITUDE);
+            afterLocationRecieved(savedInstanceState);
         }
         else{
             location = new Location(androidLocation.getLatitude(), androidLocation.getLongitude());
