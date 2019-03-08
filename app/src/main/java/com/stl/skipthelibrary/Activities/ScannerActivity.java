@@ -43,7 +43,36 @@ public class ScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         cameraKitView = findViewById(R.id.scanner_camera_view);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         cameraKitView.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cameraKitView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        cameraKitView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        cameraKitView.onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     /**
