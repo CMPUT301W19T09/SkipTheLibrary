@@ -79,8 +79,10 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.clickOnView(solo.getView(R.id.SaveBookButton));
 
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+        //TODO: Uncomment this once solve the firebase problem
+//        solo.clickOnView(solo.getView(R.id.BookListItemRightArrow));
+//        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
 
-        
         deleteBook();
 
     }
@@ -102,6 +104,13 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.sleep(1000);
 
         assertTrue(myBooksList.getAdapter().getItemCount() == 0);
+
+    }
+
+    public void GetBook(){
+        RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
+        View bookToDelete = myBooksList.getChildAt(0);
+
 
     }
 }
