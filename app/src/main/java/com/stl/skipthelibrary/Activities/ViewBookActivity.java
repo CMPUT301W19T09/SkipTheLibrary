@@ -178,6 +178,10 @@ public class ViewBookActivity extends AppCompatActivity {
         selectBottom();
     }
 
+    /**
+     * Get the book status and change the book state and book hand off state when the
+     * hand off is over
+     */
     private void selectBottom() {
         BookStatus bookStatus = book.getRequests().getState().getBookStatus();
         HandoffState bookHandoffState = book.getRequests().getState().getHandoffState();
@@ -219,7 +223,9 @@ public class ViewBookActivity extends AppCompatActivity {
         inflated = stub.inflate();
     }
 
-    //Borrower Request
+    /**
+     * Borrower request the book
+     */
     private void configureBorrowerRequest() {
         Button button = inflated.findViewById(R.id.requestButton);
         button.setOnClickListener(new View.OnClickListener() {
@@ -233,7 +239,9 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Borrower get the book and scan the book to confirm the book is borrowed
+     */
     private void configureBorrowerHandoff() {
         inflated.findViewById(R.id.borrowButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,7 +254,10 @@ public class ViewBookActivity extends AppCompatActivity {
 
     }
 
-    //Borrower Return
+
+    /**
+     * Borrower scan the book and return the book
+     */
     private void configureBorrowerReturn() {
         inflated.findViewById(R.id.returnButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,7 +279,10 @@ public class ViewBookActivity extends AppCompatActivity {
 
     }
 
-    //Owner HandOff
+
+    /**
+     * Owner scan the book, and lend the book
+     */
     private void configureOwnerHandOff() {
         inflated.findViewById(R.id.lendButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,7 +294,9 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
-    //Owner Return
+    /**
+     * Owner get the book and scan the book to confirm the book is returned
+     */
     private void configureOwnerReturn() {
         inflated.findViewById(R.id.returnedButton).setOnClickListener(new View.OnClickListener() {
             @Override
