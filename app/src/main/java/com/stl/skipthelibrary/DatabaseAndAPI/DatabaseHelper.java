@@ -22,6 +22,7 @@ import com.stl.skipthelibrary.Entities.ContactInfo;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
+import com.stl.skipthelibrary.Singletons.CurrentLocation;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
@@ -192,6 +193,8 @@ public class DatabaseHelper {
         Gson gson = new Gson();
         Intent intent = new Intent(context, NotificationActivity.class);
         context.startActivity(intent);
+
+        CurrentLocation.getInstance().updateLocation(context);
     }
 
     /**

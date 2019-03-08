@@ -23,8 +23,10 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
 import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.R;
+import com.stl.skipthelibrary.Singletons.CurrentLocation;
 
 public class MapBoxActivity extends AppCompatActivity {
     public static final int SET_LOCATION = 1;
@@ -44,33 +46,8 @@ public class MapBoxActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void getCurrentLocation(final Bundle savedInstanceState) {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        // Define a listener that responds to location updates
-        android.location.LocationListener locationListener = new android.location.LocationListener() {
-            @Override
-            public void onLocationChanged(android.location.Location receivedLocation) {
-                location = new Location(receivedLocation.getLatitude(), receivedLocation.getLongitude());
-                afterLocationRecieved(savedInstanceState);
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-        android.location.Location androidLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if (androidLocation == null){
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,  locationListener);
-        }
-        else{
-            location = new Location(androidLocation.getLatitude(), androidLocation.getLongitude());
-            afterLocationRecieved(savedInstanceState);
-        }
-
+        location = CurrentLocation.getInstance().getLocation();
+        afterLocationRecieved(savedInstanceState);
     }
 
     private void afterLocationRecieved(Bundle savedInstanceState){
@@ -119,9 +96,17 @@ public class MapBoxActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Intent intent=new Intent();
                 intent.putExtra("Location", gson.toJson(location));
+                intent.putExtra("username",getIntent().getExtras().getString("username"));
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
+    }
+
+
+        @Override
+        public void finish() {
+        mapView.onDestroy();
+        super.finish();
     }
 }

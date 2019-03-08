@@ -54,5 +54,7 @@
     <string name="requestbutton">Request</string>
     <string name="approve_button_msg">Approve</string>
     <string name="deny_button_msg">Deny</string>
-
+    <string name="return_button">Return</string>
+    <string name="lend_button">lend</string>
+    <string name="returned_button">returned</string>
 </resources>

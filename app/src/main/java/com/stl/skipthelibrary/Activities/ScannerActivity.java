@@ -7,10 +7,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.camerakit.CameraKitView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -19,12 +22,6 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.stl.skipthelibrary.R;
-import com.wonderkiln.camerakit.CameraKitError;
-import com.wonderkiln.camerakit.CameraKitEvent;
-import com.wonderkiln.camerakit.CameraKitEventListener;
-import com.wonderkiln.camerakit.CameraKitImage;
-import com.wonderkiln.camerakit.CameraKitVideo;
-import com.wonderkiln.camerakit.CameraView;
 
 import java.util.List;
 
@@ -32,9 +29,9 @@ import java.util.List;
  * The scanner activity launches the scanner and returns the ISBN of the scanned barcode
  */
 public class ScannerActivity extends AppCompatActivity {
-    public static final int SCAN_BOOK = 1;
+    public static final int SCAN_BOOK = 2;
 
-    private CameraView cameraView;
+    private CameraKitView cameraKitView;
 
     /**
      * Bind UI elements and setup listners and begin scanning
@@ -45,36 +42,8 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        cameraView = findViewById(R.id.scanner_camera_view);
-        cameraView.start();
-
-        cameraView.addCameraKitListener(new CameraKitEventListener() {
-            @Override
-            public void onEvent(CameraKitEvent cameraKitEvent) {
-
-            }
-
-            @Override
-            public void onError(CameraKitError cameraKitError) {
-
-            }
-
-            /**
-             * On retrieving an image send the corresponding bitmap to be processed
-             * @param cameraKitImage: the cameraKitImage which can be used to get the bitmap
-             */
-            @Override
-            public void onImage(CameraKitImage cameraKitImage) {
-                Bitmap bitmap = Bitmap.createScaledBitmap(cameraKitImage.getBitmap(), cameraView.getWidth(),
-                        cameraView.getHeight(), false);
-                processBitMap(bitmap);
-            }
-
-            @Override
-            public void onVideo(CameraKitVideo cameraKitVideo) {
-
-            }
-        });
+        cameraKitView = findViewById(R.id.scanner_camera_view);
+        cameraKitView.onStart();
     }
 
     /**
@@ -82,7 +51,12 @@ public class ScannerActivity extends AppCompatActivity {
      * @param view: the scan now button
      */
     public void confirmScanOnClick(View view) {
-        cameraView.captureImage();
+        cameraKitView.captureImage(new CameraKitView.ImageCallback() {
+            @Override
+            public void onImage(CameraKitView cameraKitView, byte[] bytes) {
+                processBitMap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            }
+        });
     }
 
     /**
@@ -125,6 +99,7 @@ public class ScannerActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("ISBN", barcode.getDisplayValue());
                 setResult(Activity.RESULT_OK, intent);
+                cameraKitView.onStop();
                 finish();
                 return;
             }
@@ -133,4 +108,9 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void finish() {
+        cameraKitView.onStop();
+        super.finish();
+    }
 }

@@ -16,6 +16,8 @@ import com.google.gson.Gson;
 import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
+import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.R;
 
@@ -32,10 +34,12 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
     public static final int REQUEST_CODE = 1;
     private ArrayList<String> requestors;
     private Context context;
+    private Book book;
 
-    public RequestorRecyclerAdapter(Context context, ArrayList<String> requestors) {
+    public RequestorRecyclerAdapter(Context context, ArrayList<String> requestors, Book book) {
         this.context = context;
         this.requestors = requestors;
+        this.book = book;
     }
 
     @NonNull
@@ -47,7 +51,7 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String username = requestors.get(position);
+        final String username = requestors.get(position);
         Log.d(TAG, username );
         holder.userName.setText(username);
 
@@ -56,6 +60,7 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), MapBoxActivity.class);
+                intent.putExtra("username", username);
                 ((Activity) context).startActivityForResult(intent, MapBoxActivity.SET_LOCATION);
             }
         });
@@ -63,7 +68,9 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
         holder.denyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                book.getRequests().denyRequestor(username);
+                DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                databaseHelper.updateBook(book);
             }
         });
     }
@@ -93,7 +100,6 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
             userName = itemView.findViewById(R.id.requestor_username);
             approveButton = itemView.findViewById(R.id.approve_button_id);
             denyButton = itemView.findViewById(R.id.deny_button_id);
-
         }
 
     }
