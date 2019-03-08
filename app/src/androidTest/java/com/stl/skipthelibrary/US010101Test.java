@@ -20,7 +20,6 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-@RunWith(AndroidJUnit4.class)
 public class US010101Test extends ActivityTestRule<MyBooksActivity>{
 
     private Solo solo;

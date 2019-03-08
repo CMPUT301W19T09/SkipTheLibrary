@@ -78,9 +78,9 @@ public class US080101Test extends IntentsTestRule<MyBooksActivity> {
             solo.clickOnView(addImageButton);
 
 
-//            solo.clickOnImageButton(0); //takes us back to my books activity
-//
-//            solo.waitForActivity(MyBooksActivity.class);
-//            solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+            solo.clickOnImageButton(0); //takes us back to my books activity
+
+            solo.waitForActivity(MyBooksActivity.class);
+            solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
         }
 }
