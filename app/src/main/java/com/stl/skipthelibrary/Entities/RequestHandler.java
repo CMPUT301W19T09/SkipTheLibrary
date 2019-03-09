@@ -141,11 +141,19 @@ public class RequestHandler {
     public void acceptRequestor(String user) throws RequestorsUnavailableException {
         if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
         setAcceptedRequestor(user);
-//        for (String s: getRequestors()) {
-//            sendNotificaition()
-//        }
+        requestors.remove(user);
+        denyAllOtherRequestors();
+        getState().setBookStatus(BookStatus.ACCEPTED);
+        getState().setHandoffState(HandoffState.READY_FOR_PICKUP);
+        //sendNotificaition(); to accepted
+    }
+
+    private void denyAllOtherRequestors(){
+        ArrayList<String> copyRequestors = new ArrayList<>(requestors);
+        for (String requestor: copyRequestors) {
+            denyRequestor(requestor);
+        }
         getRequestors().clear();
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     /**
@@ -156,7 +164,7 @@ public class RequestHandler {
         if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
 //        sendNotificaition();
         getRequestors().remove(user);
-        throw new UnsupportedOperationException("Not implemented yet");
+
     }
 
     /**

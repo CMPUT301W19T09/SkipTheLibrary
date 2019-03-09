@@ -47,4 +47,20 @@ public class BookDescriptionTest {
         bookDescription.setRating(new Rating());
         assertEquals(new Rating(), bookDescription.getRating());
     }
+
+    @Test
+    public void testEquals() {
+        BookDescription secondDescription = new BookDescription("title1", "synopsis1", "author1", new Rating());
+        assertFalse(bookDescription.equals(secondDescription));
+        secondDescription.setTitle("test title");
+        assertFalse(bookDescription.equals(secondDescription));
+        secondDescription.setSynopsis("test synopsis");
+        assertFalse(bookDescription.equals(secondDescription));
+        secondDescription.setAuthor("test author");
+        assertFalse(bookDescription.equals(secondDescription));
+        secondDescription.setRating(null);
+        assertTrue(bookDescription.equals(secondDescription));
+        secondDescription = bookDescription;
+        assertTrue(bookDescription.equals(secondDescription));
+    }
 }

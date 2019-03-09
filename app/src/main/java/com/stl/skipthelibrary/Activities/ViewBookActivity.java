@@ -3,10 +3,12 @@ package com.stl.skipthelibrary.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -22,9 +24,12 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.gson.Gson;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
+import com.stl.skipthelibrary.BindersAndAdapters.RequestorRecyclerAdapter;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Enums.BookStatus;
@@ -32,12 +37,16 @@ import com.stl.skipthelibrary.Enums.HandoffState;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
-
+/**
+ * This activity allows both both borrowers and owners to view books.
+ * Owners can also edit books.
+ * Owners and borrowers can also change the state of the book (requesting it, lending it out, etc.)
+ */
 public class ViewBookActivity extends AppCompatActivity {
     final public static String TAG = "ViewBookActivityTag";
     private DatabaseHelper databaseHelper;
 
-    //Book Description Elements & Fields
+
     private Book book;
     private User user;
     private EditText title_element;
@@ -49,43 +58,44 @@ public class ViewBookActivity extends AppCompatActivity {
     private ViewStub stub;
     private View inflated;
     private ChildEventListener childEventListener;
-
-
-    //Owner Requested Fields
-
-
-    //Owner Handoff Elements & Fields
-    private Button button;
-    private View view;
     private String isbn_code;
+    private ProgressDialog progressDialog;
 
-    //Owner Return Elements & Fields
-
-
-    //Borrower Request Elements & Fields
-
-
-    //Borrower Handoff Elements & Fields
-
-
-    //Borrower Return Elements & Fields
-
-
-    //Pending Screen Elements & Fields
-
-
+    /**
+     * Bind UI Elements
+     * @param savedInstanceState: the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Book Description
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        initProgressDialog();
         setContentView(R.layout.book_details);
         databaseHelper = new DatabaseHelper(this);
         stub = findViewById(R.id.generic_bottom_screen_id);
         user = CurrentUser.getInstance();
-        bindBookDescriptionElements();
+        title_element = findViewById(R.id.title_element);
+        author_element = findViewById(R.id.author_element);
+        rating_element = findViewById(R.id.rating_bar_element);
+        synopsis_element = findViewById(R.id.synopsis_element);
+        edit_button = findViewById(R.id.edit_button);
+        save_button = findViewById(R.id.save_button);
+        save_button.setVisibility(View.GONE);
+        edit_button.setVisibility(View.GONE);
+        setBookDescriptionFieldsEditable(false);
+
         getIncomingIntents();
+    }
+    /**
+     * Turn on the progress dialog just incase it takes a while to get the book
+     */
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading..");
+        progressDialog.setTitle("Getting Book");
+        progressDialog.setIndeterminate(false);
+        progressDialog.show();
     }
 
     /**
@@ -144,8 +154,10 @@ public class ViewBookActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * When we recieve a book, load its fields and then setup the edit and save button if needed.
+     */
     private void handleBookArrival() {
-
         fillBookDescriptionFields();
 
         //If user is owner of book, allow for edittability
@@ -179,8 +191,7 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the book status and change the book state and book hand off state when the
-     * hand off is over
+     * Determine which bottom screen to load
      */
     private void selectBottom() {
         BookStatus bookStatus = book.getRequests().getState().getBookStatus();
@@ -218,13 +229,19 @@ public class ViewBookActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Load the correct bottom screen and disable the progress dialog
+     * @param resourcefile: the resource file to load
+     */
     private void setBottomScreen(int resourcefile) {
         stub.setLayoutResource(resourcefile);
         inflated = stub.inflate();
+        progressDialog.hide();
+        progressDialog.dismiss();
     }
 
     /**
-     * Borrower request the book
+     * If the user is a requestor and its thier turn to request the book, allow them to request it
      */
     private void configureBorrowerRequest() {
         Button button = inflated.findViewById(R.id.requestButton);
@@ -240,7 +257,9 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Borrower get the book and scan the book to confirm the book is borrowed
+     * If the user is a borrower and it's their turn to borrow it, let them borrow it by scanning
+     * the book
+     *
      */
     private void configureBorrowerHandoff() {
         inflated.findViewById(R.id.borrowButton).setOnClickListener(new View.OnClickListener() {
@@ -254,9 +273,8 @@ public class ViewBookActivity extends AppCompatActivity {
 
     }
 
-
     /**
-     * Borrower scan the book and return the book
+     * Allow the user to return a book
      */
     private void configureBorrowerReturn() {
         inflated.findViewById(R.id.returnButton).setOnClickListener(new View.OnClickListener() {
@@ -269,19 +287,25 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
-    //Pending Screen
+    /**
+     * Configure the pending sceeen for the borrower screen
+     */
     private void configureBorrowerPending() {
 
     }
 
-    //Owner Requested
-    private void configureOwnerRequested() {
-
+    /**
+     * Configure the requested screen for an owner
+     */
+    private void configureOwnerRequested(){
+        RecyclerView recyclerView = inflated.findViewById(R.id.RequesterRecyclerView);
+        RequestorRecyclerAdapter adapter = new RequestorRecyclerAdapter(this, book.getRequests().getRequestors(), book);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-
     /**
-     * Owner scan the book, and lend the book
+     * Configure the lend screen for an owner
      */
     private void configureOwnerHandOff() {
         inflated.findViewById(R.id.lendButton).setOnClickListener(new View.OnClickListener() {
@@ -295,6 +319,7 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     /**
+     * Configure the returned screen for an owner
      * Owner get the book and scan the book to confirm the book is returned
      */
     private void configureOwnerReturn() {
@@ -308,24 +333,16 @@ public class ViewBookActivity extends AppCompatActivity {
         });
     }
 
-    //Owner Pending
+    /**
+     * Configure the pending screen for an owner
+     */
     private void configureOwnerPending() {
 
     }
 
-    private void bindBookDescriptionElements() {
-        title_element = findViewById(R.id.title_element);
-        author_element = findViewById(R.id.author_element);
-        rating_element = findViewById(R.id.rating_bar_element);
-        synopsis_element = findViewById(R.id.synopsis_element);
-        edit_button = findViewById(R.id.edit_button);
-        save_button = findViewById(R.id.save_button);
-
-        save_button.setVisibility(View.GONE);
-        edit_button.setVisibility(View.GONE);
-        setBookDescriptionFieldsEditable(false);
-    }
-
+    /**
+     * Fill in the details of a book and display it to the user
+     */
     private void fillBookDescriptionFields(){
         title_element.setText(book.getDescription().getTitle());
         author_element.setText(book.getDescription().getAuthor());
@@ -334,6 +351,10 @@ public class ViewBookActivity extends AppCompatActivity {
         synopsis_element.setText(book.getDescription().getSynopsis());
     }
 
+    /**
+     * Toggle the ability of fields to be editable
+     * @param isEditable: should the fields be allowed to be edited
+     */
     private void setBookDescriptionFieldsEditable(Boolean isEditable) {
         if (isEditable) {
             title_element.setEnabled(true);
@@ -348,6 +369,9 @@ public class ViewBookActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update the current book by changing its fields
+     */
     private void updateBookDesriptionFields(){
         book.getDescription().setTitle(title_element.getText().toString());
         book.getDescription().setAuthor(author_element.getText().toString());
@@ -357,10 +381,12 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
 
-    //Owner Requested
-
-
-    //Owner Return and Owner Handoff
+    /**
+     * Handle requests from other activities, this includes the scanner and the location activities
+     * @param requestCode: the request code
+     * @param resultCode: the result code
+     * @param data: the data returned
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
@@ -403,21 +429,23 @@ public class ViewBookActivity extends AppCompatActivity {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
             }
         }
+        if (requestCode == MapBoxActivity.SET_LOCATION){
+            if (resultCode == RESULT_OK){
+                String locationString = data.getStringExtra("Location");
+                String username = data.getStringExtra("username");
+                Gson gson = new Gson();
+                Location location = gson.fromJson(locationString, Location.class);
+                book.getRequests().getState().setLocation(location);
+                book.getRequests().acceptRequestor(username);
+                databaseHelper.updateBook(book);
+            }
+        }
     }
 
 
-    //Borrower Request
-
-
-    //Borrower Handoff
-
-
-    //Borrower Return
-
-
-    //Pending Screen
-
-
+    /**
+     * Remove the listener and then finish
+     */
     @Override
     public void finish() {
         if (childEventListener!=null){
