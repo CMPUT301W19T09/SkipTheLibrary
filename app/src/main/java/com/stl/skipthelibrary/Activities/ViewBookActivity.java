@@ -184,6 +184,7 @@ public class ViewBookActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     setBookDescriptionFieldsEditable(true);
+                    horizontalAdapter.setEditMode(true);
                     save_button.setVisibility(View.VISIBLE);
                     edit_button.setVisibility(View.GONE);
                     addNewBookImageButton.setVisibility(View.VISIBLE);
@@ -208,7 +209,7 @@ public class ViewBookActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    horizontalAdapter.notifyItemRangeChanged(0, horizontalAdapter.getItemCount(), true);
+                    horizontalAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -219,7 +220,7 @@ public class ViewBookActivity extends AppCompatActivity {
                     save_button.setVisibility(View.GONE);
                     edit_button.setVisibility(View.VISIBLE);
                     addNewBookImageButton.setVisibility(View.GONE);
-                    horizontalAdapter.notifyItemRangeChanged(0, horizontalAdapter.getItemCount(), false);
+                    horizontalAdapter.notifyDataSetChanged();
                     updateBookDesriptionFields();
                 }
             });
@@ -381,7 +382,7 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     private void initImageRecyclerView() {
-        horizontalAdapter = new HorizontalAdapter(bookImages, getApplicationContext(), noImages);
+        horizontalAdapter = new HorizontalAdapter(bookImages, getApplicationContext(), noImages, false);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(ViewBookActivity.this, LinearLayoutManager.HORIZONTAL, false);
         images_element.setAdapter(horizontalAdapter);
         images_element.setLayoutManager(horizontalLayoutManager);
@@ -504,7 +505,7 @@ public class ViewBookActivity extends AppCompatActivity {
                     else {
                         noImages.setVisibility(View.GONE);
                     }
-                    horizontalAdapter.notifyItemRangeChanged(0, horizontalAdapter.getItemCount(), true);
+                    horizontalAdapter.notifyDataSetChanged();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

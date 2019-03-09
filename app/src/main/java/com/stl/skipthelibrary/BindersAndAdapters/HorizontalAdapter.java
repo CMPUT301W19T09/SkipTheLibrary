@@ -25,16 +25,18 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
     private List<ViewableImage> bookImages;
     private Context mContext;
     private TextView noImages;
+    private boolean editMode;
 
     /**
      * The constructor
      * @param bookImages: the list of images to display
      * @param context: the current context
      */
-    public HorizontalAdapter(List<ViewableImage> bookImages, Context context, TextView noImages) {
+    public HorizontalAdapter(List<ViewableImage> bookImages, Context context, TextView noImages, boolean editMode) {
         this.bookImages = bookImages;
         this.mContext = context;
         this.noImages = noImages;
+        this.editMode = editMode;
     }
 
     /**
@@ -57,46 +59,27 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
     @Override
     public void onBindViewHolder(@NonNull BookImageViewHolder holder, final int position) {
         holder.bookImage.setImageBitmap(bookImages.get(position).decode());
-        holder.deleteImageButton.setVisibility(View.VISIBLE);
-        holder.deleteImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bookImages.remove(position);
-                if (noImages!=null) {
-                    if(bookImages.size() == 0){
-                        noImages.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        noImages.setVisibility(View.GONE);
-                    }
-                }
-                notifyDataSetChanged();
-            }
-        });
-    }
-    /**
-     * Bind the UI elements and allow deletion of images
-     * @param holder: the viewholder we use to bind data to
-     * @param position: the position of the current element in the list of images
-     * @param editing: whether or not the user is currently editing the book description
-     */
-    @Override
-    public void onBindViewHolder(@NonNull BookImageViewHolder holder, final int position,  List<Object> editing) {
-        holder.bookImage.setImageBitmap(bookImages.get(position).decode());
-        Log.d(TAG, "onBindViewHolder: "+ editing);
-        if(editing.size() != 0 && ((boolean) (editing.get(0)))){
+        if (editMode){
             holder.deleteImageButton.setVisibility(View.VISIBLE);
             holder.deleteImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     bookImages.remove(position);
+                    if (noImages!=null) {
+                        if(bookImages.size() == 0){
+                            noImages.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            noImages.setVisibility(View.GONE);
+                        }
+                    }
                     notifyDataSetChanged();
                 }
             });
-        } else {
+        }
+        else{
             holder.deleteImageButton.setVisibility(View.GONE);
         }
-
     }
 
     /**
@@ -106,5 +89,9 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
     @Override
     public int getItemCount() {
         return bookImages.size();
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 }
