@@ -61,6 +61,9 @@ public class Book{
      * @return true if the user is interested, false otherwise.
      */
     public boolean userIsInterested(String userName){
+        if (userName.equals("")){
+            return false;
+        }
         if (requests == null){
             return false;
         }

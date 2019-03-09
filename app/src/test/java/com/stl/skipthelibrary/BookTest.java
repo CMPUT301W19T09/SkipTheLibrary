@@ -89,10 +89,10 @@ public class BookTest {
     public void testUserIsInterested() {
         book.getRequests().addRequestor("test user");
         assertFalse(book.userIsInterested("test name"));
-        assertFalse(book.userIsInterested(""));
+        assertFalse(book.userIsInterested("test user 2"));
         assertTrue(book.userIsInterested("test user"));
-        book.getRequests().addRequestor("");
-        assertTrue(book.userIsInterested(""));
+        book.getRequests().addRequestor("test user 2");
+        assertTrue(book.userIsInterested("test user 2"));
         book.setRequests(null);
         assertFalse(book.userIsInterested("test user"));
     }
