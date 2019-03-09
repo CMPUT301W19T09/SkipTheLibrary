@@ -1,8 +1,10 @@
 package com.stl.skipthelibrary;
 
 import android.app.Activity;
+import android.app.NativeActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -13,11 +15,13 @@ import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.Activities.ScannerActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.Notification;
 import com.stl.skipthelibrary.Entities.State;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 
@@ -61,8 +65,8 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
     }
 
     @Rule
-    public ActivityTestRule<MyBooksActivity> rule =
-            new ActivityTestRule<>(MyBooksActivity.class, false, true);
+    public ActivityTestRule<LoginActivity> rule =
+            new ActivityTestRule<>(LoginActivity.class, false, true);
 
     @Before
     public void setUp() throws Exception {
@@ -70,10 +74,25 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
     }
 
     @Test
-    public void testSingleKeywordTitleSearch() throws Exception {
+    public void testScanningFlow() throws Exception {
+        
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.EmailEditText), "Felix@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.PasswordEditText), "123456");
+        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
 
-//        TODO: Uncomment this once solve the firebase problem
+
+        BottomNavigationView view;
+        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(view.findViewById(R.id.profile));
+        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+
+        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(view.findViewById(R.id.my_books));
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+
         solo.clickOnView(solo.getView(R.id.addBookButton));
 
         solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
@@ -84,24 +103,11 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.clickOnView(solo.getView(R.id.SaveBookButton));
 
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.BookListItemRightArrow));
+        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.goBack();
         deleteBook();
-//        solo.clickOnView(solo.getView(R.id.BookListItemRightArrow));
-//        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-
-//        BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
-//        navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
-//        navigation.setSelectedItemId(R.id.my_books);
-
-        BottomNavigationView view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-        view.setSelectedItemId(R.id.profile);
-        solo.getView(view).callOnClick();
-
-
-//        solo.clickOnView(solo.getView(R.id.bottom_navigation));
-//        solo.sleep(2000);
-        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
-        solo.clickOnView(solo.getView(R.id.logoutButton));
-        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
 
     }
