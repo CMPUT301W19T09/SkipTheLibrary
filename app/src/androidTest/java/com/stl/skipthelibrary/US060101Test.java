@@ -37,6 +37,7 @@ import static junit.framework.TestCase.assertTrue;
 
 public class US060101Test extends ActivityTestRule<ViewBookActivity> {
     private Solo solo;
+    private BottomNavigationView view;
     private DatabaseHelper databaseHelper;
         public US060101Test() {
 
@@ -75,39 +76,81 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
 
     @Test
     public void testScanningFlow() throws Exception {
-        
+
+//        /**
+//         * Test Login functionality
+//         */
+//        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+//        solo.enterText((EditText) solo.getView(R.id.EmailEditText), "Felix@gmail.com");
+//        solo.enterText((EditText) solo.getView(R.id.PasswordEditText), "123456");
+//        solo.clickOnView(solo.getView(R.id.SignInButton));
+//        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
+//
+//
+//        /**
+//         * Test AddBook functionality
+//         */
+//
+//        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+//        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+//        solo.clickOnView(view.findViewById(R.id.my_books));
+//        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+//
+//        solo.clickOnView(solo.getView(R.id.addBookButton));
+//
+//        solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
+//        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Felix");
+//        solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Felix");
+//        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "1234567890123");
+//        solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Felix");
+//        solo.clickOnView(solo.getView(R.id.SaveBookButton));
+//
+//        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+//
+//        solo.clickOnView(solo.getView(R.id.BookListItemRightArrow));
+//        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+//        solo.goBack();
+//
+//        /**
+//         * Test Profile functionality
+//         */
+//        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+//        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+//        solo.clickOnView(view.findViewById(R.id.profile));
+//        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+//
+//        solo.clickOnView(solo.getView(R.id.logoutButton));
+//        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+
+        /**
+         * Goes into another account
+         */
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.EmailEditText), "Felix@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.EmailEditText), "Felix2@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.PasswordEditText), "123456");
+        solo.clickOnView(solo.getView(R.id.SignInButton));
         solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
 
-
-        BottomNavigationView view;
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.clickOnView(view.findViewById(R.id.profile));
-        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+        solo.clickOnView(view.findViewById(R.id.borrow));
+        solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
 
-        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.clickOnView(view.findViewById(R.id.my_books));
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+        solo.clickOnView(solo.getView(R.id.searchBookButton));
+        solo.waitForActivity(SearchActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
+        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Felix");
+        assertTrue(solo.waitForText("Felix", 2, 2000));
 
-        solo.clickOnView(solo.getView(R.id.addBookButton));
-
-        solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Felix");
-        solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Felix");
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "1234567890123");
-        solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Felix");
-        solo.clickOnView(solo.getView(R.id.SaveBookButton));
-
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
-
-        solo.clickOnView(solo.getView(R.id.BookListItemRightArrow));
+//        RecyclerView recyclerView = solo.getView(R.id.SearchRecyclerView);
+//        recyclerView.getChildAt(0);
+        solo.clickOnView(solo.getView(R.id.SearchRecyclerView));
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-        solo.goBack();
-        deleteBook();
+        
+
+
+
+//        deleteBook();
 
 
     }
