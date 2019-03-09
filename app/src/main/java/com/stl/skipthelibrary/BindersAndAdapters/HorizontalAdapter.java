@@ -29,8 +29,10 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
 
     /**
      * The constructor
-     * @param bookImages: the list of images to display
+     * @param bookImages: the list of images
      * @param context: the current context
+     * @param noImages: the no image textview to display
+     * @param editMode: whether we are in editing mode or not
      */
     public HorizontalAdapter(List<ViewableImage> bookImages, Context context, TextView noImages, boolean editMode) {
         this.bookImages = bookImages;
