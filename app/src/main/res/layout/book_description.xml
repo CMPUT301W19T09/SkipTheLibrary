@@ -69,7 +69,7 @@
             android:layout_marginVertical="8dp"
             android:background="@color/white"
             tools:layout_editor_absoluteY="354dp"
-            app:layout_constraintTop_toBottomOf="@id/bookImageRecyclerview"/>
+            app:layout_constraintTop_toBottomOf="@id/addNewBookImageButton"/>
 
         <TextView
             android:id="@+id/rating_header"
@@ -82,7 +82,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bookImageRecyclerview"
+            app:layout_constraintTop_toBottomOf="@+id/rating_top_divider"
             tools:layout_editor_absoluteY="354dp" />
 
 
@@ -145,7 +145,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/rating_top_divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -165,7 +164,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/author_element" />
+            app:layout_constraintTop_toBottomOf="@+id/bookImageRecyclerview" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addNewBookImageButton"
@@ -179,14 +178,14 @@
             android:text="@string/addImage"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:backgroundTint="@color/light_grey"
             app:cornerRadius="40dp"
             app:icon="@drawable/ic_add_white_24dp"
             app:layout_constraintBottom_toTopOf="@+id/rating_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bookImageRecyclerview" />
+            app:layout_constraintTop_toBottomOf="@+id/noImageTextView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

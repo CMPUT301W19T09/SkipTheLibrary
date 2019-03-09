@@ -33,7 +33,7 @@ public class Book{
      * @param images: an arraylist of images of the book
      */
     public Book(BookDescription description, String ISBN, String ownerUserName, ArrayList<ViewableImage> images) {
-        this(ISBN, description, ownerUserName,new RequestHandler(), images, new Rating());
+        this(ISBN, description, ownerUserName, new RequestHandler(), images, new Rating());
     }
 
     /**
@@ -61,6 +61,9 @@ public class Book{
      * @return true if the user is interested, false otherwise.
      */
     public boolean userIsInterested(String userName){
+        if (userName.equals("")){
+            return false;
+        }
         if (requests == null){
             return false;
         }
@@ -90,6 +93,14 @@ public class Book{
      */
     public void setISBN(String ISBN) {
         this.ISBN = ISBN;
+    }
+
+    /**
+     * Get the book's Unique ID
+     * @return the book's Unique ID
+     */
+    public String getUuid() {
+        return uuid;
     }
 
     /**
@@ -137,6 +148,9 @@ public class Book{
      * @return an arraylist of images the book has
      */
     public ArrayList<ViewableImage> getImages() {
+        if (images == null){
+            return new ArrayList<>();
+        }
         return images;
     }
 
@@ -179,14 +193,6 @@ public class Book{
      */
     public void setOwnerUserName(String ownerUserName) {
         this.ownerUserName = ownerUserName;
-    }
-
-    /**
-     * Get the book's Unique ID
-     * @return the book's Unique ID
-     */
-    public String getUuid() {
-        return uuid;
     }
 
     /**

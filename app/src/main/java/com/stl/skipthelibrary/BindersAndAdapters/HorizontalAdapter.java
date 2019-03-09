@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Entities.ViewableImage;
@@ -23,15 +24,17 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
 
     private List<ViewableImage> bookImages;
     private Context mContext;
+    private TextView noImages;
 
     /**
      * The constructor
      * @param bookImages: the list of images to display
      * @param context: the current context
      */
-    public HorizontalAdapter(List<ViewableImage> bookImages, Context context) {
+    public HorizontalAdapter(List<ViewableImage> bookImages, Context context, TextView noImages) {
         this.bookImages = bookImages;
         this.mContext = context;
+        this.noImages = noImages;
     }
 
     /**
@@ -54,10 +57,19 @@ public class HorizontalAdapter extends RecyclerView.Adapter<BookImageViewHolder>
     @Override
     public void onBindViewHolder(@NonNull BookImageViewHolder holder, final int position) {
         holder.bookImage.setImageBitmap(bookImages.get(position).decode());
+        holder.deleteImageButton.setVisibility(View.VISIBLE);
         holder.deleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bookImages.remove(position);
+                if (noImages!=null) {
+                    if(bookImages.size() == 0){
+                        noImages.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        noImages.setVisibility(View.GONE);
+                    }
+                }
                 notifyDataSetChanged();
             }
         });

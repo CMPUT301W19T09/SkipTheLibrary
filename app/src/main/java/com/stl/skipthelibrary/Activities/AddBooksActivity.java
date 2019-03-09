@@ -67,7 +67,7 @@ public class AddBooksActivity extends AppCompatActivity {
 
         // setup recyclerview
         bookImageRecyclerview = findViewById(R.id.bookImagesRecyclerview);
-        horizontalAdapter=new HorizontalAdapter(bookImages, getApplicationContext());
+        horizontalAdapter=new HorizontalAdapter(bookImages, getApplicationContext(), null);
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(AddBooksActivity.this, LinearLayoutManager.HORIZONTAL, false);
         bookImageRecyclerview.setLayoutManager(horizontalLayoutManager);
         bookImageRecyclerview.setAdapter(horizontalAdapter);

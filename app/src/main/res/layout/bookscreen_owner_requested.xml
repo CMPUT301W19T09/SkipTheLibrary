@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/generic_bottom_layout"
-    android:background="@color/dark_grey">
+    >
+
 
     <TextView
+        android:id="@+id/RequestersHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/requests"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/RequesterRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RequesterRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Owner views all requests and approves or denies them here"
-        android:layout_margin="16dp"
-        android:background="@color/light_grey" />
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RequestersHeading"
+        tools:listitem="@layout/requestor_list_item" />
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

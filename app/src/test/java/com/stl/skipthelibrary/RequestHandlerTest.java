@@ -114,7 +114,7 @@ public class RequestHandlerTest {
     public void testDenyRequestor(){
         String deniedRequest = UUID.randomUUID().toString();
         String succeedRequest = UUID.randomUUID().toString();
-
+        requestHandler.getState().setBookStatus(BookStatus.REQUESTED);
         requestHandler.addRequestor(deniedRequest);
         requestHandler.addRequestor(succeedRequest);
 
@@ -125,7 +125,7 @@ public class RequestHandlerTest {
         assertEquals(requestHandler.getRequestors().size(),1);
         assertEquals(requestHandler.getRequestors().get(0),succeedRequest);
         assertEquals(requestHandler.getState().getBookStatus(),BookStatus.REQUESTED);
-        assertEquals(requestHandler.getState().getHandoffState(),null);
+        assertEquals(requestHandler.getState().getHandoffState(),HandoffState.NULL_STATE);
     }
 
 }

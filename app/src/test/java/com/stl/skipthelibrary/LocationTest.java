@@ -37,4 +37,16 @@ public class LocationTest {
         location.setLongitude(-69.420);
         assertEquals(-69.420, location.getLongitude(),0);
     }
+
+    @Test
+    public void testEquals() {
+        Location secondLocation = new Location(testLat, testLon);
+        assertTrue(secondLocation.equals(location));
+        secondLocation.setLatitude(5.2);
+        assertFalse(secondLocation.equals(location));
+        secondLocation = location;
+        assertTrue(secondLocation.equals(location));
+        secondLocation = null;
+        assertFalse(location.equals(secondLocation));
+    }
 }
