@@ -29,7 +29,7 @@ public class BookTest {
     public void testConstructor(){
          assertEquals("test title", book.getDescription().getTitle());
          assertEquals("testUserName", book.getOwnerUserName());
-         assertEquals(null, book.getImages());
+         assertTrue(book.getImages().isEmpty());
     }
 
     @Test

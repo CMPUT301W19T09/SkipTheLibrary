@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ public class ScannerActivity extends AppCompatActivity {
     public static final int SCAN = 4;
 
     private Uri imageUri;
+    private Button scanButton;
 
     /**
      * Bind UI elements and setup listners and begin scanning
@@ -51,6 +54,8 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        scanButton = findViewById(R.id.scanner_scan_button);
     }
 
     /**
@@ -91,6 +96,7 @@ public class ScannerActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(ScannerActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
+
                     }
         });
     }
@@ -103,6 +109,7 @@ public class ScannerActivity extends AppCompatActivity {
     private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
         if (firebaseVisionBarcodes.size() == 0){
             Toast.makeText(this, "Nothing found to scan. Please try again", Toast.LENGTH_SHORT).show();
+            scanButton.performClick();
         }
 
         for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes){
@@ -134,6 +141,9 @@ public class ScannerActivity extends AppCompatActivity {
                 try {
                     Bitmap thumbnail = MediaStore.Images.Media.getBitmap(
                             getContentResolver(), imageUri);
+                    getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            MediaStore.Images.ImageColumns.DATA + "=?" ,
+                            new String[]{ getRealPathFromURI(imageUri) });
                     Toast.makeText(getApplicationContext(),"RECEIVED SOMETHING", Toast.LENGTH_SHORT).show();
                     processBitMap(thumbnail);
                 } catch (Exception e) {
@@ -146,6 +156,24 @@ public class ScannerActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "onActivityResult: Error in picking image");
         }
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    /**
+     * On back pressed go to MyBooksActivity.
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MyBooksActivity.class);
+        startActivity(intent);
     }
 
 }
