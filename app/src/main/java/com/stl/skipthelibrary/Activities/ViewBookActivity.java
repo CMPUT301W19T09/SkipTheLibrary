@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.net.Uri;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,24 +20,30 @@ import android.widget.RatingBar;
 
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
+import com.stl.skipthelibrary.BindersAndAdapters.HorizontalAdapter;
 import com.stl.skipthelibrary.BindersAndAdapters.RequestorRecyclerAdapter;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.User;
+import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
+import java.io.IOException;
+import java.util.ArrayList;
 /**
  * This activity allows both both borrowers and owners to view books.
  * Owners can also edit books.
@@ -53,11 +60,16 @@ public class ViewBookActivity extends AppCompatActivity {
     private EditText author_element;
     private RatingBar rating_element;
     private EditText synopsis_element;
+    private RecyclerView images_element;
+    private TextView noImages;
+    private ArrayList<ViewableImage> bookImages  = new ArrayList<>();
+    private HorizontalAdapter horizontalAdapter;
     private ImageButton edit_button;
     private ImageButton save_button;
     private ViewStub stub;
     private View inflated;
     private ChildEventListener childEventListener;
+    private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
 
@@ -83,6 +95,9 @@ public class ViewBookActivity extends AppCompatActivity {
         save_button = findViewById(R.id.save_button);
         save_button.setVisibility(View.GONE);
         edit_button.setVisibility(View.GONE);
+        noImages = findViewById(R.id.noImageTextView);
+        addNewBookImageButton = findViewById(R.id.addNewBookImageButton);
+        images_element = findViewById(R.id.bookImageRecyclerview);
         setBookDescriptionFieldsEditable(false);
 
         getIncomingIntents();
@@ -169,8 +184,32 @@ public class ViewBookActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     setBookDescriptionFieldsEditable(true);
+                    horizontalAdapter.setEditMode(true);
                     save_button.setVisibility(View.VISIBLE);
                     edit_button.setVisibility(View.GONE);
+                    addNewBookImageButton.setVisibility(View.VISIBLE);
+                    addNewBookImageButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (bookImages.size() < 5) {
+                                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                getIntent.setType("image/*");
+
+                                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                pickIntent.setType("image/*");
+
+                                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                                startActivityForResult(chooserIntent, AddBooksActivity.PICK_BOOK_IMAGE);
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "Maximum number of images added", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    });
+                    horizontalAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -180,6 +219,8 @@ public class ViewBookActivity extends AppCompatActivity {
                     setBookDescriptionFieldsEditable(false);
                     save_button.setVisibility(View.GONE);
                     edit_button.setVisibility(View.VISIBLE);
+                    addNewBookImageButton.setVisibility(View.GONE);
+                    horizontalAdapter.notifyDataSetChanged();
                     updateBookDesriptionFields();
                 }
             });
@@ -340,6 +381,13 @@ public class ViewBookActivity extends AppCompatActivity {
 
     }
 
+    private void initImageRecyclerView() {
+        horizontalAdapter = new HorizontalAdapter(bookImages, getApplicationContext(), noImages, false);
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(ViewBookActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        images_element.setAdapter(horizontalAdapter);
+        images_element.setLayoutManager(horizontalLayoutManager);
+    }
+
     /**
      * Fill in the details of a book and display it to the user
      */
@@ -349,6 +397,17 @@ public class ViewBookActivity extends AppCompatActivity {
         rating_element.setMax(book.getRating().getMaxRating());
         rating_element.setNumStars((int) Math.round(book.getRating().getAverageRating()));
         synopsis_element.setText(book.getDescription().getSynopsis());
+        bookImages.addAll(book.getImages());
+        Log.d("BOOK PICS: ", bookImages.toString());
+        if(book.getImages().size() == 0){
+            noImages.setVisibility(View.VISIBLE);
+        }
+        else {
+            noImages.setVisibility(View.GONE);
+        }
+
+        initImageRecyclerView();
+        horizontalAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -377,6 +436,7 @@ public class ViewBookActivity extends AppCompatActivity {
         book.getDescription().setAuthor(author_element.getText().toString());
         book.getDescription().setSynopsis(synopsis_element.getText().toString());
         book.getRating().addRating((double) rating_element.getNumStars());
+        book.setImages(bookImages);
         databaseHelper.updateBook(book);
     }
 
@@ -393,7 +453,6 @@ public class ViewBookActivity extends AppCompatActivity {
         if (requestCode == ScannerActivity.SCAN_BOOK) {
             if (resultCode == RESULT_OK) {
                 isbn_code = data.getStringExtra("ISBN");
-
                 if (isbn_code.equals(book.getISBN()) && CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
                     switch (book.getRequests().getState().getHandoffState()) {
                         case READY_FOR_PICKUP:
@@ -407,7 +466,8 @@ public class ViewBookActivity extends AppCompatActivity {
                             databaseHelper.updateBook(book);
                             break;
                     }
-                }else if(isbn_code.equals(book.getISBN()) && !CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
+                }
+                else if(isbn_code.equals(book.getISBN()) && !CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
                     switch (book.getRequests().getState().getHandoffState()) {
                         case OWNER_LENT:
                             book.getRequests().confirmBorrowed();
@@ -420,16 +480,41 @@ public class ViewBookActivity extends AppCompatActivity {
                             databaseHelper.updateBook(book);
                             break;
                     }
-                }else{
+                }
+                else{
                     Toast.makeText(this, "Scanning ISBN does not Match the Book ISBN", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Book ISBN not match the scanning ISBN");
                 }
 
-            } else {
+            }
+            else {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
             }
         }
-        if (requestCode == MapBoxActivity.SET_LOCATION){
+        else if(requestCode == AddBooksActivity.PICK_BOOK_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                // The user picked a photo.
+                // The Intent's data Uri identifies which photo was selected.
+                Uri imageUri = data.getData();
+                try {
+                    ViewableImage newBookImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
+                    bookImages.add(newBookImage);
+                    if(bookImages.size() == 0){
+                        noImages.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        noImages.setVisibility(View.GONE);
+                    }
+                    horizontalAdapter.notifyDataSetChanged();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Log.d(TAG, "onActivityResult: Error in picking image");
+            }
+        }
+        else if (requestCode == MapBoxActivity.SET_LOCATION){
             if (resultCode == RESULT_OK){
                 String locationString = data.getStringExtra("Location");
                 String username = data.getStringExtra("username");

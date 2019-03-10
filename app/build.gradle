@@ -61,7 +61,6 @@ dependencies {
     //For UI Testing
     implementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
-
 }
 
 // Test Logging

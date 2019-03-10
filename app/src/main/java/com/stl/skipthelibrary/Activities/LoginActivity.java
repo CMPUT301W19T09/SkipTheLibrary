@@ -90,6 +90,9 @@ public class LoginActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED;
         boolean cameraNeeded = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED;
+        boolean storageNeeded = ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED;
 
         ArrayList<String> permissions = new ArrayList<>();
 
@@ -101,6 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         }
         if (cameraNeeded){
             permissions.add(Manifest.permission.CAMERA);
+        }
+        if (storageNeeded){
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
         if (permissions.size() > 0){
