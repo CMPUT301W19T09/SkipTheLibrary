@@ -148,6 +148,9 @@ public class Book{
      * @return an arraylist of images the book has
      */
     public ArrayList<ViewableImage> getImages() {
+        if (images == null){
+            return new ArrayList<>();
+        }
         return images;
     }
 

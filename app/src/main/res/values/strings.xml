@@ -57,4 +57,5 @@
     <string name="return_button">Return</string>
     <string name="lend_button">lend</string>
     <string name="returned_button">returned</string>
+    <string name="noImageText">This book has no images</string>
 </resources>

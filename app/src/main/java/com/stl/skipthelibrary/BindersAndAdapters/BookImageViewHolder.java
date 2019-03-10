@@ -24,6 +24,7 @@ public class BookImageViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         bookImage = itemView.findViewById(R.id.bookImage);
         deleteImageButton = itemView.findViewById(R.id.deleteBookImageButton);
+        deleteImageButton.setVisibility(View.GONE);
     }
 
 }
