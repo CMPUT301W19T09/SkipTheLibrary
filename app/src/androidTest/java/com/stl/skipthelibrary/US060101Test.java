@@ -14,6 +14,7 @@ import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
+import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
@@ -39,10 +40,11 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
     private Solo solo;
     private BottomNavigationView view;
     private DatabaseHelper databaseHelper;
-        public US060101Test() {
 
-            super(ViewBookActivity.class, false, false);
-        }
+    public US060101Test() {
+
+        super(ViewBookActivity.class, false, false);
+    }
 
     private class MockScanner extends ScannerActivity {
         private String isbn;
@@ -64,6 +66,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
             this.isbn = isbn;
         }
     }
+
 
     @Rule
     public ActivityTestRule<LoginActivity> rule =
@@ -123,7 +126,9 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Felix");
         assertTrue(solo.waitForText("Felix", 2, 2000));
 
-        solo.clickOnView(solo.getView(R.id.SearchRecyclerView));
+
+        RecyclerView searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
+        solo.clickOnView(searchBooksList.getChildAt(0));
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
         solo.clickOnView(solo.getView(R.id.requestButton));
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
@@ -138,10 +143,22 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         logInAccount("Felix@gmail.com", "123456");
         enterMyBookActivity();
         viewBookFromMybookActivity();
-        solo.goBack();
-        deleteBook();
+        RecyclerView requstedBookList = (RecyclerView) solo.getView(R.id.RequesterRecyclerView);
+        solo.clickOnView(requstedBookList.getChildAt(0).findViewById(R.id.approve_button_id));
+        solo.assertCurrentActivity("Wrong Activity", MapBoxActivity.class);
+        solo.clickOnView(solo.getView(R.id.select_location_submit));
+        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
 
-        
+        viewBookFromMybookActivity();
+        solo.clickOnView(solo.getView(R.id.lendButton));
+        solo.assertCurrentActivity("Wrong Activity", ScannerActivity.class);
+
+//        MockScanner mockScanner = new MockScanner();//TODO: someone please correct this
+//        mockScanner.setIsbn("1234567890123");
+
+        solo.clickOnView(solo.getView(R.id.scanner_scan_button));
+//        deleteBook();
+
 
 
     }
@@ -197,7 +214,8 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
 
     public void viewBookFromMybookActivity(){
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
-        solo.clickOnView(solo.getView(R.id.BookListItemRightArrow));
+        RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
+        solo.clickOnView(myBooksList.getChildAt(0).findViewById(R.id.BookListItemRightArrow));
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
     }
 }
