@@ -5,27 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.ScannerActivity">
-    <com.camerakit.CameraKitView
-        android:id="@+id/scanner_camera_view"
-        android:layout_width="match_parent"
-        app:camera_permissions="camera"
-        android:layout_height="match_parent"
-        app:camera_flash="auto"
-        app:camera_facing="back"
-        app:camera_focus="auto"
-        android:focusableInTouchMode="true"
-        app:camera_imageJpegQuality="100"
-        app:camera_imageMegaPixels="2"
-        />
-    <Button
-        android:id="@+id/scanner_scan_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_height="wrap_content"
-        android:text="@string/scan_now"
-        android:onClick="confirmScanOnClick"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
