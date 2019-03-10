@@ -43,7 +43,6 @@ public class ScannerActivity extends AppCompatActivity {
     public static final int SCAN = 4;
 
     private Uri imageUri;
-    private Button scanButton;
 
     /**
      * Bind UI elements and setup listners and begin scanning
@@ -54,15 +53,13 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        scanButton = findViewById(R.id.scanner_scan_button);
+        startScan();
     }
 
     /**
-     * When the scan now button is pressed we the current image is captured
-     * @param view: the scan now button
+     * Start the scan
      */
-    public void confirmScanOnClick(View view) {
+    public void startScan() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
@@ -109,7 +106,7 @@ public class ScannerActivity extends AppCompatActivity {
     private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
         if (firebaseVisionBarcodes.size() == 0){
             Toast.makeText(this, "Nothing found to scan. Please try again", Toast.LENGTH_SHORT).show();
-            scanButton.performClick();
+            startScan();
         }
 
         for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes){
@@ -144,7 +141,6 @@ public class ScannerActivity extends AppCompatActivity {
                     getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                             MediaStore.Images.ImageColumns.DATA + "=?" ,
                             new String[]{ getRealPathFromURI(imageUri) });
-                    Toast.makeText(getApplicationContext(),"RECEIVED SOMETHING", Toast.LENGTH_SHORT).show();
                     processBitMap(thumbnail);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -152,6 +148,7 @@ public class ScannerActivity extends AppCompatActivity {
 
             } else {
                 Log.d(TAG, "onActivityResult: Something went wrong in scan");
+                finish();
             }
         } else {
             Log.d(TAG, "onActivityResult: Error in picking image");
