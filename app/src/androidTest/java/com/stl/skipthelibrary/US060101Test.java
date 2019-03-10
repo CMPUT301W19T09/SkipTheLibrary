@@ -156,7 +156,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
 //        MockScanner mockScanner = new MockScanner();//TODO: someone please correct this
 //        mockScanner.setIsbn("1234567890123");
 
-        solo.clickOnView(solo.getView(R.id.scanner_scan_button));
+//        solo.clickOnView(solo.getView(R.id.scanner_scan_button));
 //        deleteBook();
 
 
