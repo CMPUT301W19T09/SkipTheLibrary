@@ -1,8 +1,5 @@
 package com.stl.skipthelibrary;
 
-import android.app.Activity;
-import android.graphics.Point;
-import android.graphics.PointF;
 import android.view.View;
 import android.widget.EditText;
 
@@ -10,10 +7,14 @@ import android.widget.EditText;
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
@@ -26,9 +27,11 @@ import static junit.framework.TestCase.assertTrue;
 public class US010701Test extends ActivityTestRule<MyBooksActivity> {
 
     private Solo solo;
+    private UITestHelper uiTestHelper;
 
-    public US010701Test() {
+    public US010701Test() throws InterruptedException {
         super(MyBooksActivity.class, true, true);
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
     }
 
     @Rule
@@ -38,14 +41,7 @@ public class US010701Test extends ActivityTestRule<MyBooksActivity> {
 
     @Before
     public void setUp() throws Exception{
-
         solo = new Solo(getInstrumentation(), rule.getActivity());
-    }
-
-    @Test
-    public void start() throws Exception{
-
-        Activity activity = rule.getActivity();
     }
 
     @Test
@@ -89,6 +85,11 @@ public class US010701Test extends ActivityTestRule<MyBooksActivity> {
         solo.sleep(1000);
 
         assertTrue(myBooksList.getAdapter().getItemCount() == 0);
-
     }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
+    }
+
 }

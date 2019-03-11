@@ -2,15 +2,22 @@ package com.stl.skipthelibrary;
 
 import android.app.Activity;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
+import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.BookDescription;
+import com.stl.skipthelibrary.Entities.Rating;
+import com.stl.skipthelibrary.Entities.RequestHandler;
+import com.stl.skipthelibrary.Entities.State;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import androidx.test.rule.ActivityTestRule;
 
@@ -20,9 +27,29 @@ import static junit.framework.TestCase.assertTrue;
 public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
     private Solo solo;
+    private static UITestHelper uiTestHelper;
 
-    public US030101Test() {
+    public US030101Test() throws InterruptedException {
         super(BorrowersBooksActivity.class, false, true);
+
+        RequestHandler requests = new RequestHandler(new State());
+        
+        BookDescription book1Description = new BookDescription("SpecificTitleToTest", "Test book", "Test Author", new Rating());
+        Book book1 = new Book("123-456-7891011", book1Description, "testyBoi", requests, null, new Rating());
+        BookDescription book2Description = new BookDescription("Test Title", "Test book", "SpecificAuthorToTest", new Rating());
+        Book book2 = new Book("123-456-7891012", book2Description, "testyBoi", requests, null, new Rating());
+        BookDescription book3Description = new BookDescription("Test Title", "SpecificDescriptionToTest", "Test Author", new Rating());
+        Book book3 = new Book("123-456-7891013", book3Description, "testyBoi", requests, null, new Rating());
+        BookDescription book4Description = new BookDescription("Artemis Fowl", "Test book", "Neil Young", new Rating());
+        Book book4 = new Book("123-456-7891014", book4Description, "testyBoi", requests, null, new Rating());
+
+        ArrayList<Book> books = new ArrayList<>();
+        books.add(book1);
+        books.add(book2);
+        books.add(book3);
+        books.add(book4);
+
+        uiTestHelper = new UITestHelper(true, true, books);
     }
 
     @Rule
@@ -102,6 +129,11 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
         assertTrue(solo.waitForText("Artemis Fowl"));
         assertTrue(solo.waitForText("Neil Young"));
-
     }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteUsersBooks("testyBoi");
+    }
+
 }
