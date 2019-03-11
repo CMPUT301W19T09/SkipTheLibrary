@@ -25,7 +25,8 @@ import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
 
 /**
- * This activity allows a user to set a location on a map
+ * This activity allows a user to set a location on a map. Adapted from
+ * https://blog.mapbox.com/how-to-build-a-location-picker-for-your-app-8e61be7fc9cc
  */
 public class MapBoxActivity extends AppCompatActivity {
     public static final int SET_LOCATION = 1;

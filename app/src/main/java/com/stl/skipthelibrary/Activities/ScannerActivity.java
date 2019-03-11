@@ -72,7 +72,7 @@ public class ScannerActivity extends AppCompatActivity {
 
     /**
      * Processes the image received from the camera. Detect any barcodes found and send them to be
-     * processed.
+     * processed. Adapted from https://firebase.google.com/docs/ml-kit/android/read-barcodes
      * @param bitmap: the bitmap to process
      */
     private void processBitMap(Bitmap bitmap){
@@ -100,7 +100,8 @@ public class ScannerActivity extends AppCompatActivity {
 
     /**
      * Process the result of the barcode, if the ISBN if found return the ISBN code to the calling
-     * activity. Otherwise, display the correct error message.
+     * activity. Otherwise, display the correct error message. Adapted from
+     * https://firebase.google.com/docs/ml-kit/android/read-barcodes
      * @param firebaseVisionBarcodes: the list of barcodes
      */
     private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
