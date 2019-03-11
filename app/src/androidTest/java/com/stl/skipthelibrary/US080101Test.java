@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.Entities.Book;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,6 +22,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -36,8 +38,9 @@ public class US080101Test extends IntentsTestRule<MyBooksActivity> {
 
         private Solo solo;
 
-        public US080101Test() {
+        public US080101Test() throws InterruptedException {
             super(MyBooksActivity.class, true, true);
+            UITestHelper uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
         }
 
 
