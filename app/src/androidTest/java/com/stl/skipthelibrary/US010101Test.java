@@ -5,6 +5,7 @@ import android.widget.EditText;
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 
 import org.junit.After;
@@ -40,7 +41,7 @@ public class US010101Test extends ActivityTestRule<MyBooksActivity>{
 
     @After
     public void tearDown() throws InterruptedException {
-        uiTestHelper.deleteBooks();
+        uiTestHelper.finish();
         solo.finishOpenedActivities();
     }
 

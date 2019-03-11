@@ -239,6 +239,7 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
     @After
     public void tearDown() throws InterruptedException {
+        uiTestHelper.finish();
         solo.finishOpenedActivities();
     }
 
@@ -270,7 +271,9 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
     public void logOutAccount(){
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.sleep(1000);
         solo.clickOnView(view.findViewById(R.id.profile));
+        solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
         solo.clickOnView(solo.getView(R.id.logoutButton));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);

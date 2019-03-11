@@ -83,7 +83,7 @@ public class US010401Test extends ActivityTestRule<MyBooksActivity> {
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
-        uiTestHelper.deleteBooks();
+        uiTestHelper.finish();
     }
 
     public void addBookWithoutImages(){

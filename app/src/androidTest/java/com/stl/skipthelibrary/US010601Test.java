@@ -53,7 +53,7 @@ public class US010601Test extends ActivityTestRule<MyBooksActivity> {
 
     @After
     public void tearDown() throws InterruptedException {
-        uiTestHelper.deleteBooks();
+        uiTestHelper.finish();
         solo.finishOpenedActivities();
     }
 
