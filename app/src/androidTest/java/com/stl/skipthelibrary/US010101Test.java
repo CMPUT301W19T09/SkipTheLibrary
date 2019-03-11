@@ -34,7 +34,6 @@ public class US010101Test extends ActivityTestRule<MyBooksActivity>{
 
     @Before
     public void setUp() throws Exception{
-
         solo = new Solo(getInstrumentation(), rule.getActivity());
     }
 
