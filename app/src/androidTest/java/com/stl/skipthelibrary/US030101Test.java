@@ -63,11 +63,6 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
     }
 
     @Test
-    public void start() throws Exception {
-        Activity activity = rule.getActivity();
-    }
-
-    @Test
     public void testSingleKeywordTitleSearch() throws Exception {
 
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);

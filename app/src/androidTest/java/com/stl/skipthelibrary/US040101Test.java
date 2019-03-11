@@ -66,11 +66,6 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
     }
 
     @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
-    }
-
-    @Test
     public void testRequestBook(){
 
         solo.sleep(1000);
