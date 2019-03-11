@@ -67,7 +67,7 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         super(LoginActivity.class, true, true);
 
         RequestHandler requests = new RequestHandler(new State());
-        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author", new Rating());
+        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author");
         Book book1 = new Book(isbn, book1Description, uiTestHelper.userName, requests, null, new Rating());
 
         ArrayList<Book> books = new ArrayList<>();
