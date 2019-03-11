@@ -18,6 +18,7 @@ import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
+import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.Notification;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
@@ -27,6 +28,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,9 +41,12 @@ import static org.junit.Assert.assertEquals;
 public class US040101Test extends ActivityTestRule<LoginActivity>{
 
     private Solo solo;
+    private UITestHelper uiTestHelper;
 
-    public US040101Test() {
+    public US040101Test() throws InterruptedException{
         super(LoginActivity.class, false, true);
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
+
     }
 
     @Rule
@@ -57,6 +62,7 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
+        uiTestHelper.deleteBooks();
     }
 
     @Test
