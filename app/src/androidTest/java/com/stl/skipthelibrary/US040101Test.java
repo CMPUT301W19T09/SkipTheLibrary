@@ -154,6 +154,8 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
         solo.sleep(1000);
         View selectedBook = searchBookList.getChildAt(0);
 
+        assertTrue(solo.searchText("REQUESTED"));
+
         solo.sleep(1000);
         //delete book
         deleteBook();
