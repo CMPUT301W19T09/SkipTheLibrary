@@ -58,19 +58,13 @@ public class UITestHelper {
 
     public void loadBooks() throws InterruptedException {
         deleteBooks();
-        Thread.sleep(2000);
-
-        databaseHelper.getDatabaseReference().child("Books")
-                .orderByChild("ownerUserName")
-                .equalTo(userName).removeEventListener(childEventListener);
-
         for (Book book: books){
             databaseHelper.getDatabaseReference().child("Books").child(book.getUuid()).setValue(book);
         }
         Thread.sleep(2000);
     }
 
-    private void deleteBooks(){
+    public void deleteBooks() throws InterruptedException {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -101,6 +95,12 @@ public class UITestHelper {
         databaseHelper.getDatabaseReference().child("Books")
                 .orderByChild("ownerUserName")
                 .equalTo(userName).addChildEventListener(childEventListener);
+
+        Thread.sleep(2500);
+
+        databaseHelper.getDatabaseReference().child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(userName).removeEventListener(childEventListener);
     }
 
 }

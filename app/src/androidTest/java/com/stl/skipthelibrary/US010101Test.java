@@ -7,6 +7,7 @@ import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,6 +36,11 @@ public class US010101Test extends ActivityTestRule<MyBooksActivity>{
     @Before
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), rule.getActivity());
+    }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
     }
 
     @Test

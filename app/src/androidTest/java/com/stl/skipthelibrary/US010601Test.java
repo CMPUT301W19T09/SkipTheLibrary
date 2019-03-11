@@ -12,6 +12,7 @@ import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,10 +35,11 @@ import static org.junit.Assert.assertEquals;
 public class US010601Test extends ActivityTestRule<MyBooksActivity> {
 
     private Solo solo;
+    private UITestHelper uiTestHelper;
 
     public US010601Test() throws InterruptedException {
         super(MyBooksActivity.class, false, true);
-        UITestHelper uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
     }
 
     @Rule
@@ -47,6 +49,11 @@ public class US010601Test extends ActivityTestRule<MyBooksActivity> {
     @Before
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), rule.getActivity());
+    }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
     }
 
     @Test
