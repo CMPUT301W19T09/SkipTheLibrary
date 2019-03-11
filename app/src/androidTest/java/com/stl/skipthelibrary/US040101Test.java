@@ -77,15 +77,16 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         solo.waitForActivity(AddBooksActivity.class);
         solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
 
-        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Fairy Tales");
+        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Grimm Tales");
         solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Inda Hood");
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "112-456-889-1333");
+        String isbnstring = new Random() + "";
+        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "112-456-883-1234");
         solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Red riding hood is rad.");
+
 
         solo.clickOnImageButton(0); //takes us back to my books activity
 
         //switch user
-
 
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
@@ -106,12 +107,12 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         solo.clickOnView(solo.getView(R.id.searchBookButton));
         solo.waitForActivity(SearchActivity.class);
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
-        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Fairy");
-
+        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Grimm");
 
         //select book
         RecyclerView searchBookList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
         solo.clickOnView(searchBookList.getChildAt(0));
+
 
         //request book
         solo.clickOnView(solo.getView(R.id.requestButton));
@@ -137,35 +138,11 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         searchBookList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
         View selectedBook = searchBookList.getChildAt(0);
 
-        TextView status = selectedBook.findViewById(R.id.BookListItemStatus);
-        assertEquals(status.getText().toString(), "REQUESTED");
-
         //delete book
         deleteBook();
 
-        /*RecyclerView searchBookList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        int index = 0;
 
-        View selectedBook = searchBookList.getChildAt(index);
-        TextView status = selectedBook.findViewById(R.id.BookListItemStatus);
 
-        while(!status.getText().toString().equals("AVAILABLE")){
-            selectedBook = searchBookList.getChildAt(index);
-            status = selectedBook.findViewById(R.id.BookListItemStatus);
-            index++;
-        }
-        assertEquals(status.getText().toString(), "AVAILABLE");
-
-        solo.clickOnView(selectedBook);
-        solo.waitForActivity(ViewBookActivity.class);
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-        solo.clickOnView(solo.getView(R.id.requestButton));
-
-        solo.waitForActivity(SearchActivity.class);
-        View requestedBook = searchBookList.getChildAt(index);
-        status = requestedBook.findViewById(R.id.BookListItemStatus);
-        assertEquals(status.getText().toString(), "REQUESTED");
-        */
 
 
     }
@@ -209,4 +186,6 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
 
     }
 }
+
+
 
