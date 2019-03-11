@@ -46,6 +46,9 @@ public class UITestHelper {
             databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
             start(loadTestUser, loadBooks, books);
         }
+        else{
+            throw new RuntimeException("A test is currently running");
+        }
     }
 
     private void start(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
