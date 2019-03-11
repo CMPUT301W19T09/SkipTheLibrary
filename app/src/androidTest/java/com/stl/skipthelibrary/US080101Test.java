@@ -16,6 +16,7 @@ import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,10 +38,11 @@ import static org.hamcrest.CoreMatchers.not;
 public class US080101Test extends IntentsTestRule<MyBooksActivity> {
 
         private Solo solo;
+        private UITestHelper uiTestHelper;
 
         public US080101Test() throws InterruptedException {
             super(MyBooksActivity.class, true, true);
-            UITestHelper uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
+            uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
         }
 
 
@@ -54,13 +56,13 @@ public class US080101Test extends IntentsTestRule<MyBooksActivity> {
             solo = new Solo(getInstrumentation(), rule.getActivity());
         }
 
-        @Test
-        public void start() throws Exception{
-
-            Activity activity = rule.getActivity();
+        @After
+        public void tearDown() throws InterruptedException {
+            uiTestHelper.deleteBooks();
         }
 
-        @Test
+
+    @Test
         public void addPhotoToBook() throws Exception {
 
             solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);

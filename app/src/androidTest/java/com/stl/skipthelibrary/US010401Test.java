@@ -32,10 +32,11 @@ import static org.junit.Assert.assertFalse;
 public class US010401Test extends ActivityTestRule<MyBooksActivity> {
     private Solo solo;
     private int index;
+    private UITestHelper uiTestHelper;
 
     public US010401Test() throws InterruptedException {
         super(MyBooksActivity.class, true, true);
-        UITestHelper uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
     }
 
     @Rule
@@ -82,6 +83,7 @@ public class US010401Test extends ActivityTestRule<MyBooksActivity> {
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
+        uiTestHelper.deleteBooks();
     }
 
     public void addBookWithoutImages(){

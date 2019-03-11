@@ -14,6 +14,7 @@ import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.State;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -128,6 +129,11 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
         assertTrue(solo.waitForText("Artemis Fowl"));
         assertTrue(solo.waitForText("Neil Young"));
-
     }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
+    }
+
 }
