@@ -143,6 +143,7 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(solo.getView(R.id.approve_button_id));
         solo.waitForText("Submit Location");
         solo.assertCurrentActivity("Should be Map Box Activity", MapBoxActivity.class);
+        solo.sleep(1000);
         solo.clickOnButton("Submit Location");
         solo.waitForText("My Books");
         solo.assertCurrentActivity("Should be my books activity", MyBooksActivity.class);

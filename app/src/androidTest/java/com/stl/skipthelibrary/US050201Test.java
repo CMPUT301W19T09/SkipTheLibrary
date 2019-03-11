@@ -80,7 +80,7 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
     }
 
     @Test
-    public void testBorrowerSearchForOnlyAvailableBooks() throws Exception {
+    public void testOwnerDenyRequest() throws Exception {
         int ownerIndex;
         int borrowerIndex;
         RecyclerView ownerBooksList;
@@ -126,66 +126,27 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         solo.clickInRecyclerView(ownerIndex);
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
         solo.clickOnView(solo.getView(R.id.deny_button_id));
-//        solo.waitForText("Submit Location");
-//        solo.assertCurrentActivity("Should be Map Box Activity", MapBoxActivity.class);
-//        solo.clickOnButton("Submit Location");
-//        solo.waitForText("My Books");
-//        solo.assertCurrentActivity("Should be my books activity", MyBooksActivity.class);
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(borrowerEmail, borrowerPassword);
-//
-//        // show that request book no longer shows in search
-//        enterBorrowActivity();
-//        enterSearchText(bookTitle);
-//        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-//        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-//        solo.goBack();
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(ownerEmail, ownerPassword);
-//
-//        // lend out the book
-//        enterMyBookActivity();
-//        solo.clickInRecyclerView(ownerIndex);
-//        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-//        Intent resultData = new Intent();
-//        resultData.putExtra("ISBN", isbn);
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-//        intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
-//        solo.clickOnView(solo.getView(R.id.lendButton));
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(borrowerEmail, borrowerPassword);
-//
-//        // borrow the book
-//        enterBorrowActivity();
-//        assertTrue(solo.waitForText(bookTitle));
-//        borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
-//        borrowerIndex = getBookIndex(bookTitle, borrowerBooksList);
-//        assertTrue(borrowerIndex>=0);
-//        solo.clickInRecyclerView(borrowerIndex);
-//
-//        solo.clickOnView(solo.getView(R.id.borrowButton));
-//        solo.waitForText("Borrowing");
-//        solo.assertCurrentActivity("Should be BorrowersBookActivity", BorrowersBooksActivity.class);
-//
-//        // show that book status has changed
-//        solo.clickOnView(solo.getView(R.id.AcceptedChip));
-//        assertTrue(solo.waitForText(bookTitle));
-//
-//        // show that book no longer appears in search
-//        enterSearchText(bookTitle);
-//        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-//        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-//        solo.goBack();
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(ownerEmail, ownerPassword);
+        solo.waitForText("My Books");
+        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.RequestedChip));
+        solo.sleep(1000);
+        ownerBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
+        assertEquals(1, ownerBooksList.getAdapter().getItemCount());
+        solo.goBack();
+
+        // switch accounts
+        logOutAccount();
+        logInAccount(borrowerEmail, borrowerPassword);
+
+        // show that request book no longer shows in search
+        enterBorrowActivity();
+        enterSearchText(bookTitle);
+        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
+        assertEquals(1, searchBooksList.getAdapter().getItemCount());
+        solo.goBack();
+
+        logOutAccount();
     }
 
     @After
