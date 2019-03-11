@@ -14,6 +14,7 @@ import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.State;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,20 +29,20 @@ import static junit.framework.TestCase.assertTrue;
 public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
     private Solo solo;
-    private UITestHelper uiTestHelper;
+    private static UITestHelper uiTestHelper;
 
     public US030101Test() throws InterruptedException {
         super(BorrowersBooksActivity.class, false, true);
 
         RequestHandler requests = new RequestHandler(new State());
         BookDescription book1Description = new BookDescription("SpecificTitleToTest", "Test book", "Test Author", new Rating());
-        Book book1 = new Book("123-456-7891011", book1Description, "gpierce", requests, null, null);
+        Book book1 = new Book("123-456-7891011", book1Description, "gpierce", requests, null, new Rating());
         BookDescription book2Description = new BookDescription("Test Title", "Test book", "SpecificAuthorToTest", new Rating());
-        Book book2 = new Book("123-456-7891012", book2Description, "gpierce", requests, null, null);
+        Book book2 = new Book("123-456-7891012", book2Description, "gpierce", requests, null, new Rating());
         BookDescription book3Description = new BookDescription("Test Title", "SpecificDescriptionToTest", "Test Author", new Rating());
-        Book book3 = new Book("123-456-7891013", book3Description, "gpierce", requests, null, null);
+        Book book3 = new Book("123-456-7891013", book3Description, "gpierce", requests, null, new Rating());
         BookDescription book4Description = new BookDescription("Artemis Fowl", "Test book", "Neil Young", new Rating());
-        Book book4 = new Book("123-456-7891014", book4Description, "gpierce", requests, null, null);
+        Book book4 = new Book("123-456-7891014", book4Description, "gpierce", requests, null, new Rating());
 
         ArrayList<Book> books = new ArrayList<>();
         books.add(book1);
@@ -129,5 +130,10 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
         assertTrue(solo.waitForText("Artemis Fowl"));
         assertTrue(solo.waitForText("Neil Young"));
 
+    }
+
+    @AfterClass
+    public static void teardown() {
+        uiTestHelper.deleteUsersBooks("gpierce");
     }
 }
