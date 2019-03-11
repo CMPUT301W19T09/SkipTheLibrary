@@ -2,7 +2,6 @@ package com.stl.skipthelibrary;
 
 import android.app.Activity;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
@@ -12,9 +11,7 @@ import com.stl.skipthelibrary.Entities.BookDescription;
 import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.State;
-import com.stl.skipthelibrary.Entities.ViewableImage;
 
-import org.junit.AfterClass;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -134,7 +131,7 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
     @After
     public void tearDown() throws InterruptedException {
-        uiTestHelper.deleteBooks();
+        uiTestHelper.deleteUsersBooks("gpierce");
     }
 
 }

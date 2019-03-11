@@ -103,4 +103,43 @@ public class UITestHelper {
                 .equalTo(userName).removeEventListener(childEventListener);
     }
 
+    public void deleteUsersBooks(String userName) throws InterruptedException {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Book book = dataSnapshot.getValue(Book.class);
+                databaseHelper.getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        databaseHelper.getDatabaseReference().child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(userName).addChildEventListener(childEventListener);
+
+        Thread.sleep(2500);
+
+        databaseHelper.getDatabaseReference().child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(userName).removeEventListener(childEventListener);
+    }
+
 }
