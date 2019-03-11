@@ -67,12 +67,13 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
     public US060101Test() throws InterruptedException {
         super(LoginActivity.class, true, true);
+        ArrayList<Book> books = new ArrayList<>();
+        books.clear();
 
         RequestHandler requests = new RequestHandler(new State());
-        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author", new Rating());
+        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author");
         Book book1 = new Book(isbn, book1Description, uiTestHelper.userName, requests, null, new Rating());
 
-        ArrayList<Book> books = new ArrayList<>();
         books.add(book1);
         uiTestHelper = new UITestHelper(true, true, books);
     }
@@ -97,32 +98,32 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
 
         /**
-         * Test AddBook functionality
+         * Check the owner's book
          */
-
         enterMyBookActivity();
 
 
 
         /**
-         * log out
+         * Log out
          */
         logOutAccount();
 
         /**
-         * Goes into another account
+         * Switch account
          */
         logInAccount(borrowerEmail, borrowerPassword);
 
+        /**
+         * Search the request book and send the request
+         */
         enterBorrowersBookActivity();
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
-
         solo.clickOnView(solo.getView(R.id.searchBookButton));
         solo.waitForActivity(SearchActivity.class);
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), bookTitle);
         assertTrue(solo.waitForText(bookTitle, 1, 2000));
-
 
         solo.clickInRecyclerView(0);
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
@@ -133,10 +134,14 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
 
         /**
-         * login Book Owner Account
+         * Switch account
          */
         logInAccount(ownerEmail, ownerPassword);
         enterMyBookActivity();
+
+        /**
+         * Owner accept the borrowing request
+         */
         viewBookFromMybookActivity();
         RecyclerView requstedBookList = (RecyclerView) solo.getView(R.id.RequesterRecyclerView);
         solo.clickOnView(requstedBookList.getChildAt(0).findViewById(R.id.approve_button_id));
@@ -146,12 +151,26 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
         logOutAccount();
 
+        /**
+         * Switch account
+         */
         logInAccount(borrowerEmail, borrowerPassword);
+
+        /**
+         * Book status in borrower's side
+         */
         enterBorrowersBookActivity();
         logOutAccount();
         solo.waitForActivity(LoginActivity.class);
 
+        /**
+         * Switch account
+         */
         logInAccount(ownerEmail, ownerPassword);
+
+        /**
+         * Owner scan the isbn code and lend the book
+         */
         enterMyBookActivity();
         viewBookFromMybookActivity();
         solo.clickInRecyclerView(0);
@@ -164,7 +183,14 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.waitForText("My Books");
         logOutAccount();
 
+        /**
+         * Switch account
+         */
         logInAccount(borrowerEmail, borrowerPassword);
+
+        /**
+         * Borrower scan the isbn code and confirm the book is borrowed
+         */
         enterBorrowersBookActivity();
         viewBookFromBorrowerBookActivity();
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
@@ -172,18 +198,37 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.waitForText("Borrow");
         logOutAccount();
 
+        /**
+         * Switch account
+         */
         logInAccount(ownerEmail,ownerPassword);
+        /**
+         * Book status in owner's side
+         */
         enterMyBookActivity();
         logOutAccount();
 
+        /**
+         * Switch account
+         */
         logInAccount(borrowerEmail, borrowerPassword);
+        /**
+         * Borrower scan the isbn and return the book
+         */
         enterBorrowersBookActivity();
         viewBookFromBorrowerBookActivity();
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
         solo.clickOnView(solo.getView(R.id.returnButton));
         logOutAccount();
 
+        /**
+         * Switch account
+         */
         logInAccount(ownerEmail, ownerPassword);
+
+        /**
+         * Owner scan the isbn to confirm the book is returned.
+         */
         enterMyBookActivity();
         viewBookFromMybookActivity();
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
@@ -197,6 +242,9 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.finishOpenedActivities();
     }
 
+    /**
+     * Delete the first book in my book list
+     */
     public void deleteBook() {
         RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
         View bookToDelete = myBooksList.getChildAt(0);
@@ -214,15 +262,12 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.drag(fromX, toX, fromY, toY, 10);
         solo.sleep(1000);
 
-//        assertTrue(myBooksList.getAdapter().getItemCount() == 0);
-
     }
 
-
+    /**
+     * log out current account
+     */
     public void logOutAccount(){
-        /**
-         * log out
-         */
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
         solo.clickOnView(view.findViewById(R.id.profile));
@@ -232,6 +277,11 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
     }
 
+    /**
+     * Log in account
+     * @param email account email address
+     * @param password account password
+     */
     public void logInAccount(String email, String password){
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.EmailEditText), email);
@@ -239,6 +289,9 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(solo.getView(R.id.SignInButton));
     }
 
+    /**
+     * Enter My book activity from initial screen
+     */
     public void enterMyBookActivity(){
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
@@ -246,6 +299,9 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
     }
 
+    /**
+     * View the first book in owner book list
+     */
     public void viewBookFromMybookActivity(){
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
         RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
@@ -253,12 +309,18 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
     }
 
+    /**
+     * Enter borrower book activity from initial screen
+     */
     public void enterBorrowersBookActivity(){
         view = (BottomNavigationView) solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
         solo.clickOnView(view.findViewById(R.id.borrow));
     }
 
+    /**
+     * View the first book in borrowing book list
+     */
     public void viewBookFromBorrowerBookActivity(){
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
         RecyclerView borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
