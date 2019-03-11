@@ -74,16 +74,18 @@ public class US090101Test extends IntentsTestRule<LoginActivity> {
     }
 
     @Test
-    public void testBorrowerSearchForOnlyAvailableBooks() throws Exception {
+    public void testOwnerSpecifyGeoLocation() throws Exception {
         int ownerIndex;
         int borrowerIndex;
         RecyclerView ownerBooksList;
         RecyclerView borrowerBooksList;
         RecyclerView searchBooksList;
 
-        Activity activity = solo.getCurrentActivity();
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.sleep(5000);
 
-        if (activity.equals(LoginActivity.class)) {
+        if (solo.searchText("Login")) {
+            solo.waitForText("Login");
             logInAccount(borrowerEmail, borrowerPassword);
         }
         else {
@@ -110,11 +112,6 @@ public class US090101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.goBack();
         assertTrue(solo.waitForText(bookTitle));
-
-        enterSearchText(bookTitle);
-        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        assertEquals(1, searchBooksList.getAdapter().getItemCount());
-        solo.goBack();
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
 
         // switch accounts

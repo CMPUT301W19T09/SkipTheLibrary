@@ -81,9 +81,11 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         RecyclerView borrowerBooksList;
         RecyclerView searchBooksList;
 
-        Activity activity = solo.getCurrentActivity();
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.sleep(5000);
 
-        if (activity.equals(LoginActivity.class)) {
+        if (solo.searchText("Login")) {
+            solo.waitForText("Login");
             logInAccount(borrowerEmail, borrowerPassword);
         }
         else {

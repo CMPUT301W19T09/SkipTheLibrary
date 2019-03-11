@@ -75,8 +75,11 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         RecyclerView borrowerBooksList;
         RecyclerView searchBooksList;
 
-        Activity activity = solo.getCurrentActivity();
-        if (activity.equals(LoginActivity.class)) {
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.sleep(5000);
+
+        if (solo.searchText("Login")) {
+            solo.waitForText("Login");
             logInAccount(borrowerEmail, borrowerPassword);
         }
         else {
@@ -129,9 +132,8 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
 
         // show that request book no longer shows in search
         enterBorrowActivity();
-        enterSearchText(bookTitle);
-        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        assertEquals(1, searchBooksList.getAdapter().getItemCount());
+        borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
+        assertEquals(0, borrowerBooksList.getAdapter().getItemCount());
         solo.goBack();
 
         logOutAccount();
