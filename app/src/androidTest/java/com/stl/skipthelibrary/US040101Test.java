@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static junit.framework.TestCase.assertTrue;
+
 public class US040101Test extends ActivityTestRule<NotificationActivity>{
 
     private Solo solo;
