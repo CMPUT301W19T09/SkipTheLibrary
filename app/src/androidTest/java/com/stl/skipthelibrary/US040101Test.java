@@ -77,15 +77,15 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         solo.waitForActivity(AddBooksActivity.class);
         solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
 
-        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Grimm Tales");
+        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Fairy Tales");
         solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Inda Hood");
-        String isbnstring = new Random() + "";
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "112-456-889-1110");
+        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "112-456-889-1333");
         solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Red riding hood is rad.");
 
         solo.clickOnImageButton(0); //takes us back to my books activity
 
         //switch user
+
 
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
@@ -106,20 +106,20 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         solo.clickOnView(solo.getView(R.id.searchBookButton));
         solo.waitForActivity(SearchActivity.class);
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
-        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Grimm");
+        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Fairy");
+
 
         //select book
         RecyclerView searchBookList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
         solo.clickOnView(searchBookList.getChildAt(0));
-
 
         //request book
         solo.clickOnView(solo.getView(R.id.requestButton));
 
 
         //logout
-        solo.waitForActivity(ProfileActivity.class);
-        solo.clickOnView(solo.getView(R.id.BookListItemLeftArrow));
+
+        solo.goBack();
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
         solo.clickOnView(view.findViewById(R.id.profile));
@@ -127,13 +127,18 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
         logOutAccount();
 
-        //login
-        logInAccount("tesb@ualberta.ca", "123456");
+        //login and navigate to owner's books
+        logInAccount("testb@ualberta.ca", "123456");
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.waitForActivity(ViewBookActivity.class);
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-        solo.clickOnView(view.findViewById(R.id.requestButton));
+        solo.clickOnView(view.findViewById(R.id.my_books));
+        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+
+        searchBookList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
+        View selectedBook = searchBookList.getChildAt(0);
+
+        TextView status = selectedBook.findViewById(R.id.BookListItemStatus);
+        assertEquals(status.getText().toString(), "REQUESTED");
 
         //delete book
         deleteBook();
@@ -162,24 +167,6 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         assertEquals(status.getText().toString(), "REQUESTED");
         */
 
-        /*
-        solo.waitForActivity(AddBooksActivity.class);
-        solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
-
-
-        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Test Title");
-        solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Test Author");
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "123-456-789-1011");
-        solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Test Description");
-
-        solo.clickOnImageButton(0); //takes us back to my books activity
-
-        solo.waitForActivity(MyBooksActivity.class);
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
-
-        assertTrue(solo.waitForText("Test Title"));
-        assertTrue(solo.waitForText("Test Author"));
-         */
 
     }
 
