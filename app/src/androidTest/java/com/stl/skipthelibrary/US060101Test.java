@@ -125,6 +125,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.waitForActivity(SearchActivity.class);
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Felix");
+        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Felix");
         assertTrue(solo.waitForText("Felix", 2, 2000));
 
 
