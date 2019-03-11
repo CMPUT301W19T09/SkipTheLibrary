@@ -90,6 +90,7 @@ public class US010701Test extends ActivityTestRule<MyBooksActivity> {
     @After
     public void tearDown() throws InterruptedException {
         uiTestHelper.deleteBooks();
+        solo.finishOpenedActivities();
     }
 
 }
