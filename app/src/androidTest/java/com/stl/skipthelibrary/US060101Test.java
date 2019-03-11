@@ -259,35 +259,14 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.returnedButton));
         solo.sleep(3000);
-        deleteBook();
     }
 
     @After
     public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
         solo.finishOpenedActivities();
     }
 
-    /**
-     * Delete the first book in my book list
-     */
-    public void deleteBook() {
-        RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
-        View bookToDelete = myBooksList.getChildAt(0);
-
-        int[] location = new int[2];
-
-        bookToDelete.getLocationInWindow(location);
-
-        int fromX = location[0] + 800;
-        int fromY = location[1];
-
-        int toX = location[0];
-        int toY = fromY;
-
-        solo.drag(fromX, toX, fromY, toY, 10);
-        solo.sleep(1000);
-
-    }
 
     /**
      * log out current account
