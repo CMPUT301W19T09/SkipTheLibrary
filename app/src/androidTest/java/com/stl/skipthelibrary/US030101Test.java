@@ -33,20 +33,22 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
         super(BorrowersBooksActivity.class, false, true);
 
         RequestHandler requests = new RequestHandler(new State());
+        
         BookDescription book1Description = new BookDescription("SpecificTitleToTest", "Test book", "Test Author", new Rating());
-        Book book1 = new Book("123-456-7891011", book1Description, "gpierce", requests, null, new Rating());
+        Book book1 = new Book("123-456-7891011", book1Description, "testyBoi", requests, null, new Rating());
         BookDescription book2Description = new BookDescription("Test Title", "Test book", "SpecificAuthorToTest", new Rating());
-        Book book2 = new Book("123-456-7891012", book2Description, "gpierce", requests, null, new Rating());
+        Book book2 = new Book("123-456-7891012", book2Description, "testyBoi", requests, null, new Rating());
         BookDescription book3Description = new BookDescription("Test Title", "SpecificDescriptionToTest", "Test Author", new Rating());
-        Book book3 = new Book("123-456-7891013", book3Description, "gpierce", requests, null, new Rating());
+        Book book3 = new Book("123-456-7891013", book3Description, "testyBoi", requests, null, new Rating());
         BookDescription book4Description = new BookDescription("Artemis Fowl", "Test book", "Neil Young", new Rating());
-        Book book4 = new Book("123-456-7891014", book4Description, "gpierce", requests, null, new Rating());
+        Book book4 = new Book("123-456-7891014", book4Description, "testyBoi", requests, null, new Rating());
 
         ArrayList<Book> books = new ArrayList<>();
         books.add(book1);
         books.add(book2);
         books.add(book3);
         books.add(book4);
+
         uiTestHelper = new UITestHelper(true, true, books);
     }
 
@@ -131,7 +133,7 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
     @After
     public void tearDown() throws InterruptedException {
-        uiTestHelper.deleteUsersBooks("gpierce");
+        uiTestHelper.deleteUsersBooks("testyBoi");
     }
 
 }
