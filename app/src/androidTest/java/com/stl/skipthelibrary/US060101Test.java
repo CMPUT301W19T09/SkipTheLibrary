@@ -278,7 +278,7 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(view.findViewById(R.id.profile));
         solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.clickOnView(solo.getView(R.id.logoutButton));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
