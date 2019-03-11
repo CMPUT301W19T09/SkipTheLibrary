@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.app.NativeActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ import org.junit.Test;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
 
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertTrue;
 
@@ -83,7 +86,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         /**
          * Test Login functionality
          */
-        logInAccount("Felix@gmail.com", "123456");
+        logInAccount("uitest@email.com", "123123");
 
 
         /**
@@ -113,7 +116,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         /**
          * Goes into another account
          */
-        logInAccount("Felix2@gmail.com", "123456");
+        logInAccount("uitestborrower@email.com", "123123");
 
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
@@ -140,7 +143,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         /**
          * login Book Owner Account
          */
-        logInAccount("Felix@gmail.com", "123456");
+        logInAccount("uitest@email.com", "123123");
         enterMyBookActivity();
         viewBookFromMybookActivity();
         RecyclerView requstedBookList = (RecyclerView) solo.getView(R.id.RequesterRecyclerView);
@@ -153,8 +156,18 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.clickOnView(solo.getView(R.id.lendButton));
         solo.assertCurrentActivity("Wrong Activity", ScannerActivity.class);
 
+        Intent resultData = new Intent();
+        resultData.putExtra("ISBN", "1234567890123");
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
+
+        solo.clickOnView(solo.getView(R.id.lendButton));
+
+
 //        MockScanner mockScanner = new MockScanner();//TODO: someone please correct this
 //        mockScanner.setIsbn("1234567890123");
+
+//        solo.clickOnView(solo.getView(R.id.scanner_scan_button));
 
 //        deleteBook();
 
