@@ -13,7 +13,7 @@ public class BookDescriptionTest {
 
     @Before
     public void setup(){
-        bookDescription = new BookDescription("test title", "test synopsis", "test author", null);
+        bookDescription = new BookDescription("test title", "test synopsis", "test author");
     }
 
     @Test
@@ -21,7 +21,6 @@ public class BookDescriptionTest {
         assertEquals("test title", bookDescription.getTitle());
         assertEquals("test synopsis", bookDescription.getSynopsis());
         assertEquals("test author", bookDescription.getAuthor());
-        assertEquals(null, bookDescription.getRating());
     }
 
     @Test
@@ -43,22 +42,14 @@ public class BookDescriptionTest {
     }
 
     @Test
-    public void testSetRating(){
-        bookDescription.setRating(new Rating());
-        assertEquals(new Rating(), bookDescription.getRating());
-    }
-
-    @Test
     public void testEquals() {
-        BookDescription secondDescription = new BookDescription("title1", "synopsis1", "author1", new Rating());
+        BookDescription secondDescription = new BookDescription("title1", "synopsis1", "author1");
         assertFalse(bookDescription.equals(secondDescription));
         secondDescription.setTitle("test title");
         assertFalse(bookDescription.equals(secondDescription));
         secondDescription.setSynopsis("test synopsis");
         assertFalse(bookDescription.equals(secondDescription));
         secondDescription.setAuthor("test author");
-        assertFalse(bookDescription.equals(secondDescription));
-        secondDescription.setRating(null);
         assertTrue(bookDescription.equals(secondDescription));
         secondDescription = bookDescription;
         assertTrue(bookDescription.equals(secondDescription));

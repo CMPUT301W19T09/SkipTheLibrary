@@ -164,7 +164,7 @@ public class AddBooksActivity extends AppCompatActivity {
         BookValidator bookValidator = new BookValidator(title,author,isbn,description);
         if (bookValidator.isValid()){
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
-            BookDescription bookDescription = new BookDescription(title,description,author,new Rating());
+            BookDescription bookDescription = new BookDescription(title,description,author);
             Book newBook = new Book(bookDescription, isbn, CurrentUser.getInstance().getUserName(), (ArrayList<ViewableImage>) bookImages);
             databaseHelper.addBookIfValid(newBook, true);
         }

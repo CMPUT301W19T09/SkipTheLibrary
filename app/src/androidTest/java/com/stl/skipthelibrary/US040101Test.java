@@ -1,12 +1,8 @@
 package com.stl.skipthelibrary;
 
-import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.robotium.solo.Solo;
@@ -17,10 +13,7 @@ import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
-import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.Entities.Book;
-import com.stl.skipthelibrary.Entities.Notification;
-import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 
 import org.junit.After;
@@ -29,15 +22,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-
 public class US040101Test extends ActivityTestRule<NotificationActivity>{
 
     private Solo solo;
