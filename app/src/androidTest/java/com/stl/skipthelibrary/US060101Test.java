@@ -26,6 +26,7 @@ import com.stl.skipthelibrary.Entities.Notification;
 import com.stl.skipthelibrary.Entities.State;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -158,10 +159,9 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
 
 //        solo.clickOnView(solo.getView(R.id.scanner_scan_button));
 //        deleteBook();
-
-
-
     }
+
+
     public void deleteBook() {
         RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
         View bookToDelete = myBooksList.getChildAt(0);
