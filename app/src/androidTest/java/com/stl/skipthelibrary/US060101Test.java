@@ -102,19 +102,7 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
         enterMyBookActivity();
 
-//        solo.clickOnView(solo.getView(R.id.addBookButton));
-//
-//        solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
-//        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Felix");
-//        solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Felix");
-//        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), isbn);
-//        solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Felix");
-//        solo.clickOnView(solo.getView(R.id.SaveBookButton));
-//
-//        viewBookFromMybookActivity();
-//
-//        solo.goBack();
-        //TODO: delte
+
 
         /**
          * log out

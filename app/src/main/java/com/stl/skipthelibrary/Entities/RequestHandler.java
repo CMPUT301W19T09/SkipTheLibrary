@@ -164,7 +164,9 @@ public class RequestHandler {
         if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
 //        sendNotificaition();
         getRequestors().remove(user);
-
+        if (getRequestors().size() == 0 && (acceptedRequestor.equals(""))){
+            getState().setBookStatus(BookStatus.AVAILABLE);
+        }
     }
 
     /**

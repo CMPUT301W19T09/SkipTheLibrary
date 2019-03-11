@@ -1,29 +1,19 @@
 package com.stl.skipthelibrary;
 
 import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.provider.Contacts;
-import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.robotium.solo.Solo;
-import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
-import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
-import com.stl.skipthelibrary.Activities.ScannerActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
-import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.BookDescription;
 import com.stl.skipthelibrary.Entities.Rating;
@@ -41,8 +31,6 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -62,7 +50,7 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         super(LoginActivity.class, true, true);
 
         RequestHandler requests = new RequestHandler(new State());
-        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author", new Rating());
+        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author");
         Book book1 = new Book(isbn, book1Description, uiTestHelper.userName, requests, null, new Rating());
 
         ArrayList<Book> books = new ArrayList<>();
@@ -80,15 +68,18 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
     }
 
     @Test
-    public void testBorrowerSearchForOnlyAvailableBooks() throws Exception {
+    public void testOwnerDenyRequest() throws Exception {
         int ownerIndex;
         int borrowerIndex;
         RecyclerView ownerBooksList;
         RecyclerView borrowerBooksList;
         RecyclerView searchBooksList;
 
-        Activity activity = solo.getCurrentActivity();
-        if (activity.equals(LoginActivity.class)) {
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        solo.sleep(5000);
+
+        if (solo.searchText("Login")) {
+            solo.waitForText("Login");
             logInAccount(borrowerEmail, borrowerPassword);
         }
         else {
@@ -126,66 +117,26 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         solo.clickInRecyclerView(ownerIndex);
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
         solo.clickOnView(solo.getView(R.id.deny_button_id));
-//        solo.waitForText("Submit Location");
-//        solo.assertCurrentActivity("Should be Map Box Activity", MapBoxActivity.class);
-//        solo.clickOnButton("Submit Location");
-//        solo.waitForText("My Books");
-//        solo.assertCurrentActivity("Should be my books activity", MyBooksActivity.class);
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(borrowerEmail, borrowerPassword);
-//
-//        // show that request book no longer shows in search
-//        enterBorrowActivity();
-//        enterSearchText(bookTitle);
-//        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-//        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-//        solo.goBack();
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(ownerEmail, ownerPassword);
-//
-//        // lend out the book
-//        enterMyBookActivity();
-//        solo.clickInRecyclerView(ownerIndex);
-//        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-//        Intent resultData = new Intent();
-//        resultData.putExtra("ISBN", isbn);
-//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-//        intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
-//        solo.clickOnView(solo.getView(R.id.lendButton));
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(borrowerEmail, borrowerPassword);
-//
-//        // borrow the book
-//        enterBorrowActivity();
-//        assertTrue(solo.waitForText(bookTitle));
-//        borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
-//        borrowerIndex = getBookIndex(bookTitle, borrowerBooksList);
-//        assertTrue(borrowerIndex>=0);
-//        solo.clickInRecyclerView(borrowerIndex);
-//
-//        solo.clickOnView(solo.getView(R.id.borrowButton));
-//        solo.waitForText("Borrowing");
-//        solo.assertCurrentActivity("Should be BorrowersBookActivity", BorrowersBooksActivity.class);
-//
-//        // show that book status has changed
-//        solo.clickOnView(solo.getView(R.id.AcceptedChip));
-//        assertTrue(solo.waitForText(bookTitle));
-//
-//        // show that book no longer appears in search
-//        enterSearchText(bookTitle);
-//        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-//        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-//        solo.goBack();
-//
-//        // switch accounts
-//        logOutAccount();
-//        logInAccount(ownerEmail, ownerPassword);
+        solo.waitForText("My Books");
+        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.RequestedChip));
+        solo.sleep(1000);
+        ownerBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
+        assertEquals(1, ownerBooksList.getAdapter().getItemCount());
+        solo.goBack();
+
+        // switch accounts
+        logOutAccount();
+        logInAccount(borrowerEmail, borrowerPassword);
+
+        // show that request book no longer shows in search
+        enterBorrowActivity();
+        borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
+        assertEquals(0, borrowerBooksList.getAdapter().getItemCount());
+        solo.goBack();
+
+        logOutAccount();
     }
 
     @After

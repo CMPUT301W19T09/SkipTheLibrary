@@ -21,7 +21,7 @@ public class BookTest {
 
     @Before
     public void setUp(){
-        book = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author", null),
+        book = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author"),
                 "testUserName", new RequestHandler(new State()), null, null);
     }
 
@@ -64,7 +64,7 @@ public class BookTest {
     @Test
     public void testSetDescription() {
         BookDescription description = new BookDescription("test title", "test synopsis",
-                "test author", new Rating());
+                "test author");
         book.setDescription(description);
         assertEquals(description, book.getDescription());
     }
@@ -99,7 +99,7 @@ public class BookTest {
 
     @Test
     public void testEquals() {
-        Book secondBook = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author", null),
+        Book secondBook = new Book("test ISBN", new BookDescription("test title", "test synopsis", "test author"),
                 "testUserName", new RequestHandler(new State()), null, null);
         secondBook.setUuid(book.getUuid());
         assertTrue(book.equals(secondBook));

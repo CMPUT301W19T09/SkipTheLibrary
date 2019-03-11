@@ -41,7 +41,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-public class US030201Test extends IntentsTestRule<LoginActivity> {
+public class US090101Test extends IntentsTestRule<LoginActivity> {
     private Solo solo;
     private BottomNavigationView view;
     private UITestHelper uiTestHelper;
@@ -52,7 +52,7 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
     private static final String borrowerEmail = "uitestborrower@email.com";
     private static final String borrowerPassword = "123123";
 
-    public US030201Test() throws InterruptedException {
+    public US090101Test() throws InterruptedException {
         super(LoginActivity.class, true, true);
 
         RequestHandler requests = new RequestHandler(new State());
@@ -74,7 +74,7 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
     }
 
     @Test
-    public void testBorrowerSearchForOnlyAvailableBooks() throws Exception {
+    public void testOwnerSpecifyGeoLocation() throws Exception {
         int ownerIndex;
         int borrowerIndex;
         RecyclerView ownerBooksList;
@@ -112,11 +112,6 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.goBack();
         assertTrue(solo.waitForText(bookTitle));
-
-        enterSearchText(bookTitle);
-        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        assertEquals(1, searchBooksList.getAdapter().getItemCount());
-        solo.goBack();
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
 
         // switch accounts
@@ -141,54 +136,6 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
 
         // switch accounts
         logOutAccount();
-        logInAccount(borrowerEmail, borrowerPassword);
-
-        // show that request book no longer shows in search
-        enterBorrowActivity();
-        enterSearchText(bookTitle);
-        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-        solo.goBack();
-
-        // switch accounts
-        logOutAccount();
-        logInAccount(ownerEmail, ownerPassword);
-
-        // lend out the book
-        enterMyBookActivity();
-        solo.clickInRecyclerView(ownerIndex);
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-        Intent resultData = new Intent();
-        resultData.putExtra("ISBN", isbn);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
-        solo.clickOnView(solo.getView(R.id.lendButton));
-
-        // switch accounts
-        logOutAccount();
-        logInAccount(borrowerEmail, borrowerPassword);
-
-        // borrow the book
-        enterBorrowActivity();
-        assertTrue(solo.waitForText(bookTitle));
-        borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
-        borrowerIndex = getBookIndex(bookTitle, borrowerBooksList);
-        assertTrue(borrowerIndex>=0);
-        solo.clickInRecyclerView(borrowerIndex);
-
-        solo.clickOnView(solo.getView(R.id.borrowButton));
-        solo.waitForText("Borrowing");
-        solo.assertCurrentActivity("Should be BorrowersBookActivity", BorrowersBooksActivity.class);
-
-        // show that book status has changed
-        solo.clickOnView(solo.getView(R.id.AcceptedChip));
-        assertTrue(solo.waitForText(bookTitle));
-
-        // show that book no longer appears in search
-        enterSearchText(bookTitle);
-        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-        solo.goBack();
     }
 
     @After
@@ -211,7 +158,7 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         solo.enterText((EditText) solo.getView(R.id.PasswordEditText), password);
         solo.clickOnView(solo.getView(R.id.SignInButton));
         assertTrue(solo.waitForText("Notifications"));
-//        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
+        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
     }
 
     public void enterProfile() {
@@ -257,3 +204,4 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         return 0;
     }
 }
+
