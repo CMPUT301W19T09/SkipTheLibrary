@@ -34,13 +34,13 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
         RequestHandler requests = new RequestHandler(new State());
         
-        BookDescription book1Description = new BookDescription("SpecificTitleToTest", "Test book", "Test Author", new Rating());
+        BookDescription book1Description = new BookDescription("SpecificTitleToTest", "Test book", "Test Author");
         Book book1 = new Book("123-456-7891011", book1Description, "testyBoi", requests, null, new Rating());
-        BookDescription book2Description = new BookDescription("Test Title", "Test book", "SpecificAuthorToTest", new Rating());
+        BookDescription book2Description = new BookDescription("Test Title", "Test book", "SpecificAuthorToTest");
         Book book2 = new Book("123-456-7891012", book2Description, "testyBoi", requests, null, new Rating());
-        BookDescription book3Description = new BookDescription("Test Title", "SpecificDescriptionToTest", "Test Author", new Rating());
+        BookDescription book3Description = new BookDescription("Test Title", "SpecificDescriptionToTest", "Test Author");
         Book book3 = new Book("123-456-7891013", book3Description, "testyBoi", requests, null, new Rating());
-        BookDescription book4Description = new BookDescription("Artemis Fowl", "Test book", "Neil Young", new Rating());
+        BookDescription book4Description = new BookDescription("Artemis Fowl", "Test book", "Neil Young");
         Book book4 = new Book("123-456-7891014", book4Description, "testyBoi", requests, null, new Rating());
 
         ArrayList<Book> books = new ArrayList<>();
