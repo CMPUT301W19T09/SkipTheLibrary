@@ -1,0 +1,106 @@
+package com.stl.skipthelibrary;
+
+import android.util.Log;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.User;
+import com.stl.skipthelibrary.Singletons.CurrentUser;
+
+import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+/**
+ * See US010101Test for example on how to use. USE FOR EVERY UI TEST
+ */
+public class UITestHelper {
+    private static final String testUserID = "XavBff02PYPykAxmnBFoy3moBTY2";
+    private static final String userName = "UITest";
+    private User testUser;
+    private ArrayList<Book> books;
+    private DatabaseHelper databaseHelper = new DatabaseHelper(null);
+    private ChildEventListener childEventListener;
+
+    public UITestHelper(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
+        if(loadTestUser){
+            loadTestUser();
+        }
+        if (loadBooks){
+            this.books = books;
+            loadBooks();
+        }
+    }
+
+    public void loadTestUser() throws InterruptedException {
+        databaseHelper.getDatabaseReference().child("Users").child(testUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                testUser = dataSnapshot.getValue(User.class);
+                if (testUser == null){
+                    throw new RuntimeException("TEST USER HAS BEEN DELETED");
+                }
+                CurrentUser.setUser(testUser);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Thread.sleep(2000);
+    }
+
+    public void loadBooks() throws InterruptedException {
+        deleteBooks();
+        Thread.sleep(2000);
+
+        databaseHelper.getDatabaseReference().child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(userName).removeEventListener(childEventListener);
+
+        for (Book book: books){
+            databaseHelper.getDatabaseReference().child("Books").child(book.getUuid()).setValue(book);
+        }
+        Thread.sleep(2000);
+    }
+
+    private void deleteBooks(){
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Book book = dataSnapshot.getValue(Book.class);
+                databaseHelper.getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        databaseHelper.getDatabaseReference().child("Books")
+                .orderByChild("ownerUserName")
+                .equalTo(userName).addChildEventListener(childEventListener);
+    }
+
+}
