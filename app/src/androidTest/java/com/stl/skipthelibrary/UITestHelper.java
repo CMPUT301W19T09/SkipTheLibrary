@@ -31,18 +31,6 @@ public class UITestHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 uiTestSemaphore = dataSnapshot.getValue(UITestSemaphore.class);
-                if (!uiTestSemaphore.isInUse()){
-                    uiTestSemaphore.setInUse(true);
-                    databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
-                    try {
-                        start(loadTestUser, loadBooks, books);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    throw new RuntimeException("A test is currently running");
-                }
             }
 
             @Override
@@ -50,6 +38,14 @@ public class UITestHelper {
 
             }
         });
+
+        Thread.sleep(2000);
+
+        if (!uiTestSemaphore.isInUse()){
+            uiTestSemaphore.setInUse(true);
+            databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
+            start(loadTestUser, loadBooks, books);
+        }
     }
 
     private void start(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
