@@ -1,29 +1,19 @@
 package com.stl.skipthelibrary;
 
 import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.provider.Contacts;
-import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.robotium.solo.Solo;
-import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
-import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
-import com.stl.skipthelibrary.Activities.ScannerActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
-import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.BookDescription;
 import com.stl.skipthelibrary.Entities.Rating;
@@ -41,8 +31,6 @@ import java.util.ArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
