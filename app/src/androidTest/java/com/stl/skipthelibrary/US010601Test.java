@@ -10,10 +10,14 @@ import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
+import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
@@ -31,9 +35,11 @@ import static org.junit.Assert.assertEquals;
 public class US010601Test extends ActivityTestRule<MyBooksActivity> {
 
     private Solo solo;
+    private UITestHelper uiTestHelper;
 
-    public US010601Test() {
+    public US010601Test() throws InterruptedException {
         super(MyBooksActivity.class, false, true);
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
     }
 
     @Rule
@@ -42,13 +48,13 @@ public class US010601Test extends ActivityTestRule<MyBooksActivity> {
 
     @Before
     public void setUp() throws Exception{
-
         solo = new Solo(getInstrumentation(), rule.getActivity());
     }
 
-    @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
+        solo.finishOpenedActivities();
     }
 
     @Test
@@ -60,26 +66,28 @@ public class US010601Test extends ActivityTestRule<MyBooksActivity> {
         solo.clickOnView(solo.getView(R.id.addBookButton));
         solo.waitForActivity(ViewBookActivity.class);
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.edit_button));
+        solo.sleep(1000);
         solo.clearEditText((EditText) solo.getView(R.id.synopsis_element));
         solo.enterText((EditText) solo.getView(R.id.synopsis_element), "I edited this text");
         solo.clickOnView(solo.getView(R.id.save_button));
-
+        solo.sleep(1000);
         solo.goBack();
 
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
-
+        solo.sleep(1000);
         solo.clickInRecyclerView(0);
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.addBookButton));
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-
+        solo.sleep(1000);
         final TextView synopsis =
                 (TextView) solo.getCurrentActivity().findViewById(R.id.synopsis_element);
-
         assertEquals("I edited this text", synopsis.getText().toString());
-
+        solo.sleep(1000);
         solo.goBack();
+        solo.sleep(1000);
         deleteBook();
 
     }

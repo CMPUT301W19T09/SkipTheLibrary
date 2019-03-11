@@ -14,13 +14,16 @@ import android.widget.ImageButton;
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -35,9 +38,11 @@ import static org.hamcrest.CoreMatchers.not;
 public class US080101Test extends IntentsTestRule<MyBooksActivity> {
 
         private Solo solo;
+        private UITestHelper uiTestHelper;
 
-        public US080101Test() {
+        public US080101Test() throws InterruptedException {
             super(MyBooksActivity.class, true, true);
+            uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
         }
 
 
@@ -51,13 +56,14 @@ public class US080101Test extends IntentsTestRule<MyBooksActivity> {
             solo = new Solo(getInstrumentation(), rule.getActivity());
         }
 
-        @Test
-        public void start() throws Exception{
-
-            Activity activity = rule.getActivity();
+        @After
+        public void tearDown() throws InterruptedException {
+            uiTestHelper.deleteBooks();
+            solo.finishOpenedActivities();
         }
 
-        @Test
+
+    @Test
         public void addPhotoToBook() throws Exception {
 
             solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);

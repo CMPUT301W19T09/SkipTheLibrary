@@ -32,8 +32,12 @@ import static org.junit.Assert.assertFalse;
 public class US010401Test extends ActivityTestRule<MyBooksActivity> {
     private Solo solo;
     private int index;
+    private UITestHelper uiTestHelper;
 
-    public US010401Test() {super(MyBooksActivity.class, true, true);}
+    public US010401Test() throws InterruptedException {
+        super(MyBooksActivity.class, true, true);
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
+    }
 
     @Rule
     public ActivityTestRule<MyBooksActivity> rule =
@@ -45,11 +49,6 @@ public class US010401Test extends ActivityTestRule<MyBooksActivity> {
     }
 
     @Test
-    public void start() throws Exception {
-        Activity activity = rule.getActivity();
-    }
-
-    @Test
     public void viewOwnBooks() {
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
 
@@ -58,7 +57,7 @@ public class US010401Test extends ActivityTestRule<MyBooksActivity> {
         View availableChip = solo.getView(R.id.AvailableChip);
 
         solo.clickOnView(availableChip);
-        assertFalse(solo.waitForText("Test Title"));
+        assertFalse(solo.waitForText("Test Title", 1, 500));
 
         solo.clickOnView(availableChip);
         assertTrue(solo.waitForText("Test Title"));
@@ -75,6 +74,7 @@ public class US010401Test extends ActivityTestRule<MyBooksActivity> {
         solo.clickInRecyclerView(index);
         solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
         assertTrue(solo.waitForText("Test Title"));
+        solo.sleep(2000);
         solo.goBack();
 
         deleteBook();
@@ -83,6 +83,7 @@ public class US010401Test extends ActivityTestRule<MyBooksActivity> {
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
+        uiTestHelper.deleteBooks();
     }
 
     public void addBookWithoutImages(){

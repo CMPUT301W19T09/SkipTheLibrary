@@ -1,31 +1,32 @@
 package com.stl.skipthelibrary;
 
-import android.app.Activity;
-import android.view.View;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.Entities.Book;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 public class US010101Test extends ActivityTestRule<MyBooksActivity>{
 
     private Solo solo;
+    private UITestHelper uiTestHelper;
 
-    public US010101Test() {
+    public US010101Test() throws InterruptedException {
         super(MyBooksActivity.class, false, true);
+        uiTestHelper = new UITestHelper(true, true, new ArrayList<Book>());
     }
 
     @Rule
@@ -34,13 +35,13 @@ public class US010101Test extends ActivityTestRule<MyBooksActivity>{
 
     @Before
     public void setUp() throws Exception{
-
         solo = new Solo(getInstrumentation(), rule.getActivity());
     }
 
-    @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteBooks();
+        solo.finishOpenedActivities();
     }
 
     @Test

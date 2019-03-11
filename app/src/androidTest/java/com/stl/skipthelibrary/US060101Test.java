@@ -23,13 +23,20 @@ import com.stl.skipthelibrary.Activities.ScannerActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.BookDescription;
 import com.stl.skipthelibrary.Entities.Notification;
+import com.stl.skipthelibrary.Entities.Rating;
+import com.stl.skipthelibrary.Entities.RequestHandler;
 import com.stl.skipthelibrary.Entities.State;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
@@ -42,33 +49,45 @@ import static junit.framework.TestCase.assertTrue;
 public class US060101Test extends ActivityTestRule<ViewBookActivity> {
     private Solo solo;
     private BottomNavigationView view;
-    private DatabaseHelper databaseHelper;
+    private UITestHelper uiTestHelper;
+    private static final String isbn = "1234567890123";
+    private static final String bookTitle = "Felix";
+    private static final String ownerEmail = "Felix@gmail.com";
+    private static final String ownerPassword = "123456";
+    private static final String borrowerEmail = "Felix2@gmail.com";
+    private static final String borrowerPassword = "123456";
 
-    public US060101Test() {
-
+    public US060101Test() throws InterruptedException {
         super(ViewBookActivity.class, false, false);
+        RequestHandler requests = new RequestHandler(new State());
+        BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author", new Rating());
+        Book book1 = new Book(isbn, book1Description, "Felix", requests, null, null);
+
+        ArrayList<Book> books = new ArrayList<>();
+        books.add(book1);
+        uiTestHelper = new UITestHelper(true, true, books);
     }
 
-    private class MockScanner extends ScannerActivity {
-        private String isbn;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            Intent intent = new Intent();
-            intent.putExtra("ISBN", isbn);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-        }
-
-        @Override
-        public void finish() {
-            super.finish();
-        }
-
-        public void setIsbn(String isbn) {
-            this.isbn = isbn;
-        }
-    }
+//    private class MockScanner extends ScannerActivity {
+//        private String isbn;
+//
+//        @Override
+//        protected void onCreate(Bundle savedInstanceState) {
+//            Intent intent = new Intent();
+//            intent.putExtra("ISBN", isbn);
+//            setResult(Activity.RESULT_OK, intent);
+//            finish();
+//        }
+//
+//        @Override
+//        public void finish() {
+//            super.finish();
+//        }
+//
+//        public void setIsbn(String isbn) {
+//            this.isbn = isbn;
+//        }
+//    }
 
 
     @Rule
@@ -86,7 +105,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         /**
          * Test Login functionality
          */
-        logInAccount("uitest@email.com", "123123");
+        logInAccount("Felix@gmail.com", "123456");
 
 
         /**
@@ -100,7 +119,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
         solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Felix");
         solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Felix");
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "1234567890123");
+        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), isbn);
         solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Felix");
         solo.clickOnView(solo.getView(R.id.SaveBookButton));
 
@@ -116,9 +135,9 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         /**
          * Goes into another account
          */
-        logInAccount("uitestborrower@email.com", "123123");
+        logInAccount("Felix2@gmail.com", "123456");
 
-        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view = (BottomNavigationView) solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
         solo.clickOnView(view.findViewById(R.id.borrow));
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
@@ -139,40 +158,35 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         logOutAccount();
 
 
-
         /**
          * login Book Owner Account
          */
-        logInAccount("uitest@email.com", "123123");
+        logInAccount("Felix@gmail.com", "123456");
         enterMyBookActivity();
         viewBookFromMybookActivity();
         RecyclerView requstedBookList = (RecyclerView) solo.getView(R.id.RequesterRecyclerView);
         solo.clickOnView(requstedBookList.getChildAt(0).findViewById(R.id.approve_button_id));
         solo.assertCurrentActivity("Wrong Activity", MapBoxActivity.class);
         solo.clickOnView(solo.getView(R.id.select_location_submit));
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.waitForActivity(MyBooksActivity.class);
 
         viewBookFromMybookActivity();
-        solo.clickOnView(solo.getView(R.id.lendButton));
-        solo.assertCurrentActivity("Wrong Activity", ScannerActivity.class);
-
         Intent resultData = new Intent();
-        resultData.putExtra("ISBN", "1234567890123");
+        resultData.putExtra("ISBN", isbn);
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
-
         solo.clickOnView(solo.getView(R.id.lendButton));
+//        solo.sleep(50000);
 
+//        viewBookFromMybookActivity();
+//        solo.goBack();
 
-//        MockScanner mockScanner = new MockScanner();//TODO: someone please correct this
-//        mockScanner.setIsbn("1234567890123");
+//        viewBookFromMybookActivity();
+//        solo.assertCurrentActivity("Wrong Activity", ScannerActivity.class);
 
-//        solo.clickOnView(solo.getView(R.id.scanner_scan_button));
-
-//        deleteBook();
-
-
+//       deleteBook();
     }
+
     public void deleteBook() {
         RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
         View bookToDelete = myBooksList.getChildAt(0);
@@ -194,6 +208,7 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
 
     }
 
+
     public void logOutAccount(){
         /**
          * log out
@@ -213,7 +228,6 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.enterText((EditText) solo.getView(R.id.EmailEditText), email);
         solo.enterText((EditText) solo.getView(R.id.PasswordEditText), password);
         solo.clickOnView(solo.getView(R.id.SignInButton));
-        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
     }
 
     public void enterMyBookActivity(){
