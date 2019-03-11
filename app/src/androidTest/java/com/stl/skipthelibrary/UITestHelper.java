@@ -1,7 +1,5 @@
 package com.stl.skipthelibrary;
 
-import android.util.Log;
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +19,7 @@ import androidx.annotation.Nullable;
  */
 public class UITestHelper {
     private static final String testUserID = "XavBff02PYPykAxmnBFoy3moBTY2";
-    private static final String userName = "UITest";
+    public static final String userName = "UITest";
     private User testUser;
     private ArrayList<Book> books;
     private DatabaseHelper databaseHelper = new DatabaseHelper(null);
