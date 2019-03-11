@@ -1,7 +1,9 @@
 package com.stl.skipthelibrary;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.AddBooksActivity;
+import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
@@ -22,6 +25,8 @@ import com.stl.skipthelibrary.Helpers.NavigationHandler;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.Random;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.rule.ActivityTestRule;
@@ -57,7 +62,7 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
     public void testRequestBook(){
 
         //login
-        logInAccount("a@a.com", "123456");
+        logInAccount("testb@ualberta.ca", "123456");
 
         //navigate to add book
         BottomNavigationView view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
@@ -74,33 +79,64 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
 
         solo.enterText((EditText) solo.getView(R.id.AddBookTitle), "Grimm Tales");
         solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Inda Hood");
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "122-456-889-1111");
+        String isbnstring = new Random() + "";
+        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), "112-456-889-1110");
         solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "Red riding hood is rad.");
 
         solo.clickOnImageButton(0); //takes us back to my books activity
 
         //switch user
 
-
         view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
         solo.clickOnView(view.findViewById(R.id.profile));
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+        logOutAccount();
 
+        logInAccount("a@a.com", "123456");
 
         //search book
 
+        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(view.findViewById(R.id.borrow));
+        solo.waitForActivity(BorrowersBooksActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.searchBookButton));
+        solo.waitForActivity(SearchActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
+        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "Grimm");
+
         //select book
+        RecyclerView searchBookList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
+        solo.clickOnView(searchBookList.getChildAt(0));
+
 
         //request book
+        solo.clickOnView(solo.getView(R.id.requestButton));
 
 
-
-
-
+        //logout
+        solo.waitForActivity(ProfileActivity.class);
+        solo.clickOnView(solo.getView(R.id.BookListItemLeftArrow));
+        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(view.findViewById(R.id.profile));
+        solo.waitForActivity(ProfileActivity.class);
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+        logOutAccount();
 
+        //login
+        logInAccount("tesb@ualberta.ca", "123456");
+        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.waitForActivity(ViewBookActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.clickOnView(view.findViewById(R.id.requestButton));
 
+        //delete book
+        deleteBook();
 
         /*RecyclerView searchBookList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
         int index = 0;
@@ -152,8 +188,38 @@ public class US040101Test extends ActivityTestRule<LoginActivity>{
         solo.enterText((EditText) solo.getView(R.id.EmailEditText), email);
         solo.enterText((EditText) solo.getView(R.id.PasswordEditText), password);
         solo.clickOnView(solo.getView(R.id.SignInButton));
-        solo.waitForActivity(NotificationActivity.class);
-        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
+    }
+
+    public void deleteBook() {
+        RecyclerView myBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
+        View bookToDelete = myBooksList.getChildAt(0);
+
+        int[] location = new int[2];
+
+        bookToDelete.getLocationInWindow(location);
+
+        int fromX = location[0] + 800;
+        int fromY = location[1];
+
+        int toX = location[0];
+        int toY = fromY;
+
+        solo.drag(fromX, toX, fromY, toY, 10);
+        solo.sleep(1000);
+
+//        assertTrue(myBooksList.getAdapter().getItemCount() == 0);
+
+    }
+
+    public void logOutAccount(){
+        BottomNavigationView view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(view.findViewById(R.id.profile));
+        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+
+        solo.clickOnView(solo.getView(R.id.logoutButton));
+        solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+
     }
 }
 
