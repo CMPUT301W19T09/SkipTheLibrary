@@ -68,7 +68,7 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
 
         RequestHandler requests = new RequestHandler(new State());
         BookDescription book1Description = new BookDescription(bookTitle, "Test book", "Test Author", new Rating());
-        Book book1 = new Book(isbn, book1Description, uiTestHelper.userName, requests, null, null);
+        Book book1 = new Book(isbn, book1Description, uiTestHelper.userName, requests, null, new Rating());
 
         ArrayList<Book> books = new ArrayList<>();
         books.add(book1);
@@ -92,15 +92,17 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         RecyclerView borrowerBooksList;
         RecyclerView searchBooksList;
 
+        Activity activity = solo.getCurrentActivity();
 
-        /**
-         * Test Login functionality
-         */
-        logInAccount(borrowerEmail, borrowerPassword);
-        enterProfile();
-        if (!solo.searchText(borrowerEmail)) {
-            logOutAccount();
+        if (activity.equals(LoginActivity.class)) {
             logInAccount(borrowerEmail, borrowerPassword);
+        }
+        else {
+            enterProfile();
+            if (!solo.searchText(borrowerEmail)) {
+                logOutAccount();
+                logInAccount(borrowerEmail, borrowerPassword);
+            }
         }
 
         // search for and request the book
@@ -218,21 +220,6 @@ public class US030201Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(solo.getView(R.id.SignInButton));
         assertTrue(solo.waitForText("Notifications"));
 //        solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
-    }
-
-    public void addBook() {
-        enterMyBookActivity();
-
-        solo.clickOnView(solo.getView(R.id.addBookButton));
-
-        solo.assertCurrentActivity("Wrong Activity", AddBooksActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.AddBookTitle), bookTitle);
-        solo.enterText((EditText) solo.getView(R.id.AddBookAuthor), "Author");
-        solo.enterText((EditText) solo.getView(R.id.AddBookISBN), isbn);
-        solo.enterText((EditText) solo.getView(R.id.AddBookDesc), "A book");
-        solo.clickOnView(solo.getView(R.id.SaveBookButton));
-
-        assertTrue(solo.waitForText(bookTitle));
     }
 
     public void enterProfile() {

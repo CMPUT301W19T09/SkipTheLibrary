@@ -68,26 +68,27 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         uiTestHelper = new UITestHelper(true, true, books);
     }
 
-//    private class MockScanner extends ScannerActivity {
-//        private String isbn;
-//
-//        @Override
-//        protected void onCreate(Bundle savedInstanceState) {
-//            Intent intent = new Intent();
-//            intent.putExtra("ISBN", isbn);
-//            setResult(Activity.RESULT_OK, intent);
-//            finish();
-//        }
-//
-//        @Override
-//        public void finish() {
-//            super.finish();
-//        }
-//
-//        public void setIsbn(String isbn) {
-//            this.isbn = isbn;
-//        }
-//    }
+    private class MockScanner extends ScannerActivity {
+        private String isbn;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            Intent intent = new Intent();
+            intent.putExtra("ISBN", isbn);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+            return;
+        }
+
+        @Override
+        public void finish() {
+            super.finish();
+        }
+
+        public void setIsbn(String isbn) {
+            this.isbn = isbn;
+        }
+    }
 
 
     @Rule
@@ -171,10 +172,11 @@ public class US060101Test extends ActivityTestRule<ViewBookActivity> {
         solo.waitForActivity(MyBooksActivity.class);
 
         viewBookFromMybookActivity();
-        Intent resultData = new Intent();
-        resultData.putExtra("ISBN", isbn);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
+//        Intent resultData = new Intent();
+//        resultData.putExtra("ISBN", isbn);
+//        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+//        intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
+//        Intent intent = new Intent(ViewBookActivity.this, ScannerActivity.class);
         solo.clickOnView(solo.getView(R.id.lendButton));
 //        solo.sleep(50000);
 
