@@ -9,7 +9,6 @@ public class BookDescription {
     private String title;
     private String synopsis;
     private String author;
-    private Rating rating;
 
     /**
      * The empty constructor
@@ -21,13 +20,11 @@ public class BookDescription {
      * @param title: the book's title
      * @param synopsis: the book's synopsis
      * @param author: the book's author
-     * @param rating: the book's rating
      */
-    public BookDescription(String title, String synopsis, String author, Rating rating) {
+    public BookDescription(String title, String synopsis, String author) {
         this.title = title;
         this.synopsis = synopsis;
         this.author = author;
-        this.rating = rating;
     }
 
 
@@ -79,21 +76,6 @@ public class BookDescription {
         this.author = author;
     }
 
-    /**
-     * get the book's rating
-     * @return the book's rating
-     */
-    public Rating getRating() {
-        return rating;
-    }
-
-    /**
-     * set the book's rating
-     * @param rating: the book's rating
-     */
-    public void setRating(Rating rating) {
-        this.rating = rating;
-    }
 
     /**
      * Determines if the object o is identical to the current bookdescription
@@ -107,8 +89,7 @@ public class BookDescription {
         BookDescription that = (BookDescription) o;
         return Objects.equals(getTitle(), that.getTitle()) &&
                 Objects.equals(getSynopsis(), that.getSynopsis()) &&
-                Objects.equals(getAuthor(), that.getAuthor()) &&
-                Objects.equals(getRating(), that.getRating());
+                Objects.equals(getAuthor(), that.getAuthor());
     }
 
     /**
@@ -117,6 +98,6 @@ public class BookDescription {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getSynopsis(), getAuthor(), getRating());
+        return Objects.hash(getTitle(), getSynopsis(), getAuthor());
     }
 }
