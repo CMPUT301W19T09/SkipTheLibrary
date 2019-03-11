@@ -140,12 +140,13 @@ public class US090101Test extends IntentsTestRule<LoginActivity> {
 
     @After
     public void tearDown() throws InterruptedException {
-        uiTestHelper.deleteBooks();
+        uiTestHelper.finish();
         solo.finishOpenedActivities();
     }
 
     public void logOutAccount(){
         enterProfile();
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.logoutButton));
         assertTrue(solo.waitForText("Login"));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
@@ -156,6 +157,7 @@ public class US090101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.EmailEditText), email);
         solo.enterText((EditText) solo.getView(R.id.PasswordEditText), password);
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.SignInButton));
         assertTrue(solo.waitForText("Notifications"));
         solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);

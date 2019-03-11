@@ -24,8 +24,34 @@ public class UITestHelper {
     private ArrayList<Book> books;
     private DatabaseHelper databaseHelper = new DatabaseHelper(null);
     private ChildEventListener childEventListener;
+    private UITestSemaphore uiTestSemaphore;
 
-    public UITestHelper(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
+    public UITestHelper(final boolean loadTestUser, final boolean loadBooks, @NonNull final ArrayList<Book> books) throws InterruptedException {
+        databaseHelper.getDatabaseReference().child("TestSemaphore").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                uiTestSemaphore = dataSnapshot.getValue(UITestSemaphore.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Thread.sleep(2000);
+
+        if (!uiTestSemaphore.isInUse()){
+            uiTestSemaphore.setInUse(true);
+            databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
+            start(loadTestUser, loadBooks, books);
+        }
+        else{
+            throw new RuntimeException("A test is currently running");
+        }
+    }
+
+    private void start(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
         if(loadTestUser){
             loadTestUser();
         }
@@ -62,7 +88,14 @@ public class UITestHelper {
         Thread.sleep(2000);
     }
 
-    public void deleteBooks() throws InterruptedException {
+    public void finish() throws InterruptedException {
+        deleteBooks();
+        uiTestSemaphore.setInUse(false);
+        databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
+    }
+
+
+    private void deleteBooks() throws InterruptedException {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

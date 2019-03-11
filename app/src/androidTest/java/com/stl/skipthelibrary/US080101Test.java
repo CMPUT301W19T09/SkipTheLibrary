@@ -58,7 +58,7 @@ public class US080101Test extends IntentsTestRule<MyBooksActivity> {
 
         @After
         public void tearDown() throws InterruptedException {
-            uiTestHelper.deleteBooks();
+            uiTestHelper.finish();
             solo.finishOpenedActivities();
         }
 

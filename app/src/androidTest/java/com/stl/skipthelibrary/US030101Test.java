@@ -128,6 +128,7 @@ public class US030101Test extends ActivityTestRule<BorrowersBooksActivity> {
 
     @After
     public void tearDown() throws InterruptedException {
+        uiTestHelper.finish();
         uiTestHelper.deleteUsersBooks("testyBoi");
         solo.finishOpenedActivities();
     }

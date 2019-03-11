@@ -53,7 +53,7 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
-        uiTestHelper.deleteBooks();
+        uiTestHelper.finish();
     }
 
     @Test
