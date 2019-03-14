@@ -281,10 +281,21 @@ public class DatabaseHelper {
     }
 
 
+
     public void sendNotification(NotificationType notificationType, String user, String bookID, String bookName) {
         Notification notification = new Notification(notificationType, user, bookID, bookName);
         getDatabaseReference().child("Notifications").child(notification.getUuid()).setValue(notification);
     }
+
+
+    /**
+     * Delete a notification from firebase
+     * @param notification: the notification to delete
+     */
+    public void deleteNotification(Notification notification){
+        getDatabaseReference().child("Notifications").child(notification.getUuid()).removeValue();
+    }
+
 
     /**
      * Gets the current FireBaseAuth instance
