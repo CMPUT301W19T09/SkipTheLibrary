@@ -112,21 +112,24 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
         String bookName = notifications.get(position).getBookName();
         String userName = notifications.get(position).getUserName();
         String notificationID = notifications.get(position).getUuid();
-
-        holder.notificationHeader.setText("bookname" + bookName);
-        holder.notificationBody.setText("fake text");
+        String notificationBodyText = "Notification Received";
 
 
-        if (notificationType.equals(NotificationType.NEW_REQUEST.name())){
+        if (notificationType.toString().equals(NotificationType.NEW_REQUEST.toString())){
             holder.notificationBubble.setBackgroundTintList(context.getColorStateList(R.color.AVAILABLE));
+            notificationBodyText = "Your book has been requested";
         }
-        else if (notificationType.equals(NotificationType.REQUEST_ACCEPTED.name())){
+        else if (notificationType.toString().equals(NotificationType.REQUEST_ACCEPTED.toString())){
             holder.notificationBubble.setBackgroundTintList(context.getColorStateList(R.color.ACCEPTED));
+            notificationBodyText = "Your request has been accepted";
         }
-        else if (notificationType.equals(NotificationType.REQUEST_DENIED.name())){
+        else if (notificationType.toString().equals(NotificationType.REQUEST_DENIED.toString())){
             holder.notificationBubble.setBackgroundTintList(context.getColorStateList(R.color.declined_red));
+            notificationBodyText = "Your request has been denied";
         }
 
+        holder.notificationHeader.setText(bookName);
+        holder.notificationBody.setText(notificationBodyText);
 
 
         holder.notificationBubble.setOnClickListener(new View.OnClickListener() {
