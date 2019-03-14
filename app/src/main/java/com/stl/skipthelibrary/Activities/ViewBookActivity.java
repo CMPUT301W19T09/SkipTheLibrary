@@ -300,7 +300,7 @@ public class ViewBookActivity extends AppCompatActivity {
                 handler.addRequestor(user.getUserName());
                 handler.getState().setBookStatus(BookStatus.REQUESTED);
                 databaseHelper.updateBook(book);
-                databaseHelper.sendNotification(NotificationType.NEW_REQUEST, user.getUserName(),
+                databaseHelper.sendNotification(NotificationType.NEW_REQUEST, book.getOwnerUserName(),
                         book.getUuid(), book.getDescription().getTitle());
             }
         });
