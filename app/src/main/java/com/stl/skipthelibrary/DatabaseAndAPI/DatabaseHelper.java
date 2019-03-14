@@ -22,6 +22,8 @@ import com.stl.skipthelibrary.Entities.ContactInfo;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
+import com.stl.skipthelibrary.Entities.Notification;
+import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
@@ -276,6 +278,12 @@ public class DatabaseHelper {
      */
     public void deleteBook(Book book){
         getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
+    }
+
+
+    public void sendNotification(NotificationType notificationType, String user, String bookID, String bookName) {
+        Notification notification = new Notification(notificationType, user, bookID, bookName);
+        getDatabaseReference().child("Notifications").child(notification.getUuid()).setValue(notification);
     }
 
     /**
