@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +31,7 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * The database helper. This class interacts heavily with the database to do all database heavy
@@ -278,8 +280,41 @@ public class DatabaseHelper {
      */
     public void deleteBook(Book book){
         getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
+
+        deleteAllNotifications(book.getUuid());
+
     }
 
+    private void deleteAllNotifications(String bookID) {
+        getDatabaseReference().child("Notifications").orderByChild("bookID")
+                .equalTo(bookID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Notification notification = dataSnapshot.getValue(Notification.class);
+                databaseReference.child("Notifications").child(notification.getUuid()).removeValue();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     public void sendNotification(NotificationType notificationType, String user, String bookID, String bookName) {

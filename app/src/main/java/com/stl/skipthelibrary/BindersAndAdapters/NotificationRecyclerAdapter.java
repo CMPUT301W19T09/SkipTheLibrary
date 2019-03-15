@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -136,10 +137,10 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
             @SuppressLint("LongLogTag")
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "notif. clicked on");
                 Intent intent = new Intent(context, ViewBookActivity.class);
                 intent.putExtra(BOOK_ID, notifications.get(position).getBookID());
                 context.startActivity(intent);
+                Log.d(TAG,"StartedActivity");
             }
         });
 
@@ -150,9 +151,6 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
                 deleteNotification(position);
             }
         });
-
-
-
 
     }
 
@@ -183,7 +181,7 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
          */
         public ViewHolder(View itemView) {
             super(itemView);
-            parentLayout = itemView.findViewById(R.id.notification_list__id);
+            parentLayout = itemView.findViewById(R.id.notification_recycler_view);
             closeButton = itemView.findViewById(R.id.floatingActionButton2);
             notificationHeader = itemView.findViewById(R.id.NotificationHeading);
             notificationBody = itemView.findViewById(R.id.NotificationBody);

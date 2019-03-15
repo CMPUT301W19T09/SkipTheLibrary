@@ -48,8 +48,7 @@ public class NotificationActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(new NavigationHandler(this));
         navigation.setSelectedItemId(R.id.home);
 
-        setContentView(R.layout.notification_view);
-        recyclerView = findViewById(R.id.notification_list__id);
+        recyclerView = findViewById(R.id.notification_recycler_view);
         mContext = getApplicationContext();
 
         adapter = new NotificationRecyclerAdapter(this, notifications);
