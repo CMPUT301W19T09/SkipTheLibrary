@@ -90,15 +90,13 @@
             android:id="@+id/rating_bar_element"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
             style="@style/ratingBarSmall"
+            android:progressTint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rating_header"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:progressTint="@color/white"
-            android:rating="3"
-            android:stepSize="0.1"
             />
 
         <View

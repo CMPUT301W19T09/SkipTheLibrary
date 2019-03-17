@@ -107,7 +107,6 @@ public class ScannerActivity extends AppCompatActivity {
     private void processResult(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
         if (firebaseVisionBarcodes.size() == 0){
             Toast.makeText(this, "Nothing found to scan. Please try again", Toast.LENGTH_SHORT).show();
-            startScan();
         }
 
         for (FirebaseVisionBarcode barcode : firebaseVisionBarcodes){
@@ -120,6 +119,7 @@ public class ScannerActivity extends AppCompatActivity {
             }
         }
         Toast.makeText(this, "Found improper barcode. Please try again", Toast.LENGTH_SHORT).show();
+        startScan();
     }
 
     /**

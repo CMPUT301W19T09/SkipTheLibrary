@@ -15,8 +15,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
+import com.stl.skipthelibrary.Helpers.BookRatingReceiver;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
@@ -274,6 +276,9 @@ public class MyBooksActivity extends AppCompatActivity {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 Log.d(TAG, "Book Added Successfully!");
+                String isbn = resultIntent.getStringExtra(ViewBookActivity.ISBN);
+                String uuid = resultIntent.getStringExtra(ViewBookActivity.UUID);
+                new BookRatingReceiver(mContext,new Rating(),uuid).execute(isbn);
             }
         } else {
             Log.d(TAG, "Book Was not Added Successfully.");
