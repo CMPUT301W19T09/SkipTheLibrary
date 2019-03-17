@@ -23,7 +23,9 @@ public class BookRatingReceiver extends AsyncTask<String, Void, String> {
 
     /**
      * The constructor
+     * @param context: the calling context
      * @param rating: the books rating
+     * @param uuid: the uuid of the book in question
      */
     public BookRatingReceiver(Context context, Rating rating, String uuid) {
         setRating(rating);
@@ -31,26 +33,50 @@ public class BookRatingReceiver extends AsyncTask<String, Void, String> {
         setUuid(uuid);
     }
 
+    /**
+     * Get book rating
+     * @return the rating
+     */
     public Rating getRating() {
         return rating;
     }
 
+    /**
+     * Set the rating
+     * @param rating
+     */
     public void setRating(Rating rating) {
         this.rating = rating;
     }
 
+    /**
+     * Return the calling context
+     * @return the context
+     */
     public Context getContext() {
         return context;
     }
 
+    /**
+     * Set the calling context
+     * @param context
+     */
     public void setContext(Context context) {
         this.context = context;
     }
 
+    /**
+     * Get the uuid of the book in question
+     * @return the uui string
+     */
     public String getUuid() {
         return uuid;
     }
 
+    /**
+     * Set the uuid string
+     * @param uuid
+     */
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
@@ -66,7 +92,7 @@ public class BookRatingReceiver extends AsyncTask<String, Void, String> {
     }
 
     /**
-     * Converts the results of the API call in JSON to separate strings and binds them to UI
+     * Converts the results of the API call in JSON to separate strings and updates the DB
      * @param s: The results in JSON of the API call
      */
     @Override

@@ -28,7 +28,7 @@ public class GoodReadsAPIHelper {
     public GoodReadsAPIHelper() {}
 
     /**
-     * Get the book's JSON info by making an API call.
+     * Get the book's JSON rating info by making an API call.
      * Sets up the HTTP connection and then retrieves the response
      * @param ISBN: the book's ISBN
      * @return the book's details in JSON
