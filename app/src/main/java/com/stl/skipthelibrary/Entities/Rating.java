@@ -120,7 +120,7 @@ public class Rating {
      */
     @Override
     public String toString() {
-        return "{rating = " + averageRating + "}";
+        return "{rating = " + averageRating + " count " + count + "}";
     }
 
     /**
