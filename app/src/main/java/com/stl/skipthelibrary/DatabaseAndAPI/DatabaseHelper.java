@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.ContactInfo;
 import com.stl.skipthelibrary.Activities.LoginActivity;
@@ -24,12 +25,15 @@ import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Entities.Notification;
 import com.stl.skipthelibrary.Enums.NotificationType;
+import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 
 import androidx.annotation.NonNull;
+
+import static com.stl.skipthelibrary.Activities.ViewBookActivity.ISBN;
 
 /**
  * The database helper. This class interacts heavily with the database to do all database heavy
@@ -261,6 +265,8 @@ public class DatabaseHelper {
         if(displayMessageAndFinish){
             Toast.makeText(context, "Book Added!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context.getApplicationContext(), MyBooksActivity.class);
+            intent.putExtra(ISBN,book.getISBN());
+            intent.putExtra(ViewBookActivity.UUID,book.getUuid());
             ((Activity) context).setResult(Activity.RESULT_OK, intent);
             ((Activity) context).finish();
         }
@@ -269,6 +275,11 @@ public class DatabaseHelper {
     public void updateBook(Book newbook){
         databaseReference.child("Books").child(newbook.getUuid()).setValue(newbook);
         Log.d("Updating book", "new book should be replaced");
+    }
+
+    public void updateRating(String uuid, Rating rating){
+        databaseReference.child("Books").child(uuid).child("rating").setValue(rating);
+        Log.d("Updating book", "rating should be replaced");
     }
 
 

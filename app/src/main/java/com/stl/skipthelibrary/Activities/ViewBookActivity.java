@@ -56,6 +56,8 @@ import java.util.ArrayList;
  */
 public class ViewBookActivity extends AppCompatActivity {
     final public static String TAG = "ViewBookActivityTag";
+    final public static String ISBN = "ISBN";
+    final public static String UUID = "UUID";
     private DatabaseHelper databaseHelper;
 
 
@@ -419,7 +421,12 @@ public class ViewBookActivity extends AppCompatActivity {
         });
 
         rating_element.setMax(book.getRating().getMaxRating());
-        rating_element.setNumStars((int) Math.round(book.getRating().getAverageRating()));
+        rating_element.setStepSize((float) 0.5);
+        rating_element.setRating((float) book.getRating().getAverageRating());
+
+        Log.d(TAG, "fillBookDescriptionFields: rating "+book.getRating());
+        Log.d(TAG, "fillBookDescriptionFields: ratings "+ rating_element.getRating() + " " + rating_element.getNumStars() + " " + rating_element.getStepSize());
+
         synopsis_element.setText(book.getDescription().getSynopsis());
         bookImages.addAll(book.getImages());
         Log.d("BOOK PICS: ", bookImages.toString());
@@ -442,12 +449,10 @@ public class ViewBookActivity extends AppCompatActivity {
         if (isEditable) {
             title_element.setEnabled(true);
             author_element.setEnabled(true);
-            rating_element.setEnabled(false);
             synopsis_element.setEnabled(true);
         } else {
             title_element.setEnabled(false);
             author_element.setEnabled(false);
-            rating_element.setEnabled(false);
             synopsis_element.setEnabled(false);
         }
     }
@@ -459,7 +464,6 @@ public class ViewBookActivity extends AppCompatActivity {
         book.getDescription().setTitle(title_element.getText().toString());
         book.getDescription().setAuthor(author_element.getText().toString());
         book.getDescription().setSynopsis(synopsis_element.getText().toString());
-        book.getRating().addRating((double) rating_element.getNumStars());
         book.setImages(bookImages);
         databaseHelper.updateBook(book);
     }
@@ -476,7 +480,7 @@ public class ViewBookActivity extends AppCompatActivity {
         // Check which request we're responding to
         if (requestCode == ScannerActivity.SCAN_BOOK) {
             if (resultCode == RESULT_OK) {
-                isbn_code = data.getStringExtra("ISBN");
+                isbn_code = data.getStringExtra(ISBN);
                 if (isbn_code.equals(book.getISBN()) && CurrentUser.getInstance().getUserName().equals(book.getOwnerUserName())){
                     switch (book.getRequests().getState().getHandoffState()) {
                         case READY_FOR_PICKUP:

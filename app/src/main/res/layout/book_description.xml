@@ -109,16 +109,17 @@
             android:id="@+id/rating_bar_element"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ratingBarSmall"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rating_header"
-            android:isIndicator="true"
+            android:alpha="1"
             android:numStars="5"
-            android:progressTint="@color/white"
-            android:rating="3"
-            android:stepSize="0.1"
-            />
+            android:progressBackgroundTint="@color/black"
+            android:progressTint="@color/gold"
+            android:isIndicator="true"
+            android:rating="2.5"
+            android:secondaryProgressTint="@color/Transparent"
+            android:stepSize="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rating_header" />
 
         <View
             android:id="@+id/rating_bar_divider"
@@ -168,6 +169,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/owner_user_name_bottom_divider"
+            tools:itemCount="1"
             tools:listitem="@layout/book_image_list_item">
 
         </androidx.recyclerview.widget.RecyclerView>
