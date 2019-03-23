@@ -42,6 +42,34 @@
         android:layout_marginVertical="16dp"
         android:background="@android:drawable/ic_menu_edit"/>
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/deleteProfileImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="128dp"
+        android:src="@android:drawable/ic_delete"
+        android:onClick="deleteImageOnClick"
+        app:civ_border_color="@color/BORROWED"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profileImage"
+        app:layout_constraintTop_toTopOf="@+id/profileImage" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/addProfileImageButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="128dp"
+        android:src="@android:drawable/ic_input_add"
+        android:onClick="addImageOnClick"
+        app:civ_border_color="@color/AVAILABLE"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profileImage"
+        app:layout_constraintTop_toTopOf="@+id/profileImage" />
+
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profileImage"
         android:layout_width="150dp"
