@@ -396,10 +396,14 @@ public class ViewBookActivity extends AppCompatActivity {
     private void fillBookDescriptionFields(){
         title_element.setText(book.getDescription().getTitle());
         author_element.setText(book.getDescription().getAuthor());
+
         rating_element.setMax(book.getRating().getMaxRating());
+        rating_element.setStepSize((float) 0.5);
+        rating_element.setRating((float) book.getRating().getAverageRating());
+
         Log.d(TAG, "fillBookDescriptionFields: rating "+book.getRating());
-        rating_element.setRating((float)book.getRating().getAverageRating());
         Log.d(TAG, "fillBookDescriptionFields: ratings "+ rating_element.getRating() + " " + rating_element.getNumStars() + " " + rating_element.getStepSize());
+
         synopsis_element.setText(book.getDescription().getSynopsis());
         bookImages.addAll(book.getImages());
         Log.d("BOOK PICS: ", bookImages.toString());
@@ -422,12 +426,10 @@ public class ViewBookActivity extends AppCompatActivity {
         if (isEditable) {
             title_element.setEnabled(true);
             author_element.setEnabled(true);
-            rating_element.setEnabled(false);
             synopsis_element.setEnabled(true);
         } else {
             title_element.setEnabled(false);
             author_element.setEnabled(false);
-            rating_element.setEnabled(false);
             synopsis_element.setEnabled(false);
         }
     }
