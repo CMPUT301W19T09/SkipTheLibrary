@@ -58,4 +58,5 @@
     <string name="lend_button">lend</string>
     <string name="returned_button">returned</string>
     <string name="noImageText">This book has no images</string>
+    <string name="password_prompt">Please enter your password to update profile</string>
 </resources>

@@ -1,14 +1,21 @@
 package com.stl.skipthelibrary.DatabaseAndAPI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -17,11 +24,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.stl.skipthelibrary.Activities.ViewBookActivity;
 import com.stl.skipthelibrary.Entities.Book;
 import com.stl.skipthelibrary.Entities.ContactInfo;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
+import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
@@ -269,6 +278,101 @@ public class DatabaseHelper {
         Log.d("Updating book", "new book should be replaced");
     }
 
+    public boolean updateCurrentUser(){
+        User user = CurrentUser.getInstance();
+        Log.d(TAG, "updateCurrentUser: "+user);
+        final String email = user.getContactInfo().getEmail();
+        Log.d(TAG, "updateCurrentUser: "+email +" "+getFirebaseAuth().getCurrentUser().getEmail());
+        if (!email.equals(getFirebaseAuth().getCurrentUser().getEmail())) {
+            getFirebaseAuth().getCurrentUser().updateEmail(email);
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            //TODO: Prompt user for password
+            promptPassword();
+
+            Log.d(TAG, "updateCurrentUser: UPDATING IN FIREBASE");
+        } else {
+            getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
+        }
+        Log.d("Updating user", "new user should be replaced");
+        return true;
+    }
+
+    private void updateEmail(String password) {
+        String oldEmail = getFirebaseAuth().getCurrentUser().getEmail();
+        final String newEmail = CurrentUser.getInstance().getContactInfo().getEmail();
+
+        // Get auth credentials from the user for re-authentication
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(oldEmail, password); // Current Login Credentials \\
+        // Prompt the user to re-provide their sign-in credentials
+        firebaseUser.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "User re-authenticated.");
+                        //Now change your email address \\
+                        //----------------Code for Changing Email Address----------\\
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.updateEmail(newEmail)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User email address updated.");
+                                            Toast.makeText(getContext(),"Updated Email", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                        //----------------------------------------------------------\\
+                    }
+                });
+    }
+
+    public void promptPassword() {
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View promptsView = li.inflate(R.layout.password_prompt, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextPassword);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // get user input and set it to result
+                                // edit text
+                                User user = CurrentUser.getInstance();
+                                Log.d(TAG, "onClick: "+userInput.getText().toString());
+                                String password = userInput.getText().toString();
+                                updateEmail(password);
+                                getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                CurrentUser.getInstance().getContactInfo()
+                                        .setEmail(getFirebaseUser().getEmail());
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
 
     /**
      * Delete a book from firebase
@@ -357,4 +461,5 @@ public class DatabaseHelper {
     public void setFirebaseUser(FirebaseUser firebaseUser) {
         this.firebaseUser = firebaseUser;
     }
+
 }

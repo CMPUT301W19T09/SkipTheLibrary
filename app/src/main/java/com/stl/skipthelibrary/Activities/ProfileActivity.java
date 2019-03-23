@@ -7,7 +7,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,13 +38,16 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView myProfileImage;
     private TextView myProfileName;
     private TextView myProfileUsername;
-    private TextView myProfileEmail;
-    private TextView myProfilePhoneNumber;
+    private EditText myProfileEmail;
+    private EditText myProfilePhoneNumber;
     private BottomNavigationView navigation;
     private MaterialButton logoutButton;
     private User user;
     private ProgressDialog progressDialog;
     private TextView title;
+    private ImageButton edit_button;
+    private ImageButton save_button;
+
     private boolean isUserTheCurrentUser;
 
     /**
@@ -54,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         initProgressDialog();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -65,6 +73,10 @@ public class ProfileActivity extends AppCompatActivity {
         navigation = findViewById(R.id.bottom_navigation);
         title = findViewById(R.id.MyProfileTitle);
         logoutButton = findViewById(R.id.logoutButton);
+        edit_button = findViewById(R.id.profile_edit_button);
+        save_button = findViewById(R.id.profile_save_button);
+
+        setContactInfoFieldsEditable(false);
 
         Intent intent = getIntent();
         String userName = intent.getExtras().getString(USER_NAME);
@@ -130,16 +142,80 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileImage.setImageBitmap(user.getImage().decode());
 
         myProfileName.setText(user.getName());
-        myProfileUsername.setText("@"+ user.getUserName());
-        myProfileEmail.setText("Email: "+ user.getContactInfo().getEmail());
-        myProfilePhoneNumber.setText("Phone Number: "+ user.getContactInfo().getPhoneNumber().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+        myProfileUsername.setText(String.format("@%s",user.getUserName()));
+        myProfileEmail.setText(String.format("Email: %s",user.getContactInfo().getEmail()));
+        myProfilePhoneNumber.setText(String.format("Phone Number: %s",user.getContactInfo().getPhoneNumber())
+                .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
         progressDialog.hide();
         progressDialog.dismiss();
 
         if (!isUserTheCurrentUser){
-            title.setText(user.getUserName() + "'s Profile");
+            title.setText(String.format("%s's Profile",user.getUserName()));
+            edit_button.setVisibility(View.GONE);
+            save_button.setVisibility(View.GONE);
+        } else {
+            edit_button.setVisibility(View.VISIBLE);
+            save_button.setVisibility(View.GONE);
+
+            edit_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContactInfoFieldsEditable(true);
+                    myProfileEmail.setText(CurrentUser.getInstance().getContactInfo().getEmail());
+                    myProfilePhoneNumber.setText(CurrentUser.getInstance()
+                            .getContactInfo().getPhoneNumber()
+                            .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+                    save_button.setVisibility(View.VISIBLE);
+                    edit_button.setVisibility(View.GONE);
+                    logoutButton.setVisibility(View.GONE);
+                }
+            });
+
+            save_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContactInfoFieldsEditable(false);
+                    save_button.setVisibility(View.GONE);
+                    edit_button.setVisibility(View.VISIBLE);
+                    logoutButton.setVisibility(View.VISIBLE);
+                    updateContactInfoFields();
+                    myProfileEmail.setText(String.format("Email: %s",CurrentUser.getInstance()
+                            .getContactInfo().getEmail()));
+                    myProfilePhoneNumber.setText(String.format("Phone Number: %s",CurrentUser
+                            .getInstance().getContactInfo().getPhoneNumber()
+                            .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3")));
+                }
+            });
         }
 
+    }
+
+    /**
+     * Toggle the ability of fields to be editable
+     * @param isEditable: should the fields be allowed to be edited
+     */
+    private void setContactInfoFieldsEditable(Boolean isEditable) {
+        if (isEditable) {
+            myProfileEmail.setEnabled(true);
+            myProfilePhoneNumber.setEnabled(true);
+        } else {
+            myProfileEmail.setEnabled(false);
+            myProfilePhoneNumber.setEnabled(false);
+        }
+    }
+
+    /**
+     * Update the current book by changing its fields
+     */
+    private void updateContactInfoFields(){
+        User user = CurrentUser.getInstance();
+        user.getContactInfo().setEmail(myProfileEmail.getText().toString());
+        user.getContactInfo().setPhoneNumber(
+                myProfilePhoneNumber.getText().toString()
+                        .replaceFirst("\\((\\d{3})\\) (\\d{3})-(\\d+)", "$1$2$3")
+        );
+        Log.d(TAG, "updateContactInfoFields: "+user);
+        databaseHelper.updateCurrentUser();
     }
 
     /**
