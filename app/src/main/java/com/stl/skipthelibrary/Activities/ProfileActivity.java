@@ -204,6 +204,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Displays the correct image button depending on the circumstances (delete or add)
+     */
     private void showImageButton() {
         if (currentImage != null) {
             delete_image_button.setVisibility(View.VISIBLE);
@@ -214,6 +217,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hides both of the possible image buttons
+     */
     private void hideImagenButtons() {
         add_image_button.setVisibility(View.GONE);
         delete_image_button.setVisibility(View.GONE);
@@ -325,7 +331,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * Handle requests from other activities, this includes the scanner and the location activities
+     * Handle requests from other activities, this includes image adding
      * @param requestCode: the request code
      * @param resultCode: the result code
      * @param data: the data returned

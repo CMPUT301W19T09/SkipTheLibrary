@@ -285,11 +285,19 @@ public class DatabaseHelper {
         }
     }
 
+
+    /**
+     * Updates a book in the user's collection in firebase
+     * @param newbook: the book to update
+     */
     public void updateBook(Book newbook){
         databaseReference.child("Books").child(newbook.getUuid()).setValue(newbook);
         Log.d("Updating book", "new book should be replaced");
     }
 
+    /**
+     * Updates the current user in firebase
+     */
     public boolean updateCurrentUser(){
         User user = CurrentUser.getInstance();
         Log.d(TAG, "updateCurrentUser: "+user);
@@ -310,6 +318,10 @@ public class DatabaseHelper {
         return true;
     }
 
+    /**
+     * Updates a users email information in firebase
+     * @param password: the password of the account in question
+     */
     private void updateEmail(String password) {
         String oldEmail = getFirebaseAuth().getCurrentUser().getEmail();
         final String newEmail = CurrentUser.getInstance().getContactInfo().getEmail();
@@ -341,6 +353,10 @@ public class DatabaseHelper {
                 });
     }
 
+    /**
+     * Prompts a user to input their password in order to update authentication related contact
+     *  info
+     */
     public void promptPassword() {
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.password_prompt, null);
@@ -385,6 +401,11 @@ public class DatabaseHelper {
         alertDialog.show();
     }
 
+    /**
+     * Updates a books rating in firebase based off of the book UUID
+     * @param uuid: the book to update
+     * @param rating: The new rating
+     */
     public void updateRating(String uuid, Rating rating){
         databaseReference.child("Books").child(uuid).child("rating").setValue(rating);
         Log.d("Updating book", "rating should be replaced");
