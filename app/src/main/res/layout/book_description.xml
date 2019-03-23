@@ -112,7 +112,7 @@
             android:alpha="1"
             android:numStars="5"
             android:progressBackgroundTint="@color/black"
-            android:progressTint="@color/gold"
+            android:progressTint="@color/white"
             android:isIndicator="true"
             android:rating="2.5"
             android:secondaryProgressTint="@color/Transparent"
