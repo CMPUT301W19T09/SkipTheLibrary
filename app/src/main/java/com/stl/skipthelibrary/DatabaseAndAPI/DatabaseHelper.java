@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +24,8 @@ import com.stl.skipthelibrary.Entities.ContactInfo;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
+import com.stl.skipthelibrary.Entities.Notification;
+import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
@@ -30,6 +33,7 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static com.stl.skipthelibrary.Activities.ViewBookActivity.ISBN;
 
@@ -287,7 +291,57 @@ public class DatabaseHelper {
      */
     public void deleteBook(Book book){
         getDatabaseReference().child("Books").child(book.getUuid()).removeValue();
+
+        deleteAllNotifications(book.getUuid());
+
     }
+
+    private void deleteAllNotifications(String bookID) {
+        getDatabaseReference().child("Notifications").orderByChild("bookID")
+                .equalTo(bookID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Notification notification = dataSnapshot.getValue(Notification.class);
+                databaseReference.child("Notifications").child(notification.getUuid()).removeValue();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public void sendNotification(NotificationType notificationType, String user, String bookID, String bookName) {
+        Notification notification = new Notification(notificationType, user, bookID, bookName);
+        getDatabaseReference().child("Notifications").child(notification.getUuid()).setValue(notification);
+    }
+
+
+    /**
+     * Delete a notification from firebase
+     * @param notification: the notification to delete
+     */
+    public void deleteNotification(Notification notification){
+        getDatabaseReference().child("Notifications").child(notification.getUuid()).removeValue();
+    }
+
 
     /**
      * Gets the current FireBaseAuth instance

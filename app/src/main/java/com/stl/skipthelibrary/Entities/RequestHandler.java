@@ -1,7 +1,9 @@
 package com.stl.skipthelibrary.Entities;
 
+import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
+import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.Exceptions.RequestorsUnavailableException;
 
 import java.util.ArrayList;
@@ -138,20 +140,22 @@ public class RequestHandler {
      * Accept a request from a user
      * @param user: the user's username to accept the request from
      */
-    public void acceptRequestor(String user) throws RequestorsUnavailableException {
+    public void acceptRequestor(String user, String bookID, String bookName) throws RequestorsUnavailableException {
         if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
         setAcceptedRequestor(user);
         requestors.remove(user);
-        denyAllOtherRequestors();
+        denyAllOtherRequestors(bookID, bookName);
         getState().setBookStatus(BookStatus.ACCEPTED);
         getState().setHandoffState(HandoffState.READY_FOR_PICKUP);
-        //sendNotificaition(); to accepted
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(null);
+        databaseHelper.sendNotification(NotificationType.REQUEST_ACCEPTED, user, bookID, bookName);
     }
 
-    private void denyAllOtherRequestors(){
+    private void denyAllOtherRequestors(String bookID, String bookName){
         ArrayList<String> copyRequestors = new ArrayList<>(requestors);
         for (String requestor: copyRequestors) {
-            denyRequestor(requestor);
+            denyRequestor(requestor, bookID, bookName);
         }
         getRequestors().clear();
     }
@@ -160,13 +164,15 @@ public class RequestHandler {
      * Deny a request from a user
      * @param user: the user's username to deny the request from
      */
-    public void denyRequestor(String user) throws  RequestorsUnavailableException{
+    public void denyRequestor(String user, String bookID, String bookName) throws  RequestorsUnavailableException{
         if (!getRequestors().contains(user)) { throw new RequestorsUnavailableException(); }
-//        sendNotificaition();
         getRequestors().remove(user);
         if (getRequestors().size() == 0 && (acceptedRequestor.equals(""))){
             getState().setBookStatus(BookStatus.AVAILABLE);
         }
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(null);
+        databaseHelper.sendNotification(NotificationType.REQUEST_DENIED, user, bookID, bookName);
     }
 
     /**

@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
@@ -39,6 +43,7 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
+import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
@@ -60,6 +65,7 @@ public class ViewBookActivity extends AppCompatActivity {
     private User user;
     private EditText title_element;
     private EditText author_element;
+    private TextView owner_user_name_element;
     private RatingBar rating_element;
     private EditText synopsis_element;
     private RecyclerView images_element;
@@ -91,6 +97,7 @@ public class ViewBookActivity extends AppCompatActivity {
         user = CurrentUser.getInstance();
         title_element = findViewById(R.id.title_element);
         author_element = findViewById(R.id.author_element);
+        owner_user_name_element = findViewById(R.id.owner_user_name_element);
         rating_element = findViewById(R.id.rating_bar_element);
         synopsis_element = findViewById(R.id.synopsis_element);
         edit_button = findViewById(R.id.edit_button);
@@ -295,6 +302,8 @@ public class ViewBookActivity extends AppCompatActivity {
                 handler.addRequestor(user.getUserName());
                 handler.getState().setBookStatus(BookStatus.REQUESTED);
                 databaseHelper.updateBook(book);
+                databaseHelper.sendNotification(NotificationType.NEW_REQUEST, book.getOwnerUserName(),
+                        book.getUuid(), book.getDescription().getTitle());
             }
         });
     }
@@ -395,7 +404,21 @@ public class ViewBookActivity extends AppCompatActivity {
      */
     private void fillBookDescriptionFields(){
         title_element.setText(book.getDescription().getTitle());
-        author_element.setText(book.getDescription().getAuthor());
+        author_element.setText("Author: " + book.getDescription().getAuthor());
+
+        SpannableString userNameUnderLined = new SpannableString("Owned by: @" + book.getOwnerUserName());
+        userNameUnderLined.setSpan(new ForegroundColorSpan(Color.WHITE), 0,9, 0);
+        userNameUnderLined.setSpan(new UnderlineSpan(), 10, userNameUnderLined.length(), 0);
+        owner_user_name_element.setText(userNameUnderLined);
+        owner_user_name_element.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ViewBookActivity.this, ProfileActivity.class);
+                intent.putExtra(ProfileActivity.USER_NAME,
+                        book.getOwnerUserName());
+                startActivity(intent);
+            }
+        });
 
         rating_element.setMax(book.getRating().getMaxRating());
         rating_element.setStepSize((float) 0.5);
@@ -526,7 +549,8 @@ public class ViewBookActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Location location = gson.fromJson(locationString, Location.class);
                 book.getRequests().getState().setLocation(location);
-                book.getRequests().acceptRequestor(username);
+                book.getRequests().acceptRequestor(username, book.getUuid(),
+                        book.getDescription().getTitle());
                 databaseHelper.updateBook(book);
             }
         }

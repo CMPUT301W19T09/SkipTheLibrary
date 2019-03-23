@@ -15,7 +15,6 @@ public class User {
     private ContactInfo contactInfo;
     private Rating ownerRating;
     private Rating borrowerRating;
-    private ArrayList<Notification> notifications;
 
     /**
      * The empty constructor
@@ -28,7 +27,6 @@ public class User {
         this.contactInfo = null;
         this.ownerRating = new Rating();
         this.borrowerRating = new Rating();
-        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -47,7 +45,6 @@ public class User {
         this.image = image;
         this.ownerRating = new Rating();
         this.borrowerRating = new Rating();
-        this.notifications = new ArrayList<>();
     }
 
     /**
@@ -59,9 +56,8 @@ public class User {
      * @param contactInfo: the user's contact info
      * @param ownerRating: the user's owner rating
      * @param borrowerRating: the user's borrower rating
-     * @param notifications: the user's notifications
      */
-    public User(String name, String userName, String userID, ViewableImage image, ContactInfo contactInfo, Rating ownerRating, Rating borrowerRating, ArrayList<Notification> notifications) {
+    public User(String name, String userName, String userID, ViewableImage image, ContactInfo contactInfo, Rating ownerRating, Rating borrowerRating) {
         this.name = name;
         this.userName = userName;
         this.userID = userID;
@@ -69,7 +65,6 @@ public class User {
         this.contactInfo = contactInfo;
         this.ownerRating = ownerRating;
         this.borrowerRating = borrowerRating;
-        this.notifications = notifications;
     }
 
 
@@ -103,22 +98,6 @@ public class User {
      */
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-
-    /**
-     * Get the user's notifications
-     * @return the user's notifications
-     */
-    public ArrayList<Notification> getNotifications() {
-        return notifications;
-    }
-
-    /**
-     * Set the user's notifications
-     * @param notifications: the user's notifications
-     */
-    public void setNotifications(ArrayList<Notification> notifications) {
-        this.notifications = notifications;
     }
 
     /**
@@ -229,8 +208,7 @@ public class User {
                 Objects.equals(getImage(), user.getImage()) &&
                 Objects.equals(getContactInfo(), user.getContactInfo()) &&
                 Objects.equals(getOwnerRating(), user.getOwnerRating()) &&
-                Objects.equals(getBorrowerRating(), user.getBorrowerRating()) &&
-                Objects.equals(getNotifications(), user.getNotifications());
+                Objects.equals(getBorrowerRating(), user.getBorrowerRating());
     }
 
     /**
@@ -239,6 +217,6 @@ public class User {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getUserName(), getUserID(), getImage(), getContactInfo(), getOwnerRating(), getBorrowerRating(), getNotifications());
+        return Objects.hash(getName(), getUserName(), getUserID(), getImage(), getContactInfo(), getOwnerRating(), getBorrowerRating());
     }
 }

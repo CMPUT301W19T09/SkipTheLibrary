@@ -166,7 +166,12 @@ public class AddBooksActivity extends AppCompatActivity {
             DatabaseHelper databaseHelper = new DatabaseHelper(this);
             BookDescription bookDescription = new BookDescription(title,description,author);
             Book newBook = new Book(bookDescription, isbn, CurrentUser.getInstance().getUserName(), (ArrayList<ViewableImage>) bookImages);
-            databaseHelper.addBookIfValid(newBook, true);
+            if (CurrentUser.getInstance().getUserName().isEmpty()){
+                Toast.makeText(mContext, "How did you get here?", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                databaseHelper.addBookIfValid(newBook, true);
+            }
         }
         else{
             Toast.makeText(mContext, bookValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();

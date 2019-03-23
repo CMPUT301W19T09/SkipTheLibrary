@@ -28,6 +28,5 @@ public class CurrentUser {
         getInstance().setImage(user.getImage());
         getInstance().setName(user.getName());
         getInstance().setUserName(user.getUserName());
-        getInstance().setNotifications(user.getNotifications());
     }
 }
