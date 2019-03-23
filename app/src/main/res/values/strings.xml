@@ -59,4 +59,6 @@
     <string name="returned_button">returned</string>
     <string name="noImageText">This book has no images</string>
     <string name="password_prompt">Please enter your password to update profile</string>
+    <string name="owned_by_username">Owned by: </string>
+    <string name="goodreads_api_key">rLCWLYxCEDQEmnJywZrwVA</string>
 </resources>

@@ -15,5 +15,7 @@
     <color name="REQUESTED">#F5A83C</color>
     <color name="BORROWED">#D91D1B</color>
     <color name="highlight">@color/ACCEPTED</color>
+    <color name="gold">#FFDF00</color>
+    <color name="Transparent">#00000000</color>
 
 </resources>

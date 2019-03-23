@@ -82,18 +82,17 @@ public class US090101Test extends IntentsTestRule<LoginActivity> {
         RecyclerView searchBooksList;
 
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-        solo.sleep(5000);
+        solo.sleep(2000);
 
-        if (solo.searchText("Login")) {
-            solo.waitForText("Login");
-            logInAccount(borrowerEmail, borrowerPassword);
-        }
-        else {
+        if (solo.searchText("Notifications")) {
             enterProfile();
             if (!solo.searchText(borrowerEmail)) {
                 logOutAccount();
                 logInAccount(borrowerEmail, borrowerPassword);
             }
+        }
+        else {
+            logInAccount(borrowerEmail, borrowerPassword);
         }
 
         // search for and request the book
@@ -164,24 +163,24 @@ public class US090101Test extends IntentsTestRule<LoginActivity> {
     }
 
     public void enterProfile() {
-        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.clickOnView(view.findViewById(R.id.profile));
+//        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+//        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(solo.getView(R.id.profile));
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
     }
 
     public void enterMyBookActivity(){
-        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.clickOnView(view.findViewById(R.id.my_books));
+//        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+//        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(solo.getView(R.id.my_books));
         solo.waitForText("My Books");
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
     }
 
     public void enterBorrowActivity() {
-        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.clickOnView(view.findViewById(R.id.borrow));
+//        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
+//        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
+        solo.clickOnView(solo.getView(R.id.borrow));
         solo.waitForText("Borrowing");
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
     }

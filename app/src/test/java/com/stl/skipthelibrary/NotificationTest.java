@@ -6,20 +6,26 @@ import com.stl.skipthelibrary.Enums.NotificationType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 public class NotificationTest {
     private Notification notification;
-
+    private String uuid;
     @Before
     public void setup(){
-        notification = new Notification(NotificationType.REQUEST_ACCEPTED, "Test Message");
+        uuid = UUID.randomUUID().toString();
+        notification = new Notification(NotificationType.REQUEST_ACCEPTED, "Test UserName",
+                uuid,"Test BookName");
     }
 
     @Test
     public void testConstructor() {
         assertEquals(NotificationType.REQUEST_ACCEPTED, notification.getNotificationType());
-        assertEquals("Test Message", notification.getMessage());
+        assertEquals("Test UserName", notification.getUserName());
+        assertFalse(notification.getBookID().isEmpty());
+        assertEquals("Test BookName", notification.getBookName());
     }
 
     @Test
@@ -31,20 +37,34 @@ public class NotificationTest {
     }
 
     @Test
-    public void testSetMessage() {
-        notification.setMessage("Message to test");
-        assertEquals("Message to test", notification.getMessage());
+    public void testSetUserName() {
+        notification.setUserName("New UserName");
+        assertEquals("New UserName", notification.getUserName());
+    }
+
+    @Test
+    public void testSetBookID() {
+        String newID = UUID.randomUUID().toString();
+        notification.setBookID(newID);
+        assertEquals(newID, notification.getBookID());
+    }
+
+    @Test
+    public void testSetBookName() {
+        notification.setBookName("New BookName");
+        assertEquals("New BookName", notification.getBookName());
     }
 
     @Test
     public void testEquals() {
-        Notification secondNotification = new Notification(NotificationType.REQUEST_ACCEPTED, "Test Message");
-        assertTrue(notification.equals(secondNotification));
+        Notification secondNotification = new Notification(NotificationType.REQUEST_ACCEPTED,
+                "Test UserName", uuid,"Test BookName");
+        assertEquals(notification,secondNotification);
         secondNotification.setNotificationType(NotificationType.REQUEST_DENIED);
-        assertFalse(notification.equals(secondNotification));
+        assertNotEquals(notification, secondNotification);
         secondNotification.setNotificationType(NotificationType.REQUEST_ACCEPTED);
-        assertTrue(notification.equals(secondNotification));
-        secondNotification.setMessage("Different message");
-        assertFalse(notification.equals(secondNotification));
+        assertEquals(notification,secondNotification);
+        secondNotification.setBookName("Different name");
+        assertNotEquals(notification, secondNotification);
     }
 }
