@@ -123,6 +123,7 @@ public class ViewBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                 intent.putExtra(UNAME,book.getOwnerUserName());
+
                 startActivity(intent);
             }
         });
