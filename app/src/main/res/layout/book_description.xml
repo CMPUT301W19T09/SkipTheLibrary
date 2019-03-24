@@ -10,7 +10,7 @@
         android:id="@+id/corners"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_top_corners_rectangle"
+        android:background="@drawable/rounded_rectangle"
         app:layout_constraintTop_toTopOf="parent"
         android:backgroundTint="@color/magenta"
         android:gravity="center"
