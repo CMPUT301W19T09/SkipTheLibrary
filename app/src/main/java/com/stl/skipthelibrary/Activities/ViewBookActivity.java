@@ -58,6 +58,7 @@ public class ViewBookActivity extends AppCompatActivity {
     final public static String TAG = "ViewBookActivityTag";
     final public static String ISBN = "ISBN";
     final public static String UUID = "UUID";
+    final public static String UNAME = "UserName";
     private DatabaseHelper databaseHelper;
 
 
@@ -80,6 +81,10 @@ public class ViewBookActivity extends AppCompatActivity {
     private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
+
+    //TODO: DELETE
+    private Button tmpRating;
+
 
     /**
      * Bind UI Elements
@@ -110,6 +115,17 @@ public class ViewBookActivity extends AppCompatActivity {
         setBookDescriptionFieldsEditable(false);
 
         getIncomingIntents();
+
+        //TODO:DELETE
+        tmpRating = findViewById(R.id.tmp_rate);
+        tmpRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
+                intent.putExtra(UNAME,book.getOwnerUserName());
+                startActivity(intent);
+            }
+        });
     }
     /**
      * Turn on the progress dialog just incase it takes a while to get the book

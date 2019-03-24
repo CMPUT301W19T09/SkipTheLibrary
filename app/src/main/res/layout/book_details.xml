@@ -13,11 +13,16 @@
         android:layout_height="match_parent"
         android:stretchColumns="1">
 
+        <Button
+            android:id="@+id/tmp_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tmpRate"
+            />
         <include layout="@layout/book_description"/>
         <ViewStub
             android:layout="@layout/default_bottom_screen"
             android:id="@+id/generic_bottom_screen_id"/>
-
 
     </TableLayout>
 </ScrollView>
