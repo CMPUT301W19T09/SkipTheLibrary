@@ -29,6 +29,53 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <ImageButton
+                android:id="@+id/profile_save_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="16dp"
+                android:background="@android:drawable/ic_menu_save"/>
+
+            <ImageButton
+                android:id="@+id/profile_edit_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="16dp"
+                android:background="@android:drawable/ic_menu_edit"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/deleteProfileImageButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="128dp"
+                android:src="@android:drawable/ic_delete"
+                android:onClick="deleteImageOnClick"
+                app:civ_border_color="@color/BORROWED"
+                app:civ_border_width="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profileImage"
+                app:layout_constraintTop_toTopOf="@+id/profileImage" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/addProfileImageButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="128dp"
+                android:src="@android:drawable/ic_input_add"
+                android:onClick="addImageOnClick"
+                app:civ_border_color="@color/AVAILABLE"
+                app:civ_border_width="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profileImage"
+                app:layout_constraintTop_toTopOf="@+id/profileImage" />
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profileImage"
@@ -163,30 +210,73 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginBottom="20dp"/>
 
-                <TextView
-                    android:id="@+id/email"
+                <LinearLayout
+                    android:id="@+id/emailLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="@string/emailaddress"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"
-                    android:onClick="sendEmailOnClick"/>
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/contactInfoLabel">
+                    <ImageButton
+                        android:id="@+id/email_button"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:backgroundTint="@color/mail_color"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:background="@android:drawable/ic_dialog_email"
+                        android:onClick="sendEmailOnClick"/>
 
-                <TextView
-                    android:id="@+id/phoneNumber"
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/emailaddress"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:onClick="sendEmailOnClick"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="@string/phonenumber"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="16dp"
-                    android:paddingBottom="20dp"
-                    android:onClick="sendPhoneCallOnClick"/>
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/emailLayout">
+
+                    <ImageButton
+                        android:id="@+id/call_button"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="16dp"
+                        android:backgroundTint="@color/phone_color"
+                        android:background="@android:drawable/stat_sys_phone_call"
+                        android:onClick="sendPhoneCallOnClick"/>
+
+                    <EditText
+                        android:id="@+id/phoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/phonenumber"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:paddingBottom="20dp"
+                        android:onClick="sendPhoneCallOnClick"/>
+                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/logoutButton"
@@ -227,5 +317,4 @@
         app:itemTextColor="@drawable/bottom_nav_colors"
         app:menu="@menu/bottom_menu_basic"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

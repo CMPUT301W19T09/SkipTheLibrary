@@ -1,14 +1,22 @@
 package com.stl.skipthelibrary.DatabaseAndAPI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -24,9 +32,13 @@ import com.stl.skipthelibrary.Entities.ContactInfo;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
+
+import com.stl.skipthelibrary.R;
+
 import com.stl.skipthelibrary.Entities.Notification;
 import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.Entities.Rating;
+
 import com.stl.skipthelibrary.Singletons.CurrentLocation;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
@@ -274,11 +286,125 @@ public class DatabaseHelper {
         }
     }
 
+
+    /**
+     * Updates a book in the user's collection in firebase
+     * @param newbook: the book to update
+     */
     public void updateBook(Book newbook){
         databaseReference.child("Books").child(newbook.getUuid()).setValue(newbook);
         Log.d("Updating book", "new book should be replaced");
     }
 
+    /**
+     * Updates the current user in firebase
+     */
+    public boolean updateCurrentUser(User user){
+        Log.d(TAG, "updateCurrentUser: "+user);
+        String email = user.getContactInfo().getEmail();
+        Log.d(TAG, "updateCurrentUser: "+email +" "+getFirebaseAuth().getCurrentUser().getEmail());
+        if (!email.equals(getFirebaseAuth().getCurrentUser().getEmail())) {
+            promptPassword(user);
+            Log.d(TAG, "updateCurrentUser: UPDATING IN FIREBASE");
+        } else {
+            getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
+        }
+        Log.d("Updating user", "new user should be replaced");
+        return true;
+    }
+
+    /**
+     * Updates a users email information in firebase
+     * @param password: the password of the account in question
+     */
+    private void updateEmail(String password, final User proposedUser) {
+        String oldEmail = getFirebaseAuth().getCurrentUser().getEmail();
+        final String newEmail = proposedUser.getContactInfo().getEmail();
+
+        // Get auth credentials from the user for re-authentication
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(oldEmail, password); // Current Login Credentials \\
+        // Prompt the user to re-provide their sign-in credentials
+        firebaseUser.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d(TAG, "User re-authenticated.");
+                        //Now change your email address \\
+                        //----------------Code for Changing Email Address----------\\
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.updateEmail(newEmail)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User email address updated.");
+                                            getDatabaseReference().child("Users")
+                                                    .child(CurrentUser.getInstance().getUserID()).
+                                                    setValue(proposedUser);
+                                            CurrentUser.setUser(proposedUser);
+                                            Toast.makeText(getContext(),"Updated Email", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(getContext(), "Update Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                        //----------------------------------------------------------\\
+                    }
+                });
+    }
+
+    /**
+     * Prompts a user to input their password in order to update authentication related contact
+     *  info
+     */
+    public void promptPassword(final User proposedUser) {
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View promptsView = li.inflate(R.layout.password_prompt, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextPassword);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // get user input and set it to result
+                                // edit text
+                                Log.d(TAG, "onClick: " + userInput.getText().toString());
+                                String password = userInput.getText().toString();
+                                updateEmail(password,proposedUser);
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    /**
+     * Updates a books rating in firebase based off of the book UUID
+     * @param uuid: the book to update
+     * @param rating: The new rating
+     */
     public void updateRating(String uuid, Rating rating){
         databaseReference.child("Books").child(uuid).child("rating").setValue(rating);
         Log.d("Updating book", "rating should be replaced");
@@ -422,4 +548,5 @@ public class DatabaseHelper {
     public void setFirebaseUser(FirebaseUser firebaseUser) {
         this.firebaseUser = firebaseUser;
     }
+
 }

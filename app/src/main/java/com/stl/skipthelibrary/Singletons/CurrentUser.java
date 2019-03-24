@@ -25,6 +25,7 @@ public class CurrentUser {
         getInstance().setOwnerRating(user.getOwnerRating());
         getInstance().setBorrowerRating(user.getBorrowerRating());
         getInstance().setContactInfo(user.getContactInfo());
+        getInstance().setUserID(user.getUserID());
         getInstance().setImage(user.getImage());
         getInstance().setName(user.getName());
         getInstance().setUserName(user.getUserName());

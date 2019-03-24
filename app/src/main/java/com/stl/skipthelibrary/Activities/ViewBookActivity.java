@@ -169,6 +169,7 @@ public class ViewBookActivity extends AppCompatActivity {
                         Toast.makeText(ViewBookActivity.this, "This book has been modified.",
                                 Toast.LENGTH_SHORT).show();
                         ViewBookActivity.this.finish();
+                        startActivity(getIntent());
 
                     }
 
@@ -209,6 +210,7 @@ public class ViewBookActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     setBookDescriptionFieldsEditable(true);
+                    author_element.setText(book.getDescription().getAuthor());
                     horizontalAdapter.setEditMode(true);
                     save_button.setVisibility(View.VISIBLE);
                     edit_button.setVisibility(View.GONE);
@@ -247,6 +249,9 @@ public class ViewBookActivity extends AppCompatActivity {
                     addNewBookImageButton.setVisibility(View.GONE);
                     horizontalAdapter.notifyDataSetChanged();
                     updateBookDesriptionFields();
+                    author_element.setText(String.format(
+                            "Author: %s",book.getDescription().getAuthor())
+                    );
                 }
             });
         } else {
