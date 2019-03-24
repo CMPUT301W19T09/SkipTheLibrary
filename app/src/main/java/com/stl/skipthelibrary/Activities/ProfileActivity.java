@@ -1,6 +1,7 @@
 package com.stl.skipthelibrary.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -19,9 +20,11 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
@@ -121,25 +124,36 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUser(String userName) {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(userName)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            /**
-             * Get the specified user
-             * @param dataSnapshot: the current snapshot
-             */
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot data: dataSnapshot.getChildren()){
-                    User user = data.getValue(User.class);
-                    userRetrieved(user);
-                    return;
-                }
-            }
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        User user = dataSnapshot.getValue(User.class);
+                        userRetrieved(user);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Toast.makeText(ProfileActivity.this, "This account has been modified",
+                                Toast.LENGTH_SHORT).show();
+                        ProfileActivity.this.finish();
+                        startActivity(getIntent());
+                    }
 
-            }
-        });
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        Toast.makeText(ProfileActivity.this, "This account has been deleted",
+                                Toast.LENGTH_SHORT).show();
+                        ProfileActivity.this.finish();
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
     }
 
     /**
@@ -243,9 +257,11 @@ public class ProfileActivity extends AppCompatActivity {
      * Update the current book by changing its fields
      */
     private void updateContactInfoFields(){
-        User user = CurrentUser.getInstance();
-        user.getContactInfo().setEmail(myProfileEmail.getText().toString());
-        user.getContactInfo().setPhoneNumber(
+        Gson gson = new Gson();
+        User proposedUser = gson.fromJson(gson.toJson(CurrentUser.getInstance()),User.class);
+
+        proposedUser.getContactInfo().setEmail(myProfileEmail.getText().toString());
+        proposedUser.getContactInfo().setPhoneNumber(
                 myProfilePhoneNumber.getText().toString()
                         .replaceFirst("\\((\\d{3})\\) (\\d{3})-(\\d+)", "$1$2$3")
         );
@@ -253,13 +269,13 @@ public class ProfileActivity extends AppCompatActivity {
             ViewableImage defaultImage = new ViewableImage(
                     BitmapFactory.decodeResource(getResources(), R.drawable.default_avatar)
             );
-            user.setImage(defaultImage);
+            proposedUser.setImage(defaultImage);
             myProfileImage.setImageBitmap(defaultImage.decode());
         } else {
-            user.setImage(currentImage);
+            proposedUser.setImage(currentImage);
         }
-        Log.d(TAG, "updateContactInfoFields: "+user);
-        databaseHelper.updateCurrentUser();
+        Log.d(TAG, "updateContactInfoFields: "+proposedUser);
+        databaseHelper.updateCurrentUser(proposedUser);
     }
 
     /**

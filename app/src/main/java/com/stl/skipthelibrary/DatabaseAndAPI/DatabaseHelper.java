@@ -299,13 +299,12 @@ public class DatabaseHelper {
     /**
      * Updates the current user in firebase
      */
-    public boolean updateCurrentUser(){
-        User user = CurrentUser.getInstance();
+    public boolean updateCurrentUser(User user){
         Log.d(TAG, "updateCurrentUser: "+user);
-        final String email = user.getContactInfo().getEmail();
+        String email = user.getContactInfo().getEmail();
         Log.d(TAG, "updateCurrentUser: "+email +" "+getFirebaseAuth().getCurrentUser().getEmail());
         if (!email.equals(getFirebaseAuth().getCurrentUser().getEmail())) {
-            promptPassword();
+            promptPassword(user);
             Log.d(TAG, "updateCurrentUser: UPDATING IN FIREBASE");
         } else {
             getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
@@ -318,9 +317,9 @@ public class DatabaseHelper {
      * Updates a users email information in firebase
      * @param password: the password of the account in question
      */
-    private void updateEmail(String password) {
+    private void updateEmail(String password, final User proposedUser) {
         String oldEmail = getFirebaseAuth().getCurrentUser().getEmail();
-        final String newEmail = CurrentUser.getInstance().getContactInfo().getEmail();
+        final String newEmail = proposedUser.getContactInfo().getEmail();
 
         // Get auth credentials from the user for re-authentication
         AuthCredential credential = EmailAuthProvider
@@ -342,7 +341,8 @@ public class DatabaseHelper {
                                             Log.d(TAG, "User email address updated.");
                                             getDatabaseReference().child("Users")
                                                     .child(CurrentUser.getInstance().getUserID()).
-                                                    setValue(CurrentUser.getInstance());
+                                                    setValue(proposedUser);
+                                            CurrentUser.setUser(proposedUser);
                                             Toast.makeText(getContext(),"Updated Email", Toast.LENGTH_SHORT).show();
                                         }
                                         else{
@@ -360,7 +360,7 @@ public class DatabaseHelper {
      * Prompts a user to input their password in order to update authentication related contact
      *  info
      */
-    public void promptPassword() {
+    public void promptPassword(final User proposedUser) {
         LayoutInflater li = LayoutInflater.from(getContext());
         View promptsView = li.inflate(R.layout.password_prompt, null);
 
@@ -381,17 +381,14 @@ public class DatabaseHelper {
                             public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
                                 // edit text
-                                User user = CurrentUser.getInstance();
                                 Log.d(TAG, "onClick: " + userInput.getText().toString());
                                 String password = userInput.getText().toString();
-                                updateEmail(password);
+                                updateEmail(password,proposedUser);
                             }
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                CurrentUser.getInstance().getContactInfo()
-                                        .setEmail(getFirebaseUser().getEmail());
                                 dialog.cancel();
                             }
                         });
