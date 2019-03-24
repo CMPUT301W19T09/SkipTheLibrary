@@ -18,5 +18,7 @@
     <color name="highlight">@color/ACCEPTED</color>
     <color name="gold">#FFDF00</color>
     <color name="Transparent">#00000000</color>
+    <color name="phone_color">#13DA5B</color>
+    <color name="mail_color">#FAC72C</color>
 
 </resources>
