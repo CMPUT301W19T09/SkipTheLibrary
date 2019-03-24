@@ -127,10 +127,10 @@ public class ViewBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                 intent.putExtra(UNAME,book.getOwnerUserName());
-                intent.putExtra(UBO,UserIdentity.OWNER);
-//                intent.putExtra(UBO,UserIdentity.BORROWER);
-                startActivityForResult(intent,RateUserActivity.RATEOWNER);
-//                startActivityForResult(intent,RateUserActivity.RATEBORROWER);
+//                intent.putExtra(UBO,UserIdentity.OWNER);
+                intent.putExtra(UBO,UserIdentity.BORROWER);
+//                startActivityForResult(intent,RateUserActivity.RATEOWNER);
+                startActivityForResult(intent,RateUserActivity.RATEBORROWER);
             }
         });
     }

@@ -191,7 +191,7 @@ public class ProfileActivity extends AppCompatActivity {
         myBorrowerRating.setMax(borrowerRating.getMaxRating());
         myBorrowerRating.setStepSize((float) 0.5);
         myBorrowerRating.setRating((float) borrowerRating.getAverageRating());
-        
+
         progressDialog.hide();
         progressDialog.dismiss();
 
