@@ -78,6 +78,7 @@ public class RateUserActivity extends AppCompatActivity {
     }
 
     private void userRetrieved(final User user) {
+
         RateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

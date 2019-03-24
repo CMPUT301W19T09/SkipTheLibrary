@@ -57,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton save_button;
     private CircleImageView add_image_button;
     private CircleImageView delete_image_button;
+    private ChildEventListener childEventListener;
 
     private boolean isUserTheCurrentUser;
     private ViewableImage currentImage;
@@ -122,38 +123,40 @@ public class ProfileActivity extends AppCompatActivity {
      * @param userName: the user's username
      */
     private void setUser(String userName) {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                User user = dataSnapshot.getValue(User.class);
+                userRetrieved(user);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(ProfileActivity.this, "This account has been modified",
+                        Toast.LENGTH_SHORT).show();
+                ProfileActivity.this.finish();
+                startActivity(getIntent());
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Toast.makeText(ProfileActivity.this, "This account has been deleted",
+                        Toast.LENGTH_SHORT).show();
+                ProfileActivity.this.finish();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        };
+
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(userName)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        User user = dataSnapshot.getValue(User.class);
-                        userRetrieved(user);
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Toast.makeText(ProfileActivity.this, "This account has been modified",
-                                Toast.LENGTH_SHORT).show();
-                        ProfileActivity.this.finish();
-                        startActivity(getIntent());
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                        Toast.makeText(ProfileActivity.this, "This account has been deleted",
-                                Toast.LENGTH_SHORT).show();
-                        ProfileActivity.this.finish();
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                .addChildEventListener(childEventListener);
     }
 
     /**
@@ -380,7 +383,23 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!isUserTheCurrentUser){
+            databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                    .equalTo(user.getUserName()).removeEventListener(childEventListener);
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void finish() {
+        databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                .equalTo(user.getUserName()).removeEventListener(childEventListener);
+        super.finish();
+    }
+
+    @Override
+    protected void onStop() {
+        databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                .equalTo(user.getUserName()).removeEventListener(childEventListener);
+        super.onStop();
     }
 }

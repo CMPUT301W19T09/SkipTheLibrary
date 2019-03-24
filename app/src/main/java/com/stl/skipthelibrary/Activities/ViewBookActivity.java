@@ -582,6 +582,9 @@ public class ViewBookActivity extends AppCompatActivity {
                 databaseHelper.updateBook(book);
             }
         }
+        else if (resultCode == RateUserActivity.RATEOWNER) {
+            Log.d(TAG, "onActivityResult: HELLLOOOOO");
+        }
     }
 
 
