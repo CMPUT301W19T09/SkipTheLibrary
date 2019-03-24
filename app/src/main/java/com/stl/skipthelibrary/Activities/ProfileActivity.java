@@ -349,6 +349,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Handle requests from other activities, this includes image adding
      * @param requestCode: the request code
@@ -401,5 +402,12 @@ public class ProfileActivity extends AppCompatActivity {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(user.getUserName()).removeEventListener(childEventListener);
         super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                .equalTo(user.getUserName()).removeEventListener(childEventListener);
+        super.onPause();
     }
 }
