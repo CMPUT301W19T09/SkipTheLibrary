@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -304,12 +305,7 @@ public class DatabaseHelper {
         final String email = user.getContactInfo().getEmail();
         Log.d(TAG, "updateCurrentUser: "+email +" "+getFirebaseAuth().getCurrentUser().getEmail());
         if (!email.equals(getFirebaseAuth().getCurrentUser().getEmail())) {
-            getFirebaseAuth().getCurrentUser().updateEmail(email);
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-            //TODO: Prompt user for password
             promptPassword();
-
             Log.d(TAG, "updateCurrentUser: UPDATING IN FIREBASE");
         } else {
             getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
@@ -344,8 +340,15 @@ public class DatabaseHelper {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Log.d(TAG, "User email address updated.");
+                                            getDatabaseReference().child("Users")
+                                                    .child(CurrentUser.getInstance().getUserID()).
+                                                    setValue(CurrentUser.getInstance());
                                             Toast.makeText(getContext(),"Updated Email", Toast.LENGTH_SHORT).show();
                                         }
+                                        else{
+                                            Toast.makeText(getContext(), "Update Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+
                                     }
                                 });
                         //----------------------------------------------------------\\
@@ -382,7 +385,6 @@ public class DatabaseHelper {
                                 Log.d(TAG, "onClick: " + userInput.getText().toString());
                                 String password = userInput.getText().toString();
                                 updateEmail(password);
-                                getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
                             }
                         })
                 .setNegativeButton("Cancel",
