@@ -25,13 +25,13 @@ public class RateUserActivity extends AppCompatActivity {
         RatingUsername = findViewById(R.id.RatingUsername);
         RatingBar = findViewById(R.id.ratingBar);
         RateButton = findViewById(R.id.RateButton);
-
+        Intent intent = getIntent();
+        String userName = intent.getStringExtra(ViewBookActivity.UNAME);
+        
         RateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 double value = RatingBar.getRating();
-                Intent intent = getIntent();
-                String userName = intent.getStringExtra(ViewBookActivity.UNAME);
 
             }
         });
