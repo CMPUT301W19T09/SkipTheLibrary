@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 import com.stl.skipthelibrary.R;
@@ -48,6 +50,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView myProfileUsername;
     private EditText myProfileEmail;
     private EditText myProfilePhoneNumber;
+    private RatingBar myOwnerRating;
+    private RatingBar myBorrowerRating;
     private BottomNavigationView navigation;
     private MaterialButton logoutButton;
     private User user;
@@ -82,6 +86,8 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileUsername = findViewById(R.id.myProfileUsername);
         myProfileEmail = findViewById(R.id.email);
         myProfilePhoneNumber = findViewById(R.id.phoneNumber);
+        myOwnerRating = findViewById(R.id.ownerRatingBar);
+        myBorrowerRating = findViewById(R.id.borrowerRatingBar);
         navigation = findViewById(R.id.bottom_navigation);
         title = findViewById(R.id.MyProfileTitle);
         logoutButton = findViewById(R.id.logoutButton);
@@ -175,6 +181,17 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileEmail.setText(String.format("Email: %s",user.getContactInfo().getEmail()));
         myProfilePhoneNumber.setText(String.format("Phone Number: %s",user.getContactInfo().getPhoneNumber())
                 .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+
+        Rating ownerRating = user.getOwnerRating();
+        myOwnerRating.setMax(ownerRating.getMaxRating());
+        myOwnerRating.setStepSize((float) 0.5);
+        myOwnerRating.setRating((float) ownerRating.getAverageRating());
+
+        Rating borrowerRating = user.getBorrowerRating();
+        myBorrowerRating.setMax(borrowerRating.getMaxRating());
+        myBorrowerRating.setStepSize((float) 0.5);
+        myBorrowerRating.setRating((float) borrowerRating.getAverageRating());
+        
         progressDialog.hide();
         progressDialog.dismiss();
 
