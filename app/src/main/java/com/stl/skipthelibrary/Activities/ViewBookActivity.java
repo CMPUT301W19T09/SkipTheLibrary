@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.net.Uri;
 import android.app.ProgressDialog;
@@ -44,6 +45,7 @@ import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
 import com.stl.skipthelibrary.Enums.NotificationType;
+import com.stl.skipthelibrary.Enums.UserIdentity;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
@@ -59,6 +61,7 @@ public class ViewBookActivity extends AppCompatActivity {
     final public static String ISBN = "ISBN";
     final public static String UUID = "UUID";
     final public static String UNAME = "UserName";
+    final public static String UBO = "UserIdentity";
     private DatabaseHelper databaseHelper;
 
 
@@ -81,6 +84,7 @@ public class ViewBookActivity extends AppCompatActivity {
     private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
+    private Dialog ratingDialog;
 
     //TODO: DELETE
     private Button tmpRating;
@@ -123,8 +127,10 @@ public class ViewBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                 intent.putExtra(UNAME,book.getOwnerUserName());
-
-                startActivity(intent);
+                intent.putExtra(UBO,UserIdentity.OWNER);
+//                intent.putExtra(UBO,UserIdentity.BORROWER);
+                startActivityForResult(intent,RateUserActivity.RATEOWNER);
+//                startActivityForResult(intent,RateUserActivity.RATEBORROWER);
             }
         });
     }
