@@ -60,4 +60,5 @@
     <string name="noImageText">This book has no images</string>
     <string name="owned_by_username">Owned by: </string>
     <string name="goodreads_api_key">rLCWLYxCEDQEmnJywZrwVA</string>
+    <string name="pending_book">Pending on another user\'s action</string>
 </resources>
