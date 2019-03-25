@@ -517,9 +517,14 @@ public class ViewBookActivity extends AppCompatActivity {
                             databaseHelper.updateBook(book);
                             break;
                         case BORROWER_RETURNED:
+                            String borrowerUserName = book.getRequests().getAcceptedRequestor();
                             book.getRequests().confirmReturned();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
                             databaseHelper.updateBook(book);
+                            Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
+                            intent.putExtra(UNAME,borrowerUserName);
+                            intent.putExtra(UBO,UserIdentity.BORROWER);
+                            startActivityForResult(intent,RateUserActivity.RATEBORROWER);
                             break;
                     }
                 }
@@ -534,6 +539,10 @@ public class ViewBookActivity extends AppCompatActivity {
                             book.getRequests().returnBook();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
                             databaseHelper.updateBook(book);
+                            Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
+                            intent.putExtra(UNAME,book.getOwnerUserName());
+                            intent.putExtra(UBO,UserIdentity.OWNER);
+                            startActivityForResult(intent,RateUserActivity.RATEOWNER);
                             break;
                     }
                 }
@@ -582,8 +591,22 @@ public class ViewBookActivity extends AppCompatActivity {
                 databaseHelper.updateBook(book);
             }
         }
-        else if (resultCode == RateUserActivity.RATEOWNER) {
-            Log.d(TAG, "onActivityResult: HELLLOOOOO");
+        else if (requestCode == RateUserActivity.RATEOWNER) {
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Rate owner received");
+            }
+            else {
+                Log.d(TAG, "Error in rating owner received");
+            }
+
+        }
+        else if (requestCode == RateUserActivity.RATEBORROWER) {
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Rate borrower received");
+            }
+            else {
+                Log.d(TAG, "Error in borrower owner received");
+            }
         }
     }
 
