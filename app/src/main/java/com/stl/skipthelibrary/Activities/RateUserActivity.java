@@ -84,12 +84,12 @@ public class RateUserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 double rating = RatingBar.getRating();
                 Intent returnIntent = new Intent();
-                if((intent.getSerializableExtra(ViewBookActivity.UBO)).equals(UserIdentity.OWNER)){
+                if((intent.getSerializableExtra(ViewBookActivity.USER_IDENTITY)).equals(UserIdentity.OWNER)){
                     user.getOwnerRating().addRating(rating);
                     databaseHelper.getDatabaseReference().child("Users").child(user.getUserID())
                             .child("ownerRating").setValue(user.getOwnerRating());
                     setResult(Activity.RESULT_OK, returnIntent);
-                }else if ((intent.getSerializableExtra(ViewBookActivity.UBO)).equals(UserIdentity.BORROWER)){
+                }else if ((intent.getSerializableExtra(ViewBookActivity.USER_IDENTITY)).equals(UserIdentity.BORROWER)){
                     user.getBorrowerRating().addRating(rating);
                     databaseHelper.getDatabaseReference().child("Users").child(user.getUserID())
                             .child("borrowerRating").setValue(user.getBorrowerRating());

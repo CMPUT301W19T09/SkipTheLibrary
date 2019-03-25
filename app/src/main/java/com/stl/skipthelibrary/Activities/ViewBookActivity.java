@@ -61,7 +61,7 @@ public class ViewBookActivity extends AppCompatActivity {
     final public static String ISBN = "ISBN";
     final public static String UUID = "UUID";
     final public static String UNAME = "UserName";
-    final public static String UBO = "UserIdentity";
+    final public static String USER_IDENTITY = "UserIdentity";
     private DatabaseHelper databaseHelper;
 
 
@@ -85,9 +85,6 @@ public class ViewBookActivity extends AppCompatActivity {
     private String isbn_code;
     private ProgressDialog progressDialog;
     private Dialog ratingDialog;
-
-    //TODO: DELETE
-    private Button tmpRating;
 
 
     /**
@@ -119,20 +116,6 @@ public class ViewBookActivity extends AppCompatActivity {
         setBookDescriptionFieldsEditable(false);
 
         getIncomingIntents();
-
-        //TODO:DELETE
-        tmpRating = findViewById(R.id.tmp_rate);
-        tmpRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
-                intent.putExtra(UNAME,book.getOwnerUserName());
-//                intent.putExtra(UBO,UserIdentity.OWNER);
-                intent.putExtra(UBO,UserIdentity.BORROWER);
-//                startActivityForResult(intent,RateUserActivity.RATEOWNER);
-                startActivityForResult(intent,RateUserActivity.RATEBORROWER);
-            }
-        });
     }
     /**
      * Turn on the progress dialog just incase it takes a while to get the book
@@ -176,7 +159,7 @@ public class ViewBookActivity extends AppCompatActivity {
                         Toast.makeText(ViewBookActivity.this, "This book has been modified.",
                                 Toast.LENGTH_SHORT).show();
                         ViewBookActivity.this.finish();
-                        startActivity(getIntent());
+//                        startActivity(getIntent());
 
                     }
 
@@ -523,7 +506,7 @@ public class ViewBookActivity extends AppCompatActivity {
                             databaseHelper.updateBook(book);
                             Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                             intent.putExtra(UNAME,borrowerUserName);
-                            intent.putExtra(UBO,UserIdentity.BORROWER);
+                            intent.putExtra(USER_IDENTITY,UserIdentity.BORROWER);
                             startActivityForResult(intent,RateUserActivity.RATEBORROWER);
                             break;
                     }
@@ -541,7 +524,7 @@ public class ViewBookActivity extends AppCompatActivity {
                             databaseHelper.updateBook(book);
                             Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                             intent.putExtra(UNAME,book.getOwnerUserName());
-                            intent.putExtra(UBO,UserIdentity.OWNER);
+                            intent.putExtra(USER_IDENTITY,UserIdentity.OWNER);
                             startActivityForResult(intent,RateUserActivity.RATEOWNER);
                             break;
                     }
