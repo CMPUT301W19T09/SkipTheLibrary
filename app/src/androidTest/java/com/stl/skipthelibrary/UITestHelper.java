@@ -90,8 +90,13 @@ public class UITestHelper {
 
     public void finish() throws InterruptedException {
         deleteBooks();
+        deleteNotifcations();
         uiTestSemaphore.setInUse(false);
         databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
+    }
+
+    private void deleteNotifcations() {
+        databaseHelper.getDatabaseReference().child("Notifications").removeValue();
     }
 
 
