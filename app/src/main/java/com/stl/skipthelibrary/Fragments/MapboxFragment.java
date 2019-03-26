@@ -15,13 +15,14 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Entities.Location;
 import com.stl.skipthelibrary.R;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
+/** This fragment displays a specified location (latitude, longitude) in
+ * a Mapbox element
+ */
 public class MapboxFragment extends Fragment {
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
@@ -30,6 +31,12 @@ public class MapboxFragment extends Fragment {
     private MapboxMap mapboxMap;
     private Location bookPickupLocation;
 
+
+    /**
+     * Creates a new instance of MapboxFragment with specified location
+     * @param location
+     * @return MapboxFragment
+     */
     public static MapboxFragment newInstance(Location location) {
         MapboxFragment fragment = new MapboxFragment();
         Bundle args = new Bundle();
@@ -39,6 +46,13 @@ public class MapboxFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Defines and inflates the fragment view with the specified parameters inside parent
+     * @param inflater
+     * @param parent
+     * @param savedInstanceState
+     * @return View
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -50,8 +64,12 @@ public class MapboxFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mapbox, parent, false);
     }
 
-    // This event is triggered soon after onCreateView().
-    // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
+    /**
+     * Styles map and sets proper location once received, disables panning and zooming
+     * so the user can't move the specified pin location
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
@@ -89,6 +107,7 @@ public class MapboxFragment extends Fragment {
                         .tilt(20)
                         .build();
                 mapboxMap.setCameraPosition(cameraPosition);
+                mapboxMap.getUiSettings().setAllGesturesEnabled(false);
             }
         });
     }
