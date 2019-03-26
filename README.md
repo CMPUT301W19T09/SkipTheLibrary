@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/CMPUT301W19T09/SkipTheLibrary.svg?branch=master)](https://travis-ci.com/CMPUT301W19T09/SkipTheLibrary)
+<br />
+
 # SkipTheLibrary
 ## The "free" book sharing app 
 
