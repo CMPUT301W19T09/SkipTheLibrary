@@ -215,7 +215,7 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         // check the rating
         enterProfile();
         RatingBar ownerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
-        assertEquals(1, ownerRatingBar.getRating());
+        assertEquals(1.0, ownerRatingBar.getRating());
 
         // accept the return
         enterMyBookActivity();
@@ -243,7 +243,7 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
 
         enterProfile();
         RatingBar borrowerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
-        assertEquals(4, borrowerRatingBar.getRating());
+        assertEquals(4.0, borrowerRatingBar.getRating());
 
         logOutAccount();
     }
