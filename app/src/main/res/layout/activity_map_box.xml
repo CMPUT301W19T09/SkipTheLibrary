@@ -5,16 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.MapBoxActivity">
+
     <TextView
         android:id="@+id/select_location_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Select Location"
         android:textAlignment="center"
-        android:textSize="50dp"
         android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:textSize="48sp"
+        app:layout_constraintTop_toTopOf="parent" />
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/select_location_map_view"
         android:layout_width="match_parent"
@@ -23,17 +24,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
     <Button
         android:id="@+id/select_location_submit"
         android:layout_width="match_parent"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginBottom="25dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="25dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Submit Location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="Submit Location"
-        />
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

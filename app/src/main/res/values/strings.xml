@@ -59,4 +59,8 @@
     <string name="returned_button">returned</string>
     <string name="noImageText">This book has no images</string>
     <string name="goodreads_api_key">rLCWLYxCEDQEmnJywZrwVA</string>
+    <string name="pickupLocation">Pick-up Location</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

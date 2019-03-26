@@ -3,6 +3,7 @@ package com.stl.skipthelibrary.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,11 +12,15 @@ import android.net.Uri;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 
 import android.content.Intent;
@@ -28,6 +33,13 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.stl.skipthelibrary.BindersAndAdapters.BookRecyclerAdapter;
 import com.stl.skipthelibrary.BindersAndAdapters.HorizontalAdapter;
 import com.stl.skipthelibrary.BindersAndAdapters.RequestorRecyclerAdapter;
@@ -39,6 +51,7 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
+import com.stl.skipthelibrary.Fragments.MapboxFragment;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
@@ -74,6 +87,10 @@ public class ViewBookActivity extends AppCompatActivity {
     private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
+    private MapView mapView;
+    private ImageView dropPinView;
+    private MapboxMap viewMapboxMap;
+    private Bundle savedInstanceState;
 
     /**
      * Bind UI Elements
@@ -83,6 +100,7 @@ public class ViewBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.savedInstanceState = savedInstanceState;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initProgressDialog();
         setContentView(R.layout.book_details);
@@ -246,6 +264,7 @@ public class ViewBookActivity extends AppCompatActivity {
                 configureOwnerRequested();
             } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
                 setBottomScreen(R.layout.bookscreen_owner_handoff);
+                configureLocationDisplay(R.id.ownerPlaceHolder);
                 configureOwnerHandOff();
             } else if (bookHandoffState == HandoffState.BORROWER_RETURNED) {
                 setBottomScreen(R.layout.bookscreen_owner_return);
@@ -261,11 +280,15 @@ public class ViewBookActivity extends AppCompatActivity {
                 configureBorrowerRequest();
             } else if (bookHandoffState == HandoffState.OWNER_LENT) {
                 setBottomScreen(R.layout.bookscreen_borrower_handoff);
+                configureLocationDisplay(R.id.borrowerPlaceHolder);
                 configureBorrowerHandoff();
             } else if (bookHandoffState == HandoffState.BORROWER_RECEIVED) {
                 setBottomScreen(R.layout.bookscreen_borrower_return);
                 configureBorrowerReturn();
-            } else {
+            } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
+                setBottomScreen(R.layout.bookscreen_handoff_location);
+                configureLocationDisplay(R.id.mapboxFragmentPlaceholder);
+            }else {
                 setBottomScreen(R.layout.bookscreen_pending);
                 configureBorrowerPending();
             }
@@ -381,6 +404,13 @@ public class ViewBookActivity extends AppCompatActivity {
      */
     private void configureOwnerPending() {
 
+    }
+
+    private void configureLocationDisplay(int placeHolderID){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        MapboxFragment mapboxFragment = MapboxFragment.newInstance(book.getRequests().getState().getLocation());
+        ft.replace(placeHolderID, mapboxFragment);
+        ft.commit();
     }
 
     private void initImageRecyclerView() {
@@ -540,6 +570,9 @@ public class ViewBookActivity extends AppCompatActivity {
             databaseHelper.getDatabaseReference().child("Books").orderByChild("uuid")
                     .equalTo(getIntent().getExtras().getString("bookUUID"))
                     .removeEventListener(childEventListener);
+        }
+        if (book.getRequests().getState().getHandoffState() == HandoffState.OWNER_LENT){
+            mapView.onDestroy();
         }
         super.finish();
     }
