@@ -61,7 +61,8 @@ public class RequestorRecyclerAdapter extends RecyclerView.Adapter<RequestorRecy
         holder.denyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                book.getRequests().denyRequestor(username);
+                book.getRequests().denyRequestor(username, book.getUuid(),
+                        book.getDescription().getTitle());
                 DatabaseHelper databaseHelper = new DatabaseHelper(context);
                 databaseHelper.updateBook(book);
             }

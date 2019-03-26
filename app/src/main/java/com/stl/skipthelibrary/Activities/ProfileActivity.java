@@ -1,26 +1,38 @@
 package com.stl.skipthelibrary.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
+
+import java.io.IOException;
 
 /**
  * Displays a user's profile, can display either the current user's profile or the profile of
@@ -34,14 +46,20 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView myProfileImage;
     private TextView myProfileName;
     private TextView myProfileUsername;
-    private TextView myProfileEmail;
-    private TextView myProfilePhoneNumber;
+    private EditText myProfileEmail;
+    private EditText myProfilePhoneNumber;
     private BottomNavigationView navigation;
     private MaterialButton logoutButton;
     private User user;
     private ProgressDialog progressDialog;
     private TextView title;
+    private ImageButton edit_button;
+    private ImageButton save_button;
+    private CircleImageView add_image_button;
+    private CircleImageView delete_image_button;
+
     private boolean isUserTheCurrentUser;
+    private ViewableImage currentImage;
 
     /**
      * Bind UI elements, get the user to display, determine whether or not the user to display is
@@ -54,6 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         initProgressDialog();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -65,6 +84,13 @@ public class ProfileActivity extends AppCompatActivity {
         navigation = findViewById(R.id.bottom_navigation);
         title = findViewById(R.id.MyProfileTitle);
         logoutButton = findViewById(R.id.logoutButton);
+        edit_button = findViewById(R.id.profile_edit_button);
+        save_button = findViewById(R.id.profile_save_button);
+        delete_image_button = findViewById(R.id.deleteProfileImageButton);
+        add_image_button = findViewById(R.id.addProfileImageButton);
+
+        setContactInfoFieldsEditable(false);
+        hideImagenButtons();
 
         Intent intent = getIntent();
         String userName = intent.getExtras().getString(USER_NAME);
@@ -98,25 +124,36 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUser(String userName) {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(userName)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            /**
-             * Get the specified user
-             * @param dataSnapshot: the current snapshot
-             */
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot data: dataSnapshot.getChildren()){
-                    User user = data.getValue(User.class);
-                    userRetrieved(user);
-                    return;
-                }
-            }
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        User user = dataSnapshot.getValue(User.class);
+                        userRetrieved(user);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Toast.makeText(ProfileActivity.this, "This account has been modified",
+                                Toast.LENGTH_SHORT).show();
+                        ProfileActivity.this.finish();
+                        startActivity(getIntent());
+                    }
 
-            }
-        });
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        Toast.makeText(ProfileActivity.this, "This account has been deleted",
+                                Toast.LENGTH_SHORT).show();
+                        ProfileActivity.this.finish();
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
     }
 
     /**
@@ -127,19 +164,118 @@ public class ProfileActivity extends AppCompatActivity {
         user = retrievedUser;
         user.getContactInfo().setContext(this);
 
-        myProfileImage.setImageBitmap(user.getImage().decode());
+        currentImage = user.getImage();
+        myProfileImage.setImageBitmap(currentImage.decode());
 
         myProfileName.setText(user.getName());
-        myProfileUsername.setText("@"+ user.getUserName());
-        myProfileEmail.setText("Email: "+ user.getContactInfo().getEmail());
-        myProfilePhoneNumber.setText("Phone Number: "+ user.getContactInfo().getPhoneNumber().replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+        myProfileUsername.setText(String.format("@%s",user.getUserName()));
+        myProfileEmail.setText(String.format("Email: %s",user.getContactInfo().getEmail()));
+        myProfilePhoneNumber.setText(String.format("Phone Number: %s",user.getContactInfo().getPhoneNumber())
+                .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
         progressDialog.hide();
         progressDialog.dismiss();
 
         if (!isUserTheCurrentUser){
-            title.setText(user.getUserName() + "'s Profile");
+            title.setText(String.format("%s's Profile",user.getUserName()));
+            edit_button.setVisibility(View.GONE);
+            save_button.setVisibility(View.GONE);
+        } else {
+            edit_button.setVisibility(View.VISIBLE);
+            save_button.setVisibility(View.GONE);
+
+            edit_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContactInfoFieldsEditable(true);
+                    showImageButton();
+                    myProfileEmail.setText(CurrentUser.getInstance().getContactInfo().getEmail());
+                    myProfilePhoneNumber.setText(CurrentUser.getInstance()
+                            .getContactInfo().getPhoneNumber()
+                            .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+                    save_button.setVisibility(View.VISIBLE);
+                    edit_button.setVisibility(View.GONE);
+                    logoutButton.setVisibility(View.GONE);
+                }
+            });
+
+            save_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContactInfoFieldsEditable(false);
+                    save_button.setVisibility(View.GONE);
+                    edit_button.setVisibility(View.VISIBLE);
+                    logoutButton.setVisibility(View.VISIBLE);
+                    hideImagenButtons();
+                    updateContactInfoFields();
+                    myProfileEmail.setText(String.format("Email: %s",CurrentUser.getInstance()
+                            .getContactInfo().getEmail()));
+                    myProfilePhoneNumber.setText(String.format("Phone Number: %s",CurrentUser
+                            .getInstance().getContactInfo().getPhoneNumber()
+                            .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3")));
+                }
+            });
         }
 
+    }
+
+    /**
+     * Displays the correct image button depending on the circumstances (delete or add)
+     */
+    private void showImageButton() {
+        if (currentImage != null) {
+            delete_image_button.setVisibility(View.VISIBLE);
+            add_image_button.setVisibility(View.GONE);
+        } else {
+            delete_image_button.setVisibility(View.GONE);
+            add_image_button.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Hides both of the possible image buttons
+     */
+    private void hideImagenButtons() {
+        add_image_button.setVisibility(View.GONE);
+        delete_image_button.setVisibility(View.GONE);
+    }
+
+    /**
+     * Toggle the ability of fields to be editable
+     * @param isEditable: should the fields be allowed to be edited
+     */
+    private void setContactInfoFieldsEditable(Boolean isEditable) {
+        if (isEditable) {
+            myProfileEmail.setEnabled(true);
+            myProfilePhoneNumber.setEnabled(true);
+        } else {
+            myProfileEmail.setEnabled(false);
+            myProfilePhoneNumber.setEnabled(false);
+        }
+    }
+
+    /**
+     * Update the current book by changing its fields
+     */
+    private void updateContactInfoFields(){
+        Gson gson = new Gson();
+        User proposedUser = gson.fromJson(gson.toJson(CurrentUser.getInstance()),User.class);
+
+        proposedUser.getContactInfo().setEmail(myProfileEmail.getText().toString());
+        proposedUser.getContactInfo().setPhoneNumber(
+                myProfilePhoneNumber.getText().toString()
+                        .replaceFirst("\\((\\d{3})\\) (\\d{3})-(\\d+)", "$1$2$3")
+        );
+        if (currentImage == null) {
+            ViewableImage defaultImage = new ViewableImage(
+                    BitmapFactory.decodeResource(getResources(), R.drawable.default_avatar)
+            );
+            proposedUser.setImage(defaultImage);
+            myProfileImage.setImageBitmap(defaultImage.decode());
+        } else {
+            proposedUser.setImage(currentImage);
+        }
+        Log.d(TAG, "updateContactInfoFields: "+proposedUser);
+        databaseHelper.updateCurrentUser(proposedUser);
     }
 
     /**
@@ -174,6 +310,66 @@ public class ProfileActivity extends AppCompatActivity {
     public void sendPhoneCallOnClick(View view) {
         if (!isUserTheCurrentUser){
             user.getContactInfo().startCall();
+        }
+    }
+
+    /**
+     * If the user is not viewing their own profile then allow them to send a call to the user
+     * they are viewing
+     * @param view: the logout button
+     */
+    public void deleteImageOnClick(View view) {
+        if (isUserTheCurrentUser){
+            currentImage = null;
+            myProfileImage.setImageBitmap(null);
+            showImageButton();
+        }
+    }
+
+    /**
+     * If the user is not viewing their own profile then allow them to send a call to the user
+     * they are viewing
+     * @param view: the logout button
+     */
+    public void addImageOnClick(View view) {
+        if (isUserTheCurrentUser){
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
+
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
+
+            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+            startActivityForResult(chooserIntent, AddBooksActivity.PICK_BOOK_IMAGE);
+        }
+    }
+
+    /**
+     * Handle requests from other activities, this includes image adding
+     * @param requestCode: the request code
+     * @param resultCode: the result code
+     * @param data: the data returned
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == AddBooksActivity.PICK_BOOK_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                // The user picked a photo.
+                // The Intent's data Uri identifies which photo was selected.
+                Uri imageUri = data.getData();
+                try {
+                    currentImage = new ViewableImage(ViewableImage.getBitmapFromUri(imageUri, this));
+                    myProfileImage.setImageBitmap(currentImage.decode());
+                    showImageButton();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Log.d(TAG, "onActivityResult: Error in picking image");
+            }
         }
     }
 

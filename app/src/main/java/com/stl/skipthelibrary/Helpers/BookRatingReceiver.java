@@ -3,6 +3,7 @@ package com.stl.skipthelibrary.Helpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.DatabaseAndAPI.GoodReadsAPIHelper;
@@ -97,8 +98,11 @@ public class BookRatingReceiver extends AsyncTask<String, Void, String> {
      */
     @Override
     protected void onPostExecute(String s) {
-        Log.d(TAG, s);
         super.onPostExecute(s);
+        if (s == null) {
+            Toast.makeText(getContext(),"Not a valid ISBN",Toast.LENGTH_SHORT).show();
+            return;
+        }
         try {
             DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
             JSONObject jsonObject = new JSONObject(s);

@@ -72,6 +72,6 @@ public class RatingTest {
     public void testToString() {
         double averageRating = 2.3;
         rating.setAverageRating(averageRating);
-        assertEquals("{rating = " + averageRating + "}", rating.toString());
+        assertEquals("{rating = " + averageRating + ", count " +  rating.getCount() + "}", rating.toString());
     }
 }

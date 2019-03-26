@@ -10,10 +10,15 @@
     <color name="declined_red">#D21919</color>
     <color name="light_grey">#9B9B9B</color>
     <color name="magenta">#BD10E0</color>
+    <color name="faded_magenta">#F489F4</color>
     <color name="ACCEPTED">#359AFF</color>
     <color name="AVAILABLE">#417600</color>
     <color name="REQUESTED">#F5A83C</color>
     <color name="BORROWED">#D91D1B</color>
     <color name="highlight">@color/ACCEPTED</color>
+    <color name="gold">#FFDF00</color>
+    <color name="Transparent">#00000000</color>
+    <color name="phone_color">#13DA5B</color>
+    <color name="mail_color">#FAC72C</color>
 
 </resources>

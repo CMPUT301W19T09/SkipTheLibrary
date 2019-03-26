@@ -56,15 +56,6 @@ public class UserTest {
     }
 
     @Test
-    public void testSetNotifications(){
-        ArrayList<Notification> notifications = new ArrayList<>();
-        Notification notification = new Notification(NotificationType.NEW_REQUEST, "test message");
-        notifications.add(notification);
-        user.setNotifications(notifications);
-        assertEquals(notifications, user.getNotifications());
-    }
-
-    @Test
     public void testSetOwnerRating(){
         Rating ownerRating = new Rating();
         ownerRating.addRating(2.3);
