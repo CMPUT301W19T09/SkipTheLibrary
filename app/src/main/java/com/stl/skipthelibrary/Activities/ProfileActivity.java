@@ -407,6 +407,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Remove the event listener and finish the activity
+     */
     @Override
     public void finish() {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
@@ -414,6 +417,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.finish();
     }
 
+    /**
+     * Removes the child event listener when the activity is stopped
+     */
     @Override
     protected void onStop() {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
@@ -421,6 +427,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    /**
+     * Removes the child event listener when the activity is paused
+     */
     @Override
     protected void onPause() {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")

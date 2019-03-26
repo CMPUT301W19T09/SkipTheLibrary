@@ -22,6 +22,9 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Enums.UserIdentity;
 import com.stl.skipthelibrary.R;
 
+/**
+ *
+ */
 public class RateUserActivity extends AppCompatActivity {
     public final static int RATEOWNER = 6;
     public final static int RATEBORROWER = 7;
@@ -32,6 +35,10 @@ public class RateUserActivity extends AppCompatActivity {
     private Intent intent;
     private DatabaseHelper databaseHelper;
 
+    /**
+     * Bind UI Elements
+     * @param savedInstanceState: the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +54,19 @@ public class RateUserActivity extends AppCompatActivity {
         getUser(userName);
     }
 
+    /**
+     * Creates a listener for when the database is changed
+     * @param userName: the name of the user for whom the rating is for
+     */
     private void getUser(String userName) {
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(userName)
                 .addChildEventListener(new ChildEventListener() {
+                    /**
+                     * Pull the specified user from the database
+                     * @param dataSnapshot: the current snapshot
+                     * @param s: the ID
+                     */
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         User user = dataSnapshot.getValue(User.class);
@@ -77,6 +93,13 @@ public class RateUserActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Reads the rating from the rating bar and updates the user rating.
+     * This can be either the borrower rating or the owner rating depending on which end of the book
+     * exchange the rating is initialized.
+     * rating.
+     * @param user: the User object for the user whose rating is to be changed
+     */
     private void userRetrieved(final User user) {
 
         RateButton.setOnClickListener(new View.OnClickListener() {

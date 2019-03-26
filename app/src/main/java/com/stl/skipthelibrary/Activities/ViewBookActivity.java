@@ -149,7 +149,7 @@ public class ViewBookActivity extends AppCompatActivity {
                     }
 
                     /**
-                     * When a child is changes update them
+                     * When a child changes update them
                      * @param dataSnapshot: the current snapshot
                      * @param s: the ID
                      */
@@ -159,7 +159,7 @@ public class ViewBookActivity extends AppCompatActivity {
                         Toast.makeText(ViewBookActivity.this, "This book has been modified.",
                                 Toast.LENGTH_SHORT).show();
                         ViewBookActivity.this.finish();
-//                        startActivity(getIntent());
+                        startActivity(getIntent());
 
                     }
 
@@ -503,7 +503,7 @@ public class ViewBookActivity extends AppCompatActivity {
                             String borrowerUserName = book.getRequests().getAcceptedRequestor();
                             book.getRequests().confirmReturned();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-                            databaseHelper.updateBook(book);
+//                            databaseHelper.updateBook(book);
                             Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                             intent.putExtra(UNAME,borrowerUserName);
                             intent.putExtra(USER_IDENTITY,UserIdentity.BORROWER);
@@ -521,7 +521,7 @@ public class ViewBookActivity extends AppCompatActivity {
                         case BORROWER_RECEIVED:
                             book.getRequests().returnBook();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-                            databaseHelper.updateBook(book);
+//                            databaseHelper.updateBook(book);
                             Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                             intent.putExtra(UNAME,book.getOwnerUserName());
                             intent.putExtra(USER_IDENTITY,UserIdentity.OWNER);
@@ -575,6 +575,7 @@ public class ViewBookActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == RateUserActivity.RATEOWNER) {
+            databaseHelper.updateBook(book);
             if (resultCode == RESULT_OK) {
                 Log.d(TAG, "Rate owner received");
             }
@@ -584,6 +585,7 @@ public class ViewBookActivity extends AppCompatActivity {
 
         }
         else if (requestCode == RateUserActivity.RATEBORROWER) {
+            databaseHelper.updateBook(book);
             if (resultCode == RESULT_OK) {
                 Log.d(TAG, "Rate borrower received");
             }

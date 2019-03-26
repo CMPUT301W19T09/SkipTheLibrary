@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
@@ -77,6 +78,7 @@ public class UITestHelper {
 
             }
         });
+
         Thread.sleep(2000);
     }
 

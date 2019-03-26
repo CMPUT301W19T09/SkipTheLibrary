@@ -110,8 +110,12 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
         assertTrue(solo.waitForText(bookTitle));
         solo.clickOnView(solo.getView(R.id.requestButton));
-//        solo.goBack();
-//        solo.sleep(1000);
+
+        // TODO: With refresh
+        solo.goBack();
+        solo.sleep(1000);
+
+
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.goBack();
         solo.waitForText("Borrowing");
@@ -135,8 +139,8 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         solo.sleep(1000);
         solo.clickOnButton("Submit Location");
 
-        // TODO: No refresh
-        solo.clickInRecyclerView(ownerIndex);
+//        // TODO: No refresh
+//        solo.clickInRecyclerView(ownerIndex);
 
         solo.waitForText(bookTitle);
         solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
@@ -149,7 +153,11 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(solo.getView(R.id.lendButton));
         solo.sleep(1000);
 
-//        solo.goBack();
+
+        // TODO: With refresh
+        solo.goBack();
+
+
         solo.waitForText("My Books");
         solo.assertCurrentActivity("Should be my books activity", MyBooksActivity.class);
 
@@ -163,6 +171,13 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
         borrowerIndex = getBookIndex(bookTitle, borrowerBooksList);
         assertTrue(borrowerIndex>=0);
+
+//        // reset ratings for two users
+//        resetRatings(borrowerIndex, borrowerBooksList);
+
+
+
+
         solo.clickInRecyclerView(borrowerIndex);
 
         assertTrue(solo.waitForText(bookTitle));
@@ -171,26 +186,36 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         solo.sleep(1000);
 
 
-        // TODO: No refresh
-        solo.clickInRecyclerView(borrowerIndex);
-        assertTrue(solo.waitForText(bookTitle));
-        solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
+//        // TODO: No refresh
+//        solo.clickInRecyclerView(borrowerIndex);
+//        assertTrue(solo.waitForText(bookTitle));
+//        solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
 
 
         // return the book
         solo.clickOnView(solo.getView(R.id.returnButton));
         solo.waitForText("rating");
         solo.assertCurrentActivity("Should be RateUserActivity", RateUserActivity.class);
-        RatingBar ratingBar = (RatingBar) solo.getView(R.id.ratingBar);
         solo.setProgressBar(0, 2);
 
         solo.clickOnView(solo.getView(R.id.RateButton));
+
+        //TODO: With refresh
+        solo.sleep(1000);
+        solo.goBack();
+
+
         solo.waitForText("Borrowing");
         solo.assertCurrentActivity("Should be BorrowersBookActivity", BorrowersBooksActivity.class);
 
         // switch accounts
         logOutAccount();
         logInAccount(ownerEmail, ownerPassword);
+
+        // check the rating
+        enterProfile();
+        RatingBar ownerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
+        assertEquals(1, ownerRatingBar.getRating());
 
         // accept the return
         enterMyBookActivity();
@@ -200,24 +225,25 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(solo.getView(R.id.returnedButton));
         solo.waitForText("rating");
         solo.assertCurrentActivity("Should be RateUserActivity", RateUserActivity.class);
-        ratingBar = (RatingBar) solo.getView(R.id.ratingBar);
         solo.setProgressBar(0, 8);
 
         solo.clickOnView(solo.getView(R.id.RateButton));
+
+        //TODO: With refresh
+        solo.sleep(1000);
+        solo.goBack();
+
         solo.waitForText("My Books");
         solo.assertCurrentActivity("Should be MyBooksActivity", MyBooksActivity.class);
 
-        // go and check that rating's were received
 
-//        // show that book status has changed
-//        solo.clickOnView(solo.getView(R.id.AcceptedChip));
-//        assertTrue(solo.waitForText(bookTitle));
-//
-//        // show that book no longer appears in search
-//        enterSearchText(bookTitle);
-//        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-//        assertEquals(0, searchBooksList.getAdapter().getItemCount());
-//        solo.goBack();
+        // go and check borrower rating was received
+        logOutAccount();
+        logInAccount(borrowerEmail, borrowerPassword);
+
+        enterProfile();
+        RatingBar borrowerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
+        assertEquals(4, borrowerRatingBar.getRating());
 
         logOutAccount();
     }
@@ -272,6 +298,12 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "BookTest1");
     }
+
+//    public void resetRatings(int index, RecyclerView bookList) {
+//        BookRecyclerAdapter adapter = (BookRecyclerAdapter) bookList.getAdapter();
+//        Book book = adapter.getBooks().get(index);
+//        book.getRequests().getAcceptedRequestor();
+//    }
 
     public int getBookIndex(String title, RecyclerView bookList) {
         BookRecyclerAdapter adapter = (BookRecyclerAdapter) bookList.getAdapter();
