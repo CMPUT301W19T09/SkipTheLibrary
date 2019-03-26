@@ -97,6 +97,13 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
             logInAccount(borrowerEmail, borrowerPassword);
         }
 
+        enterProfile();
+        solo.waitForText(borrowerEmail);
+        solo.sleep(5000);
+        RatingBar borrowerRatingBar = (RatingBar) solo.getView(R.id.borrowerRatingBar);
+        assertEquals(5, borrowerRatingBar.getNumStars());
+        assertEquals((float) 4.0, borrowerRatingBar.getRating());
+
         // search for and request the book
         enterBorrowActivity();
 
@@ -214,8 +221,11 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
 
         // check the rating
         enterProfile();
+        solo.waitForText(ownerEmail);
+        solo.sleep(5000);
         RatingBar ownerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
-        assertEquals(1.0, ownerRatingBar.getRating());
+        assertEquals(5, ownerRatingBar.getNumStars());
+        assertEquals((float) 1.0, ownerRatingBar.getRating());
 
         // accept the return
         enterMyBookActivity();
@@ -242,8 +252,10 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         logInAccount(borrowerEmail, borrowerPassword);
 
         enterProfile();
-        RatingBar borrowerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
-        assertEquals(4.0, borrowerRatingBar.getRating());
+        solo.waitForText(borrowerEmail);
+        solo.sleep(5000);
+        assertEquals(5, borrowerRatingBar.getNumStars());
+        assertEquals((float) 4.0, borrowerRatingBar.getRating());
 
         logOutAccount();
     }

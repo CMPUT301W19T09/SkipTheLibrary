@@ -48,7 +48,9 @@ public class RateUserActivity extends AppCompatActivity {
         RatingBar = findViewById(R.id.ratingBar);
         RateButton = findViewById(R.id.RateButton);
         intent = getIntent();
+
         String userName = intent.getStringExtra(ViewBookActivity.UNAME);
+        RatingUsername.setText(String.format("@%s",userName));
         databaseHelper = new DatabaseHelper(this);
 
         getUser(userName);
