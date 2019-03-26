@@ -97,13 +97,6 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
             logInAccount(borrowerEmail, borrowerPassword);
         }
 
-        enterProfile();
-        solo.waitForText(borrowerEmail);
-        solo.sleep(5000);
-        RatingBar borrowerRatingBar = (RatingBar) solo.getView(R.id.borrowerRatingBar);
-        assertEquals(5, borrowerRatingBar.getNumStars());
-        assertEquals((float) 4.0, borrowerRatingBar.getRating());
-
         // search for and request the book
         enterBorrowActivity();
 
@@ -130,7 +123,6 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
 
         // switch accounts
         logOutAccount();
-
         logInAccount(ownerEmail, ownerPassword);
 
         // search for and accept request
@@ -179,12 +171,6 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         borrowerIndex = getBookIndex(bookTitle, borrowerBooksList);
         assertTrue(borrowerIndex>=0);
 
-//        // reset ratings for two users
-//        resetRatings(borrowerIndex, borrowerBooksList);
-
-
-
-
         solo.clickInRecyclerView(borrowerIndex);
 
         assertTrue(solo.waitForText(bookTitle));
@@ -222,10 +208,7 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
         // check the rating
         enterProfile();
         solo.waitForText(ownerEmail);
-        solo.sleep(5000);
-        RatingBar ownerRatingBar = (RatingBar) solo.getView(R.id.ownerRatingBar);
-        assertEquals(5, ownerRatingBar.getNumStars());
-        assertEquals((float) 1.0, ownerRatingBar.getRating());
+        checkRating(R.id.ownerRatingBar, (float) 1.0);
 
         // accept the return
         enterMyBookActivity();
@@ -253,11 +236,20 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
 
         enterProfile();
         solo.waitForText(borrowerEmail);
-        solo.sleep(5000);
-        assertEquals(5, borrowerRatingBar.getNumStars());
-        assertEquals((float) 4.0, borrowerRatingBar.getRating());
+        checkRating(R.id.borrowerRatingBar, (float) 4.0);
 
         logOutAccount();
+    }
+
+    private void checkRating(int id, float expected) {
+        RatingBar ratingBar = null;
+        for (View v: solo.getCurrentViews()) {
+            if (v.getId() == id) {
+                ratingBar = (RatingBar) v;
+            }
+        }
+        assertTrue(ratingBar != null);
+        assertEquals(expected, ratingBar.getRating());
     }
 
     @After
