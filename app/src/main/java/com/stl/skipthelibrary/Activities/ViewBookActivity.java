@@ -84,7 +84,6 @@ public class ViewBookActivity extends AppCompatActivity {
     private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
-    private Dialog ratingDialog;
 
 
     /**
