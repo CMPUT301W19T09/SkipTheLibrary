@@ -16,14 +16,9 @@
         android:roundIcon="@mipmap/default_avatar_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
-        <activity android:name=".Activities.MapBoxActivity" />
-        <activity android:name=".Activities.SearchActivity" />
-=======
         <activity android:name=".Activities.MapBoxActivity"></activity>
         <activity android:name=".Activities.MapViewActivity"></activity>
         <activity android:name=".Activities.SearchActivity"></activity>
->>>>>>> afe0745d6e3b8bc9937731c0cea1ed17e8a09ea7
         <activity android:name=".Activities.ScannerActivity" />
         <activity
             android:name=".Activities.AddBooksActivity"
