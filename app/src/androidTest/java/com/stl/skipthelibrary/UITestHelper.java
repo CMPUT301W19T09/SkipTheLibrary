@@ -53,6 +53,9 @@ public class UITestHelper {
     }
 
     private void start(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
+        refreshRatings();
+        deleteNotifcations();
+        Thread.sleep(2000);
         if(loadTestUser){
             loadTestUser();
         }
@@ -82,6 +85,13 @@ public class UITestHelper {
         Thread.sleep(2000);
     }
 
+    private void refreshRatings() {
+        databaseHelper.getDatabaseReference().child("Users").child(testUserID)
+                .child("borrowerRating").setValue(new Rating());
+        databaseHelper.getDatabaseReference().child("Users").child(testUserID)
+                .child("ownerRating").setValue(new Rating());
+    }
+
     public void loadBooks() throws InterruptedException {
         deleteBooks();
         for (Book book: books){
@@ -92,8 +102,14 @@ public class UITestHelper {
 
     public void finish() throws InterruptedException {
         deleteBooks();
+        deleteNotifcations();
+        refreshRatings();
         uiTestSemaphore.setInUse(false);
         databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
+    }
+
+    private void deleteNotifcations() {
+        databaseHelper.getDatabaseReference().child("Notifications").removeValue();
     }
 
 
