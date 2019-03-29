@@ -502,7 +502,6 @@ public class ViewBookActivity extends AppCompatActivity {
                             String borrowerUserName = book.getRequests().getAcceptedRequestor();
                             book.getRequests().confirmReturned();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-//                            databaseHelper.updateBook(book);
                             Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                             intent.putExtra(UNAME,borrowerUserName);
                             intent.putExtra(USER_IDENTITY,UserIdentity.BORROWER);
@@ -520,7 +519,6 @@ public class ViewBookActivity extends AppCompatActivity {
                         case BORROWER_RECEIVED:
                             book.getRequests().returnBook();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-//                            databaseHelper.updateBook(book);
                             Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
                             intent.putExtra(UNAME,book.getOwnerUserName());
                             intent.putExtra(USER_IDENTITY,UserIdentity.OWNER);

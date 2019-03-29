@@ -23,7 +23,7 @@ import com.stl.skipthelibrary.Enums.UserIdentity;
 import com.stl.skipthelibrary.R;
 
 /**
- *
+ * This activity allows a user to rate another user
  */
 public class RateUserActivity extends AppCompatActivity {
     public final static int RATEOWNER = 6;
@@ -125,5 +125,13 @@ public class RateUserActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    /**
+     * Do not let the user go back until they select a rating.
+     */
+    @Override
+    public void onBackPressed() {
+
     }
 }
