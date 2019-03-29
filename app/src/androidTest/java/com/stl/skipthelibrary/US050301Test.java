@@ -1,5 +1,6 @@
 package com.stl.skipthelibrary;
 
+import android.util.Log;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
@@ -8,7 +9,6 @@ import com.robotium.solo.Solo;
 import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MapBoxActivity;
-import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
@@ -31,10 +31,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
-public class US040301Test extends IntentsTestRule<LoginActivity> {
+public class US050301Test extends IntentsTestRule<LoginActivity> {
+
+    final public static String TAG = "US050301Test";
     private Solo solo;
     private BottomNavigationView view;
     private UITestHelper uiTestHelper;
@@ -45,7 +46,7 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
     private static final String borrowerEmail = "felix2@gmail.com";
     private static final String borrowerPassword = "123456";
 
-    public US040301Test() throws InterruptedException {
+    public US050301Test() throws InterruptedException {
         super(LoginActivity.class, true, true);
         ArrayList<Book> books = new ArrayList<>();
         books.clear();
@@ -119,13 +120,27 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
         assertTrue(solo.waitForText(bookTitle));
         solo.clickInRecyclerView(0);
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.clickOnView(solo.getView(R.id.approve_button_id));
+        solo.assertCurrentActivity("Wrong Activity", MapBoxActivity.class);
+        solo.sleep(1000);
+        solo.clickOnButton("Submit Location");
+        solo.sleep(2000);
+        solo.waitForText(bookTitle);
         solo.sleep(2000);
         solo.goBack();
+        logOutAccount();
 
+        logInAccount(borrowerEmail,borrowerPassword);
+        solo.assertCurrentActivity("Wrong Activity", NotificationActivity.class);
+        assertTrue(solo.waitForText(bookTitle));
+        solo.clickInRecyclerView(0);
+        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.goBack();
         RecyclerView notificationList = (RecyclerView) solo.getView(R.id.notification_recycler_view);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.floatingActionButton2));
         logOutAccount();
+
     }
 
     @After
@@ -172,6 +187,7 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
         solo.sleep(1000);
         solo.clickOnView(view.findViewById(R.id.borrow));
     }
+
     public void enterProfile() {
         solo.clickOnView(solo.getView(R.id.profile));
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
