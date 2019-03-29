@@ -65,4 +65,6 @@
     <string name="pending_book">Pending on another user\'s action</string>
     <string name="selectLocation">Select Location</string>
     <string name="submitLocation">Submit Location</string>
+    <string name="handoffLocation">Handoff Location</string>
+    <string name="viewHandoffLocation">View Handoff Location</string>
 </resources>

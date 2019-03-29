@@ -4,28 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/pickupLocationHeading"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/genericViewLocationButton"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="@string/pickupLocation"
-        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/mapbox_blue"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:text="@string/viewHandoffLocation"
         android:textColor="@color/white"
-        android:textSize="24sp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_pin_white_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/mapboxFragmentPlaceholder"/>
-
-    <FrameLayout
-        android:id="@+id/mapboxFragmentPlaceholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

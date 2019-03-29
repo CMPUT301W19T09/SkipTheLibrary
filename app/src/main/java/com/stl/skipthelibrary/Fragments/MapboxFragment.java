@@ -34,14 +34,15 @@ public class MapboxFragment extends Fragment {
 
     /**
      * Creates a new instance of MapboxFragment with specified location
-     * @param location
+     * @param latitude
+     * @param longitude
      * @return MapboxFragment
      */
-    public static MapboxFragment newInstance(Location location) {
+    public static MapboxFragment newInstance(double latitude, double longitude) {
         MapboxFragment fragment = new MapboxFragment();
         Bundle args = new Bundle();
-        args.putDouble("latitude", location.getLatitude());
-        args.putDouble("longitude", location.getLongitude());
+        args.putDouble("latitude", latitude);
+        args.putDouble("longitude", longitude);
         fragment.setArguments(args);
         return fragment;
     }
