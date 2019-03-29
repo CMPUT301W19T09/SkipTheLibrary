@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Book;
+import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
@@ -20,6 +21,7 @@ import androidx.annotation.Nullable;
 public class UITestHelper {
     private static final String testUserID = "XavBff02PYPykAxmnBFoy3moBTY2";
     public static final String userName = "UITest";
+    public static final String borrowerUserId = "5OlDDyriXkQXwtlpSZALozbpB972";
     private User testUser;
     private ArrayList<Book> books;
     private DatabaseHelper databaseHelper = new DatabaseHelper(null);
@@ -52,6 +54,9 @@ public class UITestHelper {
     }
 
     private void start(boolean loadTestUser, boolean loadBooks, @NonNull ArrayList<Book> books) throws InterruptedException {
+        refreshRatings();
+        deleteNotifcations();
+        Thread.sleep(2000);
         if(loadTestUser){
             loadTestUser();
         }
@@ -80,6 +85,17 @@ public class UITestHelper {
         Thread.sleep(2000);
     }
 
+    private void refreshRatings() {
+        databaseHelper.getDatabaseReference().child("Users").child(testUserID)
+                .child("borrowerRating").setValue(new Rating());
+        databaseHelper.getDatabaseReference().child("Users").child(testUserID)
+                .child("ownerRating").setValue(new Rating());
+        databaseHelper.getDatabaseReference().child("Users").child(borrowerUserId)
+                .child("borrowerRating").setValue(new Rating());
+        databaseHelper.getDatabaseReference().child("Users").child(borrowerUserId)
+                .child("ownerRating").setValue(new Rating());
+    }
+
     public void loadBooks() throws InterruptedException {
         deleteBooks();
         for (Book book: books){
@@ -90,8 +106,14 @@ public class UITestHelper {
 
     public void finish() throws InterruptedException {
         deleteBooks();
+        deleteNotifcations();
+        refreshRatings();
         uiTestSemaphore.setInUse(false);
         databaseHelper.getDatabaseReference().child("TestSemaphore").setValue(uiTestSemaphore);
+    }
+
+    private void deleteNotifcations() {
+        databaseHelper.getDatabaseReference().child("Notifications").removeValue();
     }
 
 
