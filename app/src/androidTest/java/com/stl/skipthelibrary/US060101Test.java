@@ -97,20 +97,15 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.sleep(5000);
 
-        if (solo.searchText("Login")) {
-            solo.waitForText("Login");
-            logInAccount(ownerEmail, ownerPassword);
-        }
-        else {
-            view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-            view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-            solo.sleep(1000);
-            solo.clickOnView(view.findViewById(R.id.profile));
-            solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
+        if (solo.searchText("Notifications")) {
+            enterProfile();
             if (!solo.searchText(ownerEmail)) {
                 logOutAccount();
                 logInAccount(ownerEmail, ownerPassword);
             }
+        }
+        else {
+            logInAccount(ownerEmail, ownerPassword);
         }
 
 
@@ -272,10 +267,7 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
      * log out current account
      */
     public void logOutAccount(){
-        view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.sleep(1000);
-        solo.clickOnView(view.findViewById(R.id.profile));
+        enterProfile();
         solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
         solo.sleep(3000);
@@ -337,5 +329,10 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.sleep(1000);
         solo.clickOnView(borrowerBooksList.getChildAt(0).findViewById(R.id.BookListItemRightArrow));
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+    }
+
+    public void enterProfile() {
+        solo.clickOnView(solo.getView(R.id.profile));
+        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
     }
 }

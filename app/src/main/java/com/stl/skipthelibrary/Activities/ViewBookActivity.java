@@ -3,6 +3,8 @@ package com.stl.skipthelibrary.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +47,7 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
+import com.stl.skipthelibrary.Fragments.MapboxFragment;
 import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.Enums.UserIdentity;
 import com.stl.skipthelibrary.R;
@@ -263,6 +267,7 @@ public class ViewBookActivity extends AppCompatActivity {
                 configureOwnerRequested();
             } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
                 setBottomScreen(R.layout.bookscreen_owner_handoff);
+                configureLocationDisplay(R.id.ownerViewLocationButton);
                 configureOwnerHandOff();
             } else if (bookHandoffState == HandoffState.BORROWER_RETURNED) {
                 setBottomScreen(R.layout.bookscreen_owner_return);
@@ -278,11 +283,15 @@ public class ViewBookActivity extends AppCompatActivity {
                 configureBorrowerRequest();
             } else if (bookHandoffState == HandoffState.OWNER_LENT) {
                 setBottomScreen(R.layout.bookscreen_borrower_handoff);
+                configureLocationDisplay(R.id.borrowerViewLocationButton);
                 configureBorrowerHandoff();
             } else if (bookHandoffState == HandoffState.BORROWER_RECEIVED) {
                 setBottomScreen(R.layout.bookscreen_borrower_return);
                 configureBorrowerReturn();
-            } else {
+            } else if (bookHandoffState == HandoffState.READY_FOR_PICKUP) {
+                setBottomScreen(R.layout.bookscreen_handoff_location);
+                configureLocationDisplay(R.id.genericViewLocationButton);
+            }else {
                 setBottomScreen(R.layout.bookscreen_pending);
                 configureBorrowerPending();
             }
@@ -400,6 +409,19 @@ public class ViewBookActivity extends AppCompatActivity {
      */
     private void configureOwnerPending() {
 
+    }
+
+    private void configureLocationDisplay(int buttonID){
+        MaterialButton viewLocationButton = findViewById(buttonID);
+        viewLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewBookActivity.this, MapViewActivity.class);
+                intent.putExtra("latitude", book.getRequests().getState().getLocation().getLatitude());
+                intent.putExtra("longitude", book.getRequests().getState().getLocation().getLongitude());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initImageRecyclerView() {
