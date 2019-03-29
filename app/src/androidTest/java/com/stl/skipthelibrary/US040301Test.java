@@ -9,6 +9,7 @@ import com.stl.skipthelibrary.Activities.BorrowersBooksActivity;
 import com.stl.skipthelibrary.Activities.LoginActivity;
 import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
+import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 public class US040301Test extends IntentsTestRule<LoginActivity> {
@@ -77,7 +79,7 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
 
         if (solo.searchText("Login")) {
             solo.waitForText("Login");
-            logInAccount(ownerEmail, ownerPassword);
+            logInAccount(borrowerEmail, borrowerPassword);
         }
         else {
             view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
@@ -85,29 +87,11 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
             solo.sleep(1000);
             solo.clickOnView(view.findViewById(R.id.profile));
             solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
-            if (!solo.searchText(ownerEmail)) {
+            if (!solo.searchText(borrowerEmail)) {
                 logOutAccount();
-                logInAccount(ownerEmail, ownerPassword);
+                logInAccount(borrowerEmail, borrowerPassword);
             }
         }
-
-
-        /**
-         * Check the owner's book
-         */
-        enterMyBookActivity();
-
-
-
-        /**
-         * Log out
-         */
-        logOutAccount();
-
-        /**
-         * Switch account
-         */
-        logInAccount(borrowerEmail, borrowerPassword);
 
         /**
          * Search the request book and send the request
@@ -126,6 +110,7 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.requestButton));
+        solo.goBack();
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
         solo.goBack();
         logOutAccount();
@@ -135,30 +120,25 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
          * Switch account
          */
         logInAccount(ownerEmail, ownerPassword);
-        enterMyBookActivity();
+        solo.assertCurrentActivity("Wrong Activity", NotificationActivity.class);
+        assertTrue(solo.waitForText(bookTitle));
+        solo.clickInRecyclerView(0);
+        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.sleep(2000);
+        solo.goBack();
 
-        /**
-         * Owner accept the borrowing request
-         */
-        viewBookFromMybookActivity();
-        RecyclerView requstedBookList = (RecyclerView) solo.getView(R.id.RequesterRecyclerView);
+        RecyclerView notificationList = (RecyclerView) solo.getView(R.id.notification_recycler_view);
         solo.sleep(1000);
-        solo.clickOnView(requstedBookList.getChildAt(0).findViewById(R.id.approve_button_id));
-        solo.assertCurrentActivity("Wrong Activity", MapBoxActivity.class);
-        solo.sleep(1000);
-        solo.clickOnButton("Submit Location");
-        solo.waitForText("My Books");
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+        solo.clickOnView(solo.getView(R.id.floatingActionButton2));
         logOutAccount();
-
     }
 
     @After
     public void tearDown() throws InterruptedException {
+        uiTestHelper.deleteUsersBooks("Felix");
         uiTestHelper.finish();
         solo.finishOpenedActivities();
     }
-
 
     /**
      * log out current account
@@ -171,6 +151,7 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
         solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
         solo.sleep(3000);
+        solo.scrollDown();
         solo.clickOnView(solo.getView(R.id.logoutButton));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
@@ -191,27 +172,6 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
     }
 
     /**
-     * Enter My book activity from initial screen
-     */
-    public void enterMyBookActivity() {
-        view = (BottomNavigationView) solo.getView(R.id.bottom_navigation);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.sleep(1000);
-        solo.clickOnView(view.findViewById(R.id.my_books));
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
-    }
-
-    /**
-     * View the first book in owner book list
-     */
-    public void viewBookFromMybookActivity() {
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
-        solo.sleep(1000);
-        solo.clickInRecyclerView(0);
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-    }
-
-    /**
      * Enter borrower book activity from initial screen
      */
     public void enterBorrowersBookActivity() {
@@ -219,16 +179,5 @@ public class US040301Test extends IntentsTestRule<LoginActivity> {
         view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
         solo.sleep(1000);
         solo.clickOnView(view.findViewById(R.id.borrow));
-    }
-
-    /**
-     * View the first book in borrowing book list
-     */
-    public void viewBookFromBorrowerBookActivity() {
-        solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
-        RecyclerView borrowerBooksList = (RecyclerView) solo.getView(R.id.borrowerBookRecyclerView);
-        solo.sleep(1000);
-        solo.clickOnView(borrowerBooksList.getChildAt(0).findViewById(R.id.BookListItemRightArrow));
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
     }
 }
