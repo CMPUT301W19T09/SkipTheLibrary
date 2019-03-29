@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 public class UITestHelper {
     private static final String testUserID = "XavBff02PYPykAxmnBFoy3moBTY2";
     public static final String userName = "UITest";
+    public static final String borrowerUserId = "5OlDDyriXkQXwtlpSZALozbpB972";
     private User testUser;
     private ArrayList<Book> books;
     private DatabaseHelper databaseHelper = new DatabaseHelper(null);
@@ -89,6 +90,10 @@ public class UITestHelper {
         databaseHelper.getDatabaseReference().child("Users").child(testUserID)
                 .child("borrowerRating").setValue(new Rating());
         databaseHelper.getDatabaseReference().child("Users").child(testUserID)
+                .child("ownerRating").setValue(new Rating());
+        databaseHelper.getDatabaseReference().child("Users").child(borrowerUserId)
+                .child("borrowerRating").setValue(new Rating());
+        databaseHelper.getDatabaseReference().child("Users").child(borrowerUserId)
                 .child("ownerRating").setValue(new Rating());
     }
 
