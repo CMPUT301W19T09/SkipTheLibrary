@@ -1,10 +1,1 @@
-com.stl.skipthelibrary
 com.stl.skipthelibrary.Activities
-com.stl.skipthelibrary.BindersAndAdapters
-com.stl.skipthelibrary.DatabaseAndAPI
-com.stl.skipthelibrary.Entities
-com.stl.skipthelibrary.Enums
-com.stl.skipthelibrary.Exceptions
-com.stl.skipthelibrary.Helpers
-com.stl.skipthelibrary.Singletons
-com.stl.skipthelibrary.Validators
