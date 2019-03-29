@@ -18,6 +18,5 @@
             android:layout="@layout/default_bottom_screen"
             android:id="@+id/generic_bottom_screen_id"/>
 
-
     </TableLayout>
 </ScrollView>

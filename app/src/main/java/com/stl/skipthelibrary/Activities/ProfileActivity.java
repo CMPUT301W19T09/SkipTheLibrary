@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
+import com.stl.skipthelibrary.Entities.Rating;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Helpers.NavigationHandler;
 import com.stl.skipthelibrary.R;
@@ -48,6 +50,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView myProfileUsername;
     private EditText myProfileEmail;
     private EditText myProfilePhoneNumber;
+    private RatingBar myOwnerRating;
+    private RatingBar myBorrowerRating;
     private BottomNavigationView navigation;
     private MaterialButton logoutButton;
     private User user;
@@ -57,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton save_button;
     private CircleImageView add_image_button;
     private CircleImageView delete_image_button;
+    private ChildEventListener childEventListener;
 
     private boolean isUserTheCurrentUser;
     private ViewableImage currentImage;
@@ -81,6 +86,8 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileUsername = findViewById(R.id.myProfileUsername);
         myProfileEmail = findViewById(R.id.email);
         myProfilePhoneNumber = findViewById(R.id.phoneNumber);
+        myOwnerRating = findViewById(R.id.ownerRatingBar);
+        myBorrowerRating = findViewById(R.id.borrowerRatingBar);
         navigation = findViewById(R.id.bottom_navigation);
         title = findViewById(R.id.MyProfileTitle);
         logoutButton = findViewById(R.id.logoutButton);
@@ -122,38 +129,40 @@ public class ProfileActivity extends AppCompatActivity {
      * @param userName: the user's username
      */
     private void setUser(String userName) {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                User user = dataSnapshot.getValue(User.class);
+                userRetrieved(user);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(ProfileActivity.this, "This account has been modified",
+                        Toast.LENGTH_SHORT).show();
+                ProfileActivity.this.finish();
+                startActivity(getIntent());
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Toast.makeText(ProfileActivity.this, "This account has been deleted",
+                        Toast.LENGTH_SHORT).show();
+                ProfileActivity.this.finish();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        };
+
         databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
                 .equalTo(userName)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        User user = dataSnapshot.getValue(User.class);
-                        userRetrieved(user);
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Toast.makeText(ProfileActivity.this, "This account has been modified",
-                                Toast.LENGTH_SHORT).show();
-                        ProfileActivity.this.finish();
-                        startActivity(getIntent());
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                        Toast.makeText(ProfileActivity.this, "This account has been deleted",
-                                Toast.LENGTH_SHORT).show();
-                        ProfileActivity.this.finish();
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                .addChildEventListener(childEventListener);
     }
 
     /**
@@ -172,6 +181,17 @@ public class ProfileActivity extends AppCompatActivity {
         myProfileEmail.setText(String.format("Email: %s",user.getContactInfo().getEmail()));
         myProfilePhoneNumber.setText(String.format("Phone Number: %s",user.getContactInfo().getPhoneNumber())
                 .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+
+        Rating ownerRating = user.getOwnerRating();
+        myOwnerRating.setMax(ownerRating.getMaxRating());
+        myOwnerRating.setStepSize((float) 0.5);
+        myOwnerRating.setRating((float) ownerRating.getAverageRating());
+
+        Rating borrowerRating = user.getBorrowerRating();
+        myBorrowerRating.setMax(borrowerRating.getMaxRating());
+        myBorrowerRating.setStepSize((float) 0.5);
+        myBorrowerRating.setRating((float) borrowerRating.getAverageRating());
+
         progressDialog.hide();
         progressDialog.dismiss();
 
@@ -346,6 +366,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Handle requests from other activities, this includes image adding
      * @param requestCode: the request code
@@ -380,7 +401,39 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!isUserTheCurrentUser){
+            databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                    .equalTo(user.getUserName()).removeEventListener(childEventListener);
             super.onBackPressed();
         }
+    }
+
+    /**
+     * Remove the event listener and finish the activity
+     */
+    @Override
+    public void finish() {
+        databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                .equalTo(user.getUserName()).removeEventListener(childEventListener);
+        super.finish();
+    }
+
+    /**
+     * Removes the child event listener when the activity is stopped
+     */
+    @Override
+    protected void onStop() {
+        databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                .equalTo(user.getUserName()).removeEventListener(childEventListener);
+        super.onStop();
+    }
+
+    /**
+     * Removes the child event listener when the activity is paused
+     */
+    @Override
+    protected void onPause() {
+        databaseHelper.getDatabaseReference().child("Users").orderByChild("userName")
+                .equalTo(user.getUserName()).removeEventListener(childEventListener);
+        super.onPause();
     }
 }

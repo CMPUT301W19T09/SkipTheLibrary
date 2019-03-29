@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.net.Uri;
 import android.app.ProgressDialog;
@@ -48,6 +49,7 @@ import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
 import com.stl.skipthelibrary.Fragments.MapboxFragment;
 import com.stl.skipthelibrary.Enums.NotificationType;
+import com.stl.skipthelibrary.Enums.UserIdentity;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 
@@ -62,6 +64,8 @@ public class ViewBookActivity extends AppCompatActivity {
     final public static String TAG = "ViewBookActivityTag";
     final public static String ISBN = "ISBN";
     final public static String UUID = "UUID";
+    final public static String UNAME = "UserName";
+    final public static String USER_IDENTITY = "UserIdentity";
     private DatabaseHelper databaseHelper;
 
 
@@ -84,6 +88,7 @@ public class ViewBookActivity extends AppCompatActivity {
     private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
+
 
     /**
      * Bind UI Elements
@@ -147,7 +152,7 @@ public class ViewBookActivity extends AppCompatActivity {
                     }
 
                     /**
-                     * When a child is changes update them
+                     * When a child changes update them
                      * @param dataSnapshot: the current snapshot
                      * @param s: the ID
                      */
@@ -516,9 +521,13 @@ public class ViewBookActivity extends AppCompatActivity {
                             databaseHelper.updateBook(book);
                             break;
                         case BORROWER_RETURNED:
+                            String borrowerUserName = book.getRequests().getAcceptedRequestor();
                             book.getRequests().confirmReturned();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-                            databaseHelper.updateBook(book);
+                            Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
+                            intent.putExtra(UNAME,borrowerUserName);
+                            intent.putExtra(USER_IDENTITY,UserIdentity.BORROWER);
+                            startActivityForResult(intent,RateUserActivity.RATEBORROWER);
                             break;
                     }
                 }
@@ -532,7 +541,10 @@ public class ViewBookActivity extends AppCompatActivity {
                         case BORROWER_RECEIVED:
                             book.getRequests().returnBook();
                             Toast.makeText(this, "The Book is Returned", Toast.LENGTH_SHORT).show();
-                            databaseHelper.updateBook(book);
+                            Intent intent = new Intent(ViewBookActivity.this, RateUserActivity.class);
+                            intent.putExtra(UNAME,book.getOwnerUserName());
+                            intent.putExtra(USER_IDENTITY,UserIdentity.OWNER);
+                            startActivityForResult(intent,RateUserActivity.RATEOWNER);
                             break;
                     }
                 }
@@ -579,6 +591,25 @@ public class ViewBookActivity extends AppCompatActivity {
                 book.getRequests().acceptRequestor(username, book.getUuid(),
                         book.getDescription().getTitle());
                 databaseHelper.updateBook(book);
+            }
+        }
+        else if (requestCode == RateUserActivity.RATEOWNER) {
+            databaseHelper.updateBook(book);
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Rate owner received");
+            }
+            else {
+                Log.d(TAG, "Error in rating owner received");
+            }
+
+        }
+        else if (requestCode == RateUserActivity.RATEBORROWER) {
+            databaseHelper.updateBook(book);
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Rate borrower received");
+            }
+            else {
+                Log.d(TAG, "Error in borrower owner received");
             }
         }
     }

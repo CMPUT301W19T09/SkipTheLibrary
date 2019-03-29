@@ -5,20 +5,25 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:hardwareAccelerated="false"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/default_avatar"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/default_avatar_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
+        <activity android:name=".Activities.MapBoxActivity" />
+        <activity android:name=".Activities.SearchActivity" />
+=======
         <activity android:name=".Activities.MapBoxActivity"></activity>
         <activity android:name=".Activities.MapViewActivity"></activity>
         <activity android:name=".Activities.SearchActivity"></activity>
+>>>>>>> afe0745d6e3b8bc9937731c0cea1ed17e8a09ea7
         <activity android:name=".Activities.ScannerActivity" />
         <activity
             android:name=".Activities.AddBooksActivity"
@@ -44,6 +49,9 @@
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
+
         <activity android:name=".Activities.ViewBookActivity" />
+        <activity android:name=".Activities.RateUserActivity"></activity>
     </application>
+
 </manifest>

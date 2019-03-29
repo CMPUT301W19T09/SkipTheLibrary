@@ -82,6 +82,7 @@ public class UITestHelper {
 
             }
         });
+
         Thread.sleep(2000);
     }
 
