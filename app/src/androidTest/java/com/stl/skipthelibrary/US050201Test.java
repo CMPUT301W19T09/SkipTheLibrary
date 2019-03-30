@@ -45,6 +45,9 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
     private static final String ownerPassword = "123123";
     private static final String borrowerEmail = "uitestborrower@email.com";
     private static final String borrowerPassword = "123123";
+    int searchIndex = -1;
+    int borrowerIndex = -1;
+    int ownerIndex = -1;
 
     public US050201Test() throws InterruptedException {
         super(LoginActivity.class, true, true);
@@ -69,8 +72,6 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
 
     @Test
     public void testOwnerDenyRequest() throws Exception {
-        int ownerIndex;
-        int borrowerIndex;
         RecyclerView ownerBooksList;
         RecyclerView borrowerBooksList;
         RecyclerView searchBooksList;
@@ -78,56 +79,22 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.sleep(2000);
 
-        if (solo.searchText("Notifications")) {
-            enterProfile();
-            if (!solo.searchText(borrowerEmail)) {
-                logOutAccount();
-                logInAccount(borrowerEmail, borrowerPassword);
-            }
-        }
-        else {
-            logInAccount(borrowerEmail, borrowerPassword);
-        }
-
-        // search for and request the book
+        initialLoginToTestBorrower();
         enterBorrowActivity();
-        enterSearchText(bookTitle);
-        searchBooksList = (RecyclerView) solo.getView(R.id.SearchRecyclerView);
-        borrowerIndex = getBookIndex(bookTitle, searchBooksList);
-        assertTrue(borrowerIndex>=0);
-        solo.clickInRecyclerView(borrowerIndex);
-        solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
-        assertTrue(solo.waitForText(bookTitle));
-        solo.clickOnView(solo.getView(R.id.requestButton));
-        solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
-        solo.goBack();
-        assertTrue(solo.waitForText(bookTitle));
+        searchAndRequestBook();
 
-        // switch accounts
-        logOutAccount();
 
-        logInAccount(ownerEmail, ownerPassword);
-
-        // search for and accept request
+        switchAccounts(ownerEmail, ownerPassword);
         enterMyBookActivity();
-        ownerBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
-        ownerIndex = getBookIndex(bookTitle, ownerBooksList);
-        assertTrue(ownerIndex>=0);
-        solo.clickInRecyclerView(ownerIndex);
-        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
-        solo.clickOnView(solo.getView(R.id.deny_button_id));
-        solo.waitForText("My Books");
-        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+        denyRequest();
 
         solo.clickOnView(solo.getView(R.id.RequestedChip));
         solo.sleep(1000);
         ownerBooksList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
         assertEquals(1, ownerBooksList.getAdapter().getItemCount());
-        solo.goBack();
 
         // switch accounts
-        logOutAccount();
-        logInAccount(borrowerEmail, borrowerPassword);
+        switchAccounts(borrowerEmail, borrowerPassword);
 
         // show that request book no longer shows in search
         enterBorrowActivity();
@@ -138,35 +105,88 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         logOutAccount();
     }
 
-    @After
-    public void tearDown() throws InterruptedException {
-        uiTestHelper.finish();
-        solo.finishOpenedActivities();
+    private void denyRequest() {
+        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
+        if (ownerIndex < 0) {
+            ownerIndex = getBookIndex(bookTitle, R.id.ownerBooksRecyclerView);
+            assertTrue(ownerIndex>=0);
+        }
+
+        solo.clickInRecyclerView(ownerIndex);
+        solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
+        solo.clickOnView(solo.getView(R.id.deny_button_id));
+
+        // searchRecyclerView
+
+        solo.waitForText(bookTitle);
+
+        solo.sleep(1000);
+        solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
+        solo.goBack();
+        solo.waitForText("My Books");
+        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
     }
 
+    private void switchAccounts(String email, String password) {
+        logOutAccount();
+        logInAccount(email, password);
+    }
+
+    private void searchAndRequestBook() {
+        solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
+        enterSearchText(bookTitle);
+
+        if (searchIndex == -1) {
+            searchIndex = getBookIndex(bookTitle, R.id.SearchRecyclerView);
+            assertTrue(searchIndex>=0);
+        }
+
+        solo.clickInRecyclerView(searchIndex);
+        solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
+        assertTrue(solo.waitForText(bookTitle));
+        solo.clickOnView(solo.getView(R.id.requestButton));
+
+        solo.goBack();
+        solo.sleep(1000);
+
+        solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
+        solo.goBack();
+        solo.waitForText("Borrowing");
+        solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);
+    }
 
     public void logOutAccount(){
         enterProfile();
         solo.sleep(1000);
-        solo.clickOnView(solo.getView(R.id.logoutButton));
+        solo.scrollDown();
+        assertTrue(solo.waitForText("logout"));
+        solo.clickOnButton("logout");
         assertTrue(solo.waitForText("Login"));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-
     }
 
     public void logInAccount(String email, String password){
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.EmailEditText), email);
         solo.enterText((EditText) solo.getView(R.id.PasswordEditText), password);
-        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.SignInButton));
         assertTrue(solo.waitForText("Notifications"));
-        solo.sleep(1000);
         solo.assertCurrentActivity("Wrong activity", NotificationActivity.class);
     }
 
+    private void initialLoginToTestBorrower() {
+        if (solo.searchText("Notifications")) {
+            enterProfile();
+            if (!solo.searchText(borrowerEmail)) {
+                switchAccounts(borrowerEmail, borrowerPassword);
+            }
+        }
+        else {
+            logInAccount(borrowerEmail, borrowerPassword);
+        }
+    }
+
     public void enterProfile() {
-        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.profile));
         solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
     }
@@ -187,10 +207,11 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
         solo.clickOnView(solo.getView(R.id.searchBookButton));
         solo.waitForActivity(SearchActivity.class);
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
-        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), "BookTest1");
+        solo.enterText((AutoCompleteTextView) solo.getView(R.id.SearchBar), text);
     }
 
-    public int getBookIndex(String title, RecyclerView bookList) {
+    public int getBookIndex(String title, int recyclerViewID) {
+        RecyclerView bookList = (RecyclerView) solo.getView(recyclerViewID);
         BookRecyclerAdapter adapter = (BookRecyclerAdapter) bookList.getAdapter();
         ArrayList<Book> books = adapter.getBooks();
         for (Book book: books) {
@@ -198,9 +219,14 @@ public class US050201Test extends IntentsTestRule<LoginActivity> {
                 return adapter.getBooks().indexOf(book);
             }
         }
-
         // assume 0
         return 0;
+    }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        uiTestHelper.finish();
+        solo.finishOpenedActivities();
     }
 }
 

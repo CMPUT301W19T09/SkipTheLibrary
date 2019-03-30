@@ -79,7 +79,7 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
     }
 
     @Test
-    public void testBorrowerSearchForOnlyAvailableBooks() throws Exception {
+    public void testBorrowerAndOwnerRating() throws Exception {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.sleep(2000);
 
@@ -257,8 +257,8 @@ public class US100401Test extends IntentsTestRule<LoginActivity> {
 
         solo.goBack();
         solo.sleep(1000);
-
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
+
         solo.goBack();
         solo.waitForText("Borrowing");
         solo.assertCurrentActivity("Wrong Activity", BorrowersBooksActivity.class);

@@ -20,6 +20,7 @@ import com.stl.skipthelibrary.Activities.MapBoxActivity;
 import com.stl.skipthelibrary.Activities.MyBooksActivity;
 import com.stl.skipthelibrary.Activities.NotificationActivity;
 import com.stl.skipthelibrary.Activities.ProfileActivity;
+import com.stl.skipthelibrary.Activities.RateUserActivity;
 import com.stl.skipthelibrary.Activities.ScannerActivity;
 import com.stl.skipthelibrary.Activities.SearchActivity;
 import com.stl.skipthelibrary.Activities.ViewBookActivity;
@@ -90,7 +91,6 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
 
     @Test
     public void testScanningFlow() throws Exception {
-
         /**
          * Test Login functionality
          */
@@ -143,7 +143,11 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", ViewBookActivity.class);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.requestButton));
+
+        solo.goBack();
+        solo.sleep(1000);
         solo.assertCurrentActivity("Wrong Activity", SearchActivity.class);
+
         solo.goBack();
         logOutAccount();
 
@@ -164,6 +168,10 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         solo.assertCurrentActivity("Wrong Activity", MapBoxActivity.class);
         solo.sleep(1000);
         solo.clickOnButton("Submit Location");
+        solo.waitForText(bookTitle);
+        solo.assertCurrentActivity("Should be ViewBookActivity", ViewBookActivity.class);
+
+        solo.goBack();
         solo.waitForText("My Books");
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
         logOutAccount();
@@ -197,7 +205,10 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.lendButton));
+        solo.sleep(1000);
+        solo.goBack();
         solo.waitForText("My Books");
+        solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
         logOutAccount();
 
         /**
@@ -213,7 +224,11 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.borrowButton));
-        solo.waitForText("Borrow");
+        solo.sleep(1000);
+        solo.goBack();
+
+        solo.waitForText("Borrowing");
+        solo.assertCurrentActivity("Should be BorrowersBookActivity", BorrowersBooksActivity.class);
         logOutAccount();
 
         /**
@@ -238,6 +253,17 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.returnButton));
+        solo.waitForText("rating");
+        solo.assertCurrentActivity("Should be RateUserActivity", RateUserActivity.class);
+        solo.setProgressBar(0, 6);
+
+        solo.clickOnView(solo.getView(R.id.RateButton));
+
+        solo.sleep(1000);
+        solo.goBack();
+
+        solo.waitForText("Borrowing");
+        solo.assertCurrentActivity("Should be BorrowersBookActivity", BorrowersBooksActivity.class);
         logOutAccount();
 
         /**
@@ -253,7 +279,18 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
         intending(hasComponent(ScannerActivity.class.getName())).respondWith(result);
         solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.returnedButton));
-        solo.sleep(3000);
+        solo.waitForText("rating");
+        solo.assertCurrentActivity("Should be RateUserActivity", RateUserActivity.class);
+        solo.setProgressBar(0, 4);
+
+        solo.clickOnView(solo.getView(R.id.RateButton));
+        solo.sleep(1000);
+        solo.goBack();
+
+        solo.waitForText("My Books");
+        solo.assertCurrentActivity("Should be MyBooksActivity", MyBooksActivity.class);
+
+        logOutAccount();
     }
 
     @After
@@ -269,11 +306,11 @@ public class US060101Test extends IntentsTestRule<LoginActivity> {
     public void logOutAccount(){
         enterProfile();
         solo.sleep(1000);
-        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
-        solo.sleep(3000);
-        solo.clickOnView(solo.getView(R.id.logoutButton));
+        solo.scrollDown();
+        assertTrue(solo.waitForText("logout"));
+        solo.clickOnButton("logout");
+        assertTrue(solo.waitForText("Login"));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-
     }
 
     /**

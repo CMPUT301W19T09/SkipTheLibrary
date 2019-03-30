@@ -58,7 +58,6 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
 
     @Test
     public void testRequestBook(){
-
         solo.sleep(1000);
         //navigate to add book
         selectMenuItem(R.id.my_books);
@@ -122,6 +121,8 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
         //logout
         solo.goBack();
         solo.sleep(1000);
+        solo.goBack();
+        solo.sleep(1000);
         solo.waitForActivity(BorrowersBooksActivity.class);
 
         selectMenuItem(R.id.profile);
@@ -141,16 +142,13 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
         solo.waitForActivity(MyBooksActivity.class);
         solo.assertCurrentActivity("Wrong Activity", MyBooksActivity.class);
 
-        searchBookList = (RecyclerView) solo.getView(R.id.ownerBooksRecyclerView);
         solo.sleep(1000);
-        View selectedBook = searchBookList.getChildAt(0);
 
         assertTrue(solo.searchText("REQUESTED"));
 
         solo.sleep(1000);
         //delete book
         deleteBook();
-
     }
 
 
@@ -197,18 +195,12 @@ public class US040101Test extends ActivityTestRule<NotificationActivity>{
     }
 
     public void logOutAccount(){
-        BottomNavigationView view = (BottomNavigationView)solo.getView(R.id.bottom_navigation);
         solo.sleep(1000);
-        view.setOnNavigationItemSelectedListener(new NavigationHandler(view.getContext()));
-        solo.sleep(1000);
-        solo.clickOnView(view.findViewById(R.id.profile));
-        solo.sleep(1000);
-        solo.assertCurrentActivity("Wrong Activity", ProfileActivity.class);
-
-        solo.clickOnView(solo.getView(R.id.logoutButton));
-        solo.sleep(1000);
+        solo.scrollDown();
+        assertTrue(solo.waitForText("logout"));
+        solo.clickOnButton("logout");
+        assertTrue(solo.waitForText("Login"));
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
-
     }
 }
 
