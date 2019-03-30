@@ -307,6 +307,7 @@ public class DatabaseHelper {
             promptPassword(user);
             Log.d(TAG, "updateCurrentUser: UPDATING IN FIREBASE");
         } else {
+            CurrentUser.setUser(user);
             getDatabaseReference().child("Users").child(user.getUserID()).setValue(user);
         }
         Log.d("Updating user", "new user should be replaced");
