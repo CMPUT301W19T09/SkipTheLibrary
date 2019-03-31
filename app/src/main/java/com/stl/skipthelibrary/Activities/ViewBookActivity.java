@@ -3,18 +3,17 @@ package com.stl.skipthelibrary.Activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
@@ -31,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,11 +45,12 @@ import com.stl.skipthelibrary.Entities.User;
 import com.stl.skipthelibrary.Entities.ViewableImage;
 import com.stl.skipthelibrary.Enums.BookStatus;
 import com.stl.skipthelibrary.Enums.HandoffState;
-import com.stl.skipthelibrary.Fragments.MapboxFragment;
 import com.stl.skipthelibrary.Enums.NotificationType;
 import com.stl.skipthelibrary.Enums.UserIdentity;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
+import com.stl.skipthelibrary.Validators.BookValidator;
+import com.stl.skipthelibrary.Validators.TextValidator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,6 +87,10 @@ public class ViewBookActivity extends AppCompatActivity {
     private MaterialButton addNewBookImageButton;
     private String isbn_code;
     private ProgressDialog progressDialog;
+    private TextWatcher titleTextWatcher;
+    private TextWatcher authorTextWatcher;
+    private TextWatcher synopsisTextWatcher;
+    private Context mContext;
 
 
     /**
@@ -102,6 +105,7 @@ public class ViewBookActivity extends AppCompatActivity {
         initProgressDialog();
         setContentView(R.layout.book_details);
         databaseHelper = new DatabaseHelper(this);
+        mContext = getApplicationContext();
         stub = findViewById(R.id.generic_bottom_screen_id);
         user = CurrentUser.getInstance();
         title_element = findViewById(R.id.title_element);
@@ -119,6 +123,42 @@ public class ViewBookActivity extends AppCompatActivity {
         setBookDescriptionFieldsEditable(false);
 
         getIncomingIntents();
+
+
+        titleTextWatcher = new TextValidator(title_element) {
+            /**
+             * Validates the input
+             * @param textView: the textView to validate
+             * @param text: the text to validate
+             */
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new BookValidator(text,null,null,null).isTitleValid())){
+                    title_element.setError("Please enter valid title");
+                }
+            }
+        };
+        authorTextWatcher = new TextValidator(author_element) {
+            /**
+             * Validates the input
+             * @param textView: the textView to validate
+             * @param text: the text to validate
+             */
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new BookValidator(null,text,null,null).isAuthorValid())){
+                    author_element.setError("Please enter valid author");
+                }
+            }
+        };
+        synopsisTextWatcher = new TextValidator(synopsis_element) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if (!(new BookValidator(null,null,null,text).isDescriptionValid())){
+                    synopsis_element.setError("Please enter valid description");
+                }
+            }
+        };
     }
     /**
      * Turn on the progress dialog just incase it takes a while to get the book
@@ -157,7 +197,6 @@ public class ViewBookActivity extends AppCompatActivity {
                      * @param s: the ID
                      */
                     @Override
-                    //TODO:Make books edit on the go
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Toast.makeText(ViewBookActivity.this, "This book has been modified.",
                                 Toast.LENGTH_SHORT).show();
@@ -189,7 +228,7 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * When we recieve a book, load its fields and then setup the edit and save button if needed.
+     * When we receive a book, load its fields and then setup the edit and save button if needed.
      */
     private void handleBookArrival() {
         fillBookDescriptionFields();
@@ -203,6 +242,7 @@ public class ViewBookActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     setBookDescriptionFieldsEditable(true);
+                    addTextWatchers();
                     author_element.setText(book.getDescription().getAuthor());
                     horizontalAdapter.setEditMode(true);
                     save_button.setVisibility(View.VISIBLE);
@@ -242,9 +282,12 @@ public class ViewBookActivity extends AppCompatActivity {
                     addNewBookImageButton.setVisibility(View.GONE);
                     horizontalAdapter.notifyDataSetChanged();
                     updateBookDesriptionFields();
+                    title_element.setText(book.getDescription().getTitle());
+                    synopsis_element.setText(book.getDescription().getSynopsis());
                     author_element.setText(String.format(
                             "Author: %s",book.getDescription().getAuthor())
                     );
+                    removeTextWatchers();
                 }
             });
         } else {
@@ -490,14 +533,59 @@ public class ViewBookActivity extends AppCompatActivity {
     }
 
     /**
+     * Adds text validation to editable fields
+     */
+    private void addTextWatchers() {
+        if (titleTextWatcher != null && authorTextWatcher != null && synopsisTextWatcher != null ){
+            title_element.addTextChangedListener(titleTextWatcher);
+            author_element.addTextChangedListener(authorTextWatcher);
+            synopsis_element.addTextChangedListener(synopsisTextWatcher);
+        }
+    }
+
+    /**
+     * Removes text validation from editable fields
+     */
+    private void removeTextWatchers() {
+        title_element.removeTextChangedListener(titleTextWatcher);
+        author_element.removeTextChangedListener(authorTextWatcher);
+        synopsis_element.removeTextChangedListener(synopsisTextWatcher);
+
+        title_element.setError(null);
+        author_element.setError(null);
+        synopsis_element.setError(null);
+    }
+
+    /**
      * Update the current book by changing its fields
      */
     private void updateBookDesriptionFields(){
-        book.getDescription().setTitle(title_element.getText().toString());
-        book.getDescription().setAuthor(author_element.getText().toString());
-        book.getDescription().setSynopsis(synopsis_element.getText().toString());
-        book.setImages(bookImages);
-        databaseHelper.updateBook(book);
+        String title = title_element.getText().toString();
+        String author = author_element.getText().toString();
+        String description = synopsis_element.getText().toString();
+
+        // Use Gson to make a deep copy of the current user object
+        Gson gson = new Gson();
+        Book proposedBook = gson.fromJson(gson.toJson(book),Book.class);
+
+        BookValidator bookValidator = new BookValidator(title,author,book.getISBN(),description);
+        if (bookValidator.isValid()){
+            proposedBook.getDescription().setTitle(title_element.getText().toString());
+            proposedBook.getDescription().setAuthor(author_element.getText().toString());
+            proposedBook.getDescription().setSynopsis(synopsis_element.getText().toString());
+            proposedBook.setImages(bookImages);
+            if (CurrentUser.getInstance().getUserName().isEmpty()){
+                Toast.makeText(mContext, "How did you get here?", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                book = proposedBook;
+                databaseHelper.updateBook(book);
+            }
+        }
+        else{
+            Toast.makeText(mContext, bookValidator.getErrorMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
 
