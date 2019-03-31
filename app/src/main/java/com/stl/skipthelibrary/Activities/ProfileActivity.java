@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,7 +26,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.stl.skipthelibrary.DatabaseAndAPI.DatabaseHelper;
 import com.stl.skipthelibrary.Entities.Rating;
@@ -33,6 +34,8 @@ import com.stl.skipthelibrary.Helpers.NavigationHandler;
 import com.stl.skipthelibrary.R;
 import com.stl.skipthelibrary.Singletons.CurrentUser;
 import com.stl.skipthelibrary.Entities.User;
+import com.stl.skipthelibrary.Validators.SignUpValidator;
+import com.stl.skipthelibrary.Validators.TextValidator;
 
 import java.io.IOException;
 
@@ -62,6 +65,9 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView add_image_button;
     private CircleImageView delete_image_button;
     private ChildEventListener childEventListener;
+    private TextWatcher emailTextWatcher;
+    private TextWatcher phoneTextWatcher;
+    private Context mContext;
 
     private boolean isUserTheCurrentUser;
     private ViewableImage currentImage;
@@ -81,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
+        mContext = getApplicationContext();
         myProfileImage = findViewById(R.id.profileImage);
         myProfileName = findViewById(R.id.myProfileName);
         myProfileUsername = findViewById(R.id.myProfileUsername);
@@ -97,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         add_image_button = findViewById(R.id.addProfileImageButton);
 
         setContactInfoFieldsEditable(false);
-        hideImagenButtons();
+        hideImageButtons();
 
         Intent intent = getIntent();
         String userName = intent.getExtras().getString(USER_NAME);
@@ -111,6 +118,38 @@ public class ProfileActivity extends AppCompatActivity {
             navigation.setSelectedItemId(R.id.profile);
         }
         setUser(userName);
+
+        phoneTextWatcher = new TextValidator(myProfilePhoneNumber) {
+            /**
+             * Validate the phonenumber
+             * @param textView: the textview to validate
+             * @param text: the text to validate
+             */
+            @Override
+            public void validate(TextView textView, String text) {
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setPhoneNumber(text);
+                if (!(signInValidator.isPhoneNumberValid())){
+                    myProfilePhoneNumber.setError(signInValidator.getErrorMessage());
+                }
+            }
+        };
+
+        emailTextWatcher = new TextValidator(myProfileEmail) {
+            /**
+             * Validate the email address
+             * @param textView: the textview to validate
+             * @param text: the text to validate
+             */
+            @Override
+            public void validate(TextView textView, String text) {
+                SignUpValidator signInValidator = new SignUpValidator();
+                signInValidator.setEmailAddress(text);
+                if (!(signInValidator.isEmailNameValid())){
+                    myProfileEmail.setError(signInValidator.getErrorMessage());
+                }
+            }
+        };
     }
 
     /**
@@ -208,10 +247,11 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     setContactInfoFieldsEditable(true);
                     showImageButton();
+                    addTextWatchers();
                     myProfileEmail.setText(CurrentUser.getInstance().getContactInfo().getEmail());
                     myProfilePhoneNumber.setText(CurrentUser.getInstance()
                             .getContactInfo().getPhoneNumber()
-                            .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3"));
+                            .replaceFirst("\\((\\d{3})\\) (\\d{3})-(\\d+)", "$1$2$3"));
                     save_button.setVisibility(View.VISIBLE);
                     edit_button.setVisibility(View.GONE);
                     logoutButton.setVisibility(View.GONE);
@@ -225,13 +265,14 @@ public class ProfileActivity extends AppCompatActivity {
                     save_button.setVisibility(View.GONE);
                     edit_button.setVisibility(View.VISIBLE);
                     logoutButton.setVisibility(View.VISIBLE);
-                    hideImagenButtons();
+                    hideImageButtons();
                     updateContactInfoFields();
                     myProfileEmail.setText(String.format("Email: %s",CurrentUser.getInstance()
                             .getContactInfo().getEmail()));
                     myProfilePhoneNumber.setText(String.format("Phone Number: %s",CurrentUser
                             .getInstance().getContactInfo().getPhoneNumber()
                             .replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3")));
+                    removeTextWatchers();
                 }
             });
         }
@@ -254,9 +295,31 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * Hides both of the possible image buttons
      */
-    private void hideImagenButtons() {
+    private void hideImageButtons() {
         add_image_button.setVisibility(View.GONE);
         delete_image_button.setVisibility(View.GONE);
+    }
+
+    /**
+     * Adds text validation to editable fields
+     */
+    private void addTextWatchers() {
+        if (emailTextWatcher != null && phoneTextWatcher != null) {
+            myProfileEmail.addTextChangedListener(emailTextWatcher);
+            myProfilePhoneNumber.addTextChangedListener(phoneTextWatcher);
+        }
+    }
+
+    /**
+     * Removes text validation from editable fields
+     */
+    private void removeTextWatchers() {
+        if (emailTextWatcher != null && phoneTextWatcher != null) {
+            myProfileEmail.removeTextChangedListener(emailTextWatcher);
+            myProfilePhoneNumber.removeTextChangedListener(phoneTextWatcher);
+            myProfileEmail.setError(null);
+            myProfilePhoneNumber.setError(null);
+        }
     }
 
     /**
@@ -277,14 +340,18 @@ public class ProfileActivity extends AppCompatActivity {
      * Update the current book by changing its fields
      */
     private void updateContactInfoFields(){
+        String userName = CurrentUser.getInstance().getUserName();
+        String password = "fakepass";
+        String firstName = "First";
+        String lastName = "Last";
+        String emailAddress = myProfileEmail.getText().toString();
+        String phoneNumber = myProfilePhoneNumber.getText().toString();
+        // Use Gson to make a deep copy of the current user object
         Gson gson = new Gson();
         User proposedUser = gson.fromJson(gson.toJson(CurrentUser.getInstance()),User.class);
 
-        proposedUser.getContactInfo().setEmail(myProfileEmail.getText().toString());
-        proposedUser.getContactInfo().setPhoneNumber(
-                myProfilePhoneNumber.getText().toString()
-                        .replaceFirst("\\((\\d{3})\\) (\\d{3})-(\\d+)", "$1$2$3")
-        );
+        proposedUser.getContactInfo().setEmail(emailAddress);
+        proposedUser.getContactInfo().setPhoneNumber(phoneNumber);
         if (currentImage == null) {
             ViewableImage defaultImage = new ViewableImage(
                     BitmapFactory.decodeResource(getResources(), R.drawable.default_avatar)
@@ -295,7 +362,18 @@ public class ProfileActivity extends AppCompatActivity {
             proposedUser.setImage(currentImage);
         }
         Log.d(TAG, "updateContactInfoFields: "+proposedUser);
-        databaseHelper.updateCurrentUser(proposedUser);
+
+
+        SignUpValidator signUpValidator = new SignUpValidator(userName, password, firstName, lastName, emailAddress, phoneNumber);
+        if (signUpValidator.isValid()){
+            databaseHelper.updateCurrentUser(proposedUser);
+        }
+        else{
+            Toast.makeText(mContext, "Please fix the above errors", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
     }
 
     /**
